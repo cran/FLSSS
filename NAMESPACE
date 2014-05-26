@@ -1,0 +1,8 @@
+useDynLib(FLSSS)
+exportPattern("^[[:alpha:]]+")
+exportClasses(
+    "linknode",
+     "node",
+     "pointer" 
+)
+importFrom(Rcpp, evalCpp)
