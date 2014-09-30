@@ -1,6 +1,14 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
+//void printv(NumericVector&v,std::vector<NumericVector::iterator>&BI){
+//std::vector<NumericVector::iterator>::iterator i=BI.begin();
+//for(;i!=BI.end();++i){
+//std::cout<<*i-v.begin()+1<<", ";
+//}
+//}
+
 //intention: sums the actual values pointed by UBI or LBI
 double itersum(std::vector<NumericVector::iterator>::iterator start,std::vector<NumericVector::iterator>::iterator end){
 double S=0;
@@ -36,6 +44,10 @@ std::vector<std::vector<double>*>* theMatrix(NumericVector&v, unsigned short&len
 }
 
 
+
+
+
+
 //intention: find infima and suprema for every position. 
 //LBI and UBI are equivalent to LBFEP and UBFEP in the R functions.
 bool FindBoundsCpp9_1_1(unsigned short& len,NumericVector&v,double& x,double&ME,
@@ -46,7 +58,7 @@ NumericVector::iterator the, sup;
 std::vector<double>::iterator Mi_begin, Mi_last, mid;
 std::vector<std::vector<double>*>::iterator Mi;
 unsigned short i, fb_len;
-std::vector<NumericVector::iterator>::iterator LBi, UBi, tmp, fb_st;
+std::vector<NumericVector::iterator>::iterator LBi, UBi, tmp/*, fb_st*/;
 double Max=x+ME, Min=x-ME, sumnew;
 if(sumUBI<Min||sumLBI>Max)return 0;
 else if(sumUBI==sumLBI){equal=1;return 1;}
@@ -57,9 +69,10 @@ i=0;
 LBi=LBI.begin();
 UBi=UBI.begin();
 
-fb_st=LBi;
+fb_len=0;
 fb_sum_target=Min-sumUBI;
 sumnew=0;
+
 for(;LBi!=LBI.end();i++,LBi++,UBi++,++fb_len){
 
 fb_sum_target=fb_sum_target+**UBi;
@@ -69,25 +82,25 @@ if(i>0)
     if(*LBi<the)*LBi=the;
     else the=*LBi;
     sup=the-fb_len;
-    tmp=UBI.begin()+(fb_st-LBI.begin());
+    tmp=UBi-fb_len;
 }
-else {the=*LBi;sup=*fb_st;tmp=UBi;fb_len=0;}
+else {sup=*LBi;tmp=UBi;}
 Mi=M->begin()+fb_len;
 while(1)
 {
     Mi_last=(**Mi).begin()+(*tmp-v.begin());
-    if(*Mi_last < fb_sum_target)
+    if(*Mi_last<fb_sum_target||*tmp+fb_len<*LBi)
     {
-        if(Mi==M->begin())return 0;
+        if(Mi==M->begin()&& *Mi_last<fb_sum_target)return 0;
         fb_sum_target=fb_sum_target-**tmp;
         --Mi;
-        ++fb_st;
         --fb_len;
         ++tmp;
-        ++sup;
     }
     else break;
 }
+sup=*LBi-fb_len;
+
 Mi_begin=(**Mi).begin()+(sup-v.begin());
 
 
@@ -120,7 +133,6 @@ while(1)
 sumnew=sumnew+**LBi;
 }
 
-
 if(!boo)boo=1;
 else
 {
@@ -138,9 +150,9 @@ i=len-1;
 LBi=LBI.end()-1;
 UBi=UBI.end()-1;
 
-fb_st=UBi;
 fb_len=0;
 sumnew=0;
+
 for(;UBi>=UBI.begin();--i,--LBi,--UBi,++fb_len){
 fb_sum_target=fb_sum_target+**LBi;
 if(i<len-1)
@@ -149,25 +161,24 @@ if(i<len-1)
     if(*UBi>the)*UBi=the;
     else the=*UBi;
     sup=the+fb_len;
-    tmp=LBI.begin()+(fb_st-UBI.begin());
+    tmp=LBi+fb_len;
 }
-else {the=*UBi;sup=*fb_st;tmp=LBi;}
+else {sup=*UBi;tmp=LBi;}
 Mi=M->begin()+fb_len;
 while(1)
 {
     Mi_last=(**Mi).begin()+(*tmp-fb_len-v.begin());
-    if(*Mi_last>fb_sum_target)
+    if(*Mi_last>fb_sum_target||*tmp-fb_len>*UBi)
     {
-        if(Mi==M->begin()){return 0;}
+        if(Mi==M->begin()&& *Mi_last>fb_sum_target)return 0;
         fb_sum_target=fb_sum_target-**tmp;
         --Mi;
-        --fb_st;
         --tmp;
-        --sup;
         --fb_len;
     }
     else break;
 }
+sup=*UBi+fb_len;
 Mi_begin=(**Mi).begin()+(sup-fb_len-v.begin());
 
 if(*Mi_begin<=fb_sum_target)
@@ -195,10 +206,8 @@ while(1)
         break;
     }
 }
-
 sumnew=sumnew+**UBi;
 }
-
 
 if(sumnew==sumUBI)
 {
@@ -209,6 +218,39 @@ sumUBI=sumnew;
 }
 return 1;
 }
+
+
+
+
+
+
+
+
+
+
+//List FB2(unsigned short len, NumericVector v, double target, double ME){
+//std::vector<NumericVector::iterator>LBI(len),UBI(len);
+//std::vector<NumericVector::iterator>::iterator LBi=LBI.begin(), UBi=UBI.end()-1;
+//NumericVector::iterator left=v.begin(), right=v.end()-1;
+//for(;LBi!=LBI.end();LBi++,UBi--,left++,right--){*LBi=left;*UBi=right;}
+//double sumLBI=itersum(LBI.begin(),LBI.end()), sumUBI=itersum(UBI.begin(),UBI.end());
+//std::vector<std::vector<double>*>*M=theMatrix(v,len);
+//bool equal=0;
+//bool boo;
+//boo=FindBoundsCpp9_1_1(len,v,target,ME,LBI,sumLBI,UBI,sumUBI,equal,M);
+//std::vector<std::vector<double>*>::iterator Mi=M->begin();
+//for(;Mi!=M->end();++Mi)delete *Mi;
+//delete M;
+//if(!boo)return List(0);
+//IntegerVector LB(len), UB(len);
+//for(unsigned short i=0;i<len;++i){LB[i]=LBI[i]-v.begin()+1;UB[i]=UBI[i]-v.begin()+1;}
+//
+//List result(2);
+//result[0]=LB;
+//result[1]=UB;
+//
+//return result;
+//}
 
 
 
@@ -550,7 +592,6 @@ else
 
 
 
-
 List FLSSS_ALL_1(unsigned short len, NumericVector v, double target, double ME){
 std::vector<unsigned short*>result;
 std::vector<NumericVector::iterator>LBI(len),UBI(len);
@@ -562,18 +603,18 @@ std::vector<std::vector<double>*>*M=theMatrix(v,len);
 TTT_direct3_1ALL_1(len,len,v,target,ME,LBI,sumLBI,UBI,sumUBI,result,M);
 std::vector<std::vector<double>*>::iterator Mi=M->begin();
 for(;Mi!=M->end();++Mi)delete *Mi;
+delete M;
 if(result.size()==0)return List(0);
 List lis(result.size());
 IntegerVector IntVec(len);
 for(unsigned int i=0;i<result.size();i++)
 {
     for(int j=0;j<len;j++)IntVec[j]=result[i][j]+1;
-    delete result[i];
+    delete[] result[i];
     lis[i]=clone(IntVec);
 }
 return lis;
 }
-
 
 
 List FLSSS_PART_1(unsigned short len, NumericVector v, double target, double ME, unsigned short sizeNeeded=1){
@@ -587,13 +628,14 @@ std::vector<std::vector<double>*>*M=theMatrix(v,len);
 TTT_direct3_1PART_1(len,len,v,target,ME,LBI,sumLBI,UBI,sumUBI,result,sizeNeeded,M);
 std::vector<std::vector<double>*>::iterator Mi=M->begin();
 for(;Mi!=M->end();++Mi)delete *Mi;
+delete M;
 if(result.size()==0)return List(0);
 List lis(result.size());
 IntegerVector IntVec(len);
 for(unsigned int i=0;i<result.size();i++)
 {
     for(int j=0;j<len;j++)IntVec[j]=result[i][j]+1;
-    delete result[i];
+    delete[] result[i];
     lis[i]=clone(IntVec);
 }
 return lis;
@@ -637,8 +679,3 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-
-
-
-
-
