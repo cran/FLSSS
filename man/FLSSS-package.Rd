@@ -27,7 +27,7 @@ return all the solutions found in 10 seconds. tlimit="none" means no time limit}
 \details{
 \href{https://docs.google.com/a/bu.edu/file/d/0B8MJ_hAGrDrwNHFScDZqS0x4elE/edit}{An introduction to the algorithm}
 
-\href{https://docs.google.com/a/bu.edu/file/d/0B8MJ_hAGrDrwUWhkUnpNeld4N28/edit}{C++ and R codes for package 1.0}
+\href{https://docs.google.com/a/bu.edu/file/d/0B8MJ_hAGrDrwUWhkUnpNeld4N28/edit}{C++ and R codes for version 1.0}
 
 \href{https://docs.google.com/a/bu.edu/file/d/0B8MJ_hAGrDrwZVJkXzd1RGo4Q2M/edit}{Explanatory R codes}
 
@@ -42,13 +42,13 @@ throw=T, returns a list L, L$roots is the list of solutions, L$node is the list 
 the stack.
 }
 
-\note{1. Intension of parameter "catch" and "throw": If sizeNeeded=10 and throw=T, 
-then FLSSS returns a list L, L$roots are the 10 solutions and L$node is a "stack" 
-list. Suppose after a while another 10 solutions are found to be needed, then one 
-can run FLSSS with catch=L$node. In this way FLSSS won't start from square one.
+\note{1. Parameter "catch" and "throw": if sizeNeeded=10 and throw=1, 
+then FLSSS returns a list L where L$roots are the solutions and L$node is a "stack" 
+list. If 10 more solutions are found to be needed, then running FLSSS with catch
+=L$node can let it start looking for the 11th solution.
 
 2. Number of output solutions may be greater than sizeNeeded. A resultant empty 
-list indicates there are no solutions. Setting sizeNeeded="all" and tlimit="none" 
+list indicates no solutions. Setting sizeNeeded="all" and tlimit="none" 
 could take considerable amount of time when v is long and sparse. Assigning at 
 least one of them numeric value is strongly recommended.
 
@@ -73,23 +73,23 @@ FLSSS(len,v,target,20,5)
 result1<-FLSSS(len,v,target,20,"all",tlimit=0.03,throw=1)
 result2<-FLSSS(len,v,target,20,"all",tlimit=0.1,catch=result1$node)
 
-#Example of using FLSSS to solve Subset Sum Problem
+# Example of using FLSSS to solve Subset Sum Problem
 for(len in 1:length(v))
 {
   lis=FLSSS(len,v,target,0)
   if(length(lis)!=0)break
 }
 
-#Example of using FLSSS to solve a knapsack problem
-bagCapacity=361                    #Capacity of the knapsack
-objectMass<-sort(sample(1:100,10)) #Mass of each of the 10 kinds of objects
-                                   #that can be put in the knapsack
-objectAmount<-sample(1:30,10)      #Number of each kind
+# Example of using FLSSS to solve a knapsack problem
+bagCapacity=361                    # Capacity of the knapsack
+objectMass<-sort(sample(1:100,10)) # Mass of each of the 10 kinds of objects
+                                   # that can be put in the knapsack
+objectAmount<-sample(1:30,10)      # Number of each kind
 v<-unlist(mapply(rep,objectMass,objectAmount)) #Set of choices
 for(len in 1:length(v))
 {
-  lis=FLSSS(len,v,bagCapacity,0) #Completely utilize the capacity of the knapsack - 
-                                 #with the smallest number of objects.
+  lis=FLSSS(len,v,bagCapacity,0) # Use up the capacity of the knapsack - 
+                                 # with the smallest number of objects.
   if(length(lis)!=0)break
 }
 }
