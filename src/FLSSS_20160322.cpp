@@ -9,11 +9,11 @@ for(std::vector<NumericVector::iterator>::iterator i=start;i!=end;i++)S=S+**i;
 return S;
 }
 
-void theMatrix(NumericVector&v,unsigned&len,std::vector<std::vector<double> >&M){
+void theMatrix(NumericVector&v,int&len,std::vector<std::vector<double> >&M){
 std::vector<std::vector<double> >::iterator Mi=M.begin(), Miend;
 std::vector<double>::iterator tmpi, tmpiend;
 NumericVector::iterator vi=v.begin(), vii;
-unsigned i=v.size();
+int i=v.size();
 Mi->resize(i);
 for(tmpi=Mi->begin();vi!=v.end();++tmpi,++vi)*tmpi=*vi;
 ++Mi;
@@ -33,38 +33,38 @@ for(;Mi!=Miend;++Mi,--i,++vi)
 }
 
 void to_num(std::vector<NumericVector::iterator>&BI,
-std::vector<std::vector<unsigned> >::iterator x,NumericVector::iterator vbegin)
+std::vector<std::vector<int> >::iterator x,NumericVector::iterator vbegin)
 {
     x->resize(BI.size());
-    std::vector<unsigned>::iterator xi=x->begin(),end=x->end();
+    std::vector<int>::iterator xi=x->begin(),end=x->end();
     std::vector<NumericVector::iterator>::iterator j=BI.begin();
     for(;xi!=end;++xi,++j)*xi=*j-vbegin;
 }
 
 void to_iter(std::vector<NumericVector::iterator>&BI,
-std::vector<std::vector<unsigned> >::iterator&x,NumericVector::iterator vbegin)
+std::vector<std::vector<int> >::iterator&x,NumericVector::iterator vbegin)
 {
     BI.resize(x->size());
-    std::vector<unsigned>::iterator xi=x->begin(),end=x->end();
+    std::vector<int>::iterator xi=x->begin(),end=x->end();
     std::vector<NumericVector::iterator>::iterator j=BI.begin();
     for(;xi!=end;++xi,++j)*j=*xi+vbegin;
 }
 
-unsigned FindBoundsCpp9_1_1(unsigned&len,NumericVector&v,double& x,double&ME,
+int FindBoundsCpp9_1_1(int&len,NumericVector&v,double& x,double&ME,
                         std::vector<NumericVector::iterator>&LBI,double& sumLBI,
-                        std::vector<NumericVector::iterator>&UBI,double& sumUBI, 
+                        std::vector<NumericVector::iterator>&UBI,double& sumUBI,
                         std::vector<std::vector<double> >&M){
 NumericVector::iterator the, sup;
 std::vector<double>::iterator Mi_begin, Mi_last, mid;
 std::vector<std::vector<double> >::iterator Mi;
-unsigned i, fb_len;
+int i, fb_len;
 std::vector<NumericVector::iterator>::iterator LBi, UBi, tmp;
 double Max=x+ME, Min=x-ME, sumnew;
 if(sumUBI<Min||sumLBI>Max)return 0;
 if(sumUBI==sumLBI)return 2;
 double fb_sum_target;
 bool boo=0;
-while(1){   
+while(1){
 i=0;
 LBi=LBI.begin();
 UBi=UBI.begin();
@@ -112,7 +112,7 @@ if(*Mi_begin>=fb_sum_target)
 
 while(1)
 {
-    mid=Mi_begin+unsigned((Mi_last-Mi_begin)/2);
+    mid=Mi_begin+int((Mi_last-Mi_begin)/2);
     if(*mid<fb_sum_target)
     {
         if(mid==Mi_begin)
@@ -220,13 +220,14 @@ return 1;
 }
 
 struct PAT{
-unsigned position;
+int position;
 NumericVector::iterator s,send;
 double target,sumLBI,sumUBI;
 std::vector<NumericVector::iterator>LBI,UBI,UBILeftReserve;
 };
 
-unsigned update(std::vector<PAT>::iterator P){
+
+int update(std::vector<PAT>::iterator P){
 if(P->s==P->send)return 0;
 P->target=P->target+*(P->s);
 if(P->position==0)
@@ -238,9 +239,10 @@ if(P->position==0)
     for(;bound!=P->LBI.end();bound++,iter++)
     {
         if(iter>*bound)*bound=iter;
-        else 
-        { 
-            P->sumLBI=P->sumLBI-*tmp+*(iter-1); 
+        else
+        {
+            //P->sumLBI=P->sumLBI-*tmp+*(iter-1);
+            if(iter<*bound)P->sumLBI=P->sumLBI-*tmp+*(iter-1);
             break;
         }
     }
@@ -254,9 +256,10 @@ else if(P->position==P->UBI.size())
     for(;bound>=P->UBI.begin();bound--,iter--)
     {
         if(iter<*bound)*bound=iter;
-        else 
-        { 
-            P->sumUBI=P->sumUBI-*tmp+*(iter+1);
+        else
+        {
+            //P->sumUBI=P->sumUBI-*tmp+*(iter+1);
+            if(iter>*bound)P->sumUBI=P->sumUBI-*tmp+*(iter+1);
             break;
         }
     }
@@ -282,25 +285,26 @@ else
     for(;bound!=P->LBI.end();bound++,iter++)
     {
         if(iter>*bound)*bound=iter;
-        else 
-        { 
-            P->sumLBI=P->sumLBI-*tmp+*(iter-1);
-            break; 
+        else
+        {
+            //P->sumLBI=P->sumLBI-*tmp+*(iter-1);
+            if(iter<*bound)P->sumLBI=P->sumLBI-*tmp+*(iter-1);
+            break;
         }
     }
 }
 return 1;
 }
 
-unsigned giveBirth(std::vector<PAT>::iterator&child,NumericVector&v,
+int giveBirth(std::vector<PAT>::iterator&child,NumericVector&v,
 double&ME,std::vector<std::vector<double> >&M){
-unsigned len=child->UBI.size();
-unsigned boo=FindBoundsCpp9_1_1(len,v,child->target,ME,child->LBI,child->sumLBI,child->UBI,child->sumUBI,M);
+int len=child->UBI.size();
+int boo=FindBoundsCpp9_1_1(len,v,child->target,ME,child->LBI,child->sumLBI,child->UBI,child->sumUBI,M);
 if(boo==0)return 0;
 if(len==1)return 3;
 if(boo==2)return 2;
 std::vector<NumericVector::iterator>::iterator LBi=child->LBI.begin(), UBi=child->UBI.begin();
-unsigned Min=*UBi-*LBi, temp=Min, i=1; 
+int Min=*UBi-*LBi, temp=Min, i=1;
 child->position=0;
 LBi++;
 UBi++;
@@ -331,7 +335,7 @@ else if(child->position==len-1)
 }
 else
 {
-    std::vector<NumericVector::iterator>::iterator 
+    std::vector<NumericVector::iterator>::iterator
     Lp=child->LBI.begin()+child->position, Up=child->UBI.begin()+child->position;
     child->s=*Lp;
     child->target=child->target-*(child->s);
@@ -351,19 +355,19 @@ else
         if(iter<=*ULRi)*bound=iter;
         else break;
     }
-    child->sumUBI=itersum(child->UBI.begin(),Up_left+1)+sumUBIright;    
+    child->sumUBI=itersum(child->UBI.begin(),Up_left+1)+sumUBIright;
 }
 return 1;
 };
 
-void TTT_stack_1_1(unsigned&LEN,NumericVector&v,double&ME,
-                std::vector<std::vector<unsigned> >&result, unsigned&sizeNeeded,
-                std::vector<std::vector<double> >&M, std::vector<PAT>&SK, 
+void TTT_stack_1_1(int&LEN,NumericVector&v,double&ME,
+                std::vector<std::vector<int> >&result, int&sizeNeeded,
+                std::vector<std::vector<double> >&M, std::vector<PAT>&SK,
                 std::vector<PAT>::iterator&SK_end, double&Duration){
 if(LEN==1)
 {
     double Max=SK.front().target+ME, Min=Max-2*ME;
-    std::vector<unsigned>x(1);
+    std::vector<int>x(1);
     for(NumericVector::iterator i=v.begin();i!=v.end();++i)
     {
         if(*i>=Min&&*i<=Max)
@@ -376,10 +380,10 @@ if(LEN==1)
     return;
 }
 if(SK.front().UBI.size()==0&&SK_end-SK.begin()<2)return;
-unsigned boo;
+int boo;
 std::clock_t timeend=std::clock()+Duration*(double)CLOCKS_PER_SEC;
-std::vector<unsigned>common(LEN);
-std::vector<unsigned>::iterator xi;
+std::vector<int>common(LEN);
+std::vector<int>::iterator xi;
 while(1){
 *SK_end=*(SK_end-1);
 boo=giveBirth(SK_end,v,ME,M);
@@ -391,7 +395,7 @@ if(boo==1)
 if(boo==3)
 {
     xi=common.begin();
-    unsigned i=SK_end->LBI.back()-v.begin()+1, end=SK_end->UBI.back()-v.begin()+1, tmp;
+    int i=SK_end->LBI.back()-v.begin()+1, end=SK_end->UBI.back()-v.begin()+1, tmp;
     if(i>end){tmp=i;i=end;end=tmp;}
     for(std::vector<PAT>::iterator SKi=SK.begin()+1;SKi!=SK_end;++SKi,++xi)*xi=SKi->s-v.begin()+1;
     for(;i<=end;i++)
@@ -417,9 +421,9 @@ if((sizeNeeded!=0&&result.size()>=sizeNeeded)||(Duration!=-1&&std::clock()>timee
 }
 }
 
-List FLSSS_SK_throw(unsigned len, NumericVector v, double target, double ME, 
-IntegerVector LB, IntegerVector UB, unsigned sizeNeeded, double Duration){
-std::vector<std::vector<unsigned> >result;
+List FLSSS_SK_throw(int len, NumericVector v, double target, double ME,
+IntegerVector LB, IntegerVector UB, int sizeNeeded, double Duration){
+std::vector<std::vector<int> >result;
 if(sizeNeeded!=0)result.reserve(sizeNeeded+6);
 else result.reserve(1024);
 std::vector<PAT>SK(len+6);
@@ -427,7 +431,7 @@ NumericVector::iterator vbegin=v.begin();
 PAT&SKbegin=SK.front();
 SKbegin.LBI.resize(len);
 SKbegin.UBI.resize(len);
-for(unsigned i=0;i<len;++i)
+for(int i=0;i<len;++i)
 {
     SKbegin.LBI[i]=vbegin+LB[i]-1;
     SKbegin.UBI[i]=vbegin+UB[i]-1;
@@ -441,14 +445,14 @@ std::vector<PAT>::iterator SK_end=SK.begin()+1;
 TTT_stack_1_1(len,v,ME,result,sizeNeeded,M,SK,SK_end,Duration);
 if(result.size()==0)return List(0);
 List lis(result.size());
-for(unsigned i=0;i<result.size();i++)lis[i]=result[i];
+for(int i=0;i<result.size();i++)lis[i]=result[i];
 std::vector<PAT>::iterator pati=SK.begin()+1;
-std::vector<unsigned>I(3*(SK_end-SK.begin()-1));
+std::vector<int>I(3*(SK_end-SK.begin()-1));
 std::vector<double>J(I.size());
-std::vector<std::vector<unsigned> >K(I.size());
-std::vector<unsigned>::iterator Ii=I.begin();
+std::vector<std::vector<int> >K(I.size());
+std::vector<int>::iterator Ii=I.begin();
 std::vector<double>::iterator Ji=J.begin();
-std::vector<std::vector<unsigned> >::iterator Ki=K.begin();
+std::vector<std::vector<int> >::iterator Ki=K.begin();
 for(;pati!=SK_end;++pati)
 {
     *Ii=pati->position;++Ii;
@@ -464,16 +468,16 @@ for(;pati!=SK_end;++pati)
 return List::create(Named("roots",lis),Named("node",List::create(I,J,K,M)));
 }
 
-List FLSSS_SK_catch(unsigned len, NumericVector v, double ME,
-IntegerVector I, NumericVector J, List LK, List LM,unsigned sizeNeeded,double Duration){
-std::vector<std::vector<unsigned> >K=as<std::vector<std::vector<unsigned> > >(LK);
-std::vector<std::vector<double> >M=as<std::vector<std::vector<double> > >(LM);    
+List FLSSS_SK_catch(int len, NumericVector v, double ME,
+IntegerVector I, NumericVector J, List LK, List LM,int sizeNeeded,double Duration){
+std::vector<std::vector<int> >K=as<std::vector<std::vector<int> > >(LK);
+std::vector<std::vector<double> >M=as<std::vector<std::vector<double> > >(LM);
 NumericVector::iterator vbegin=v.begin();
 std::vector<PAT>SK(len+6);
 std::vector<PAT>::iterator SK_end=SK.begin()+I.size()/3+1, pati=SK.begin()+1;
 IntegerVector::iterator Ii=I.begin();
 NumericVector::iterator Ji=J.begin();
-std::vector<std::vector<unsigned> >::iterator Ki=K.begin();
+std::vector<std::vector<int> >::iterator Ki=K.begin();
 for(;pati!=SK_end;++pati)
 {
     pati->position=*Ii;++Ii;
@@ -486,26 +490,26 @@ for(;pati!=SK_end;++pati)
     to_iter(pati->UBI,Ki,vbegin);++Ki;
     to_iter(pati->UBILeftReserve,Ki,vbegin);++Ki;
 }
-std::vector<std::vector<unsigned> >result;
+std::vector<std::vector<int> >result;
 if(sizeNeeded!=0)result.reserve(sizeNeeded+6);
 else result.reserve(1024);
 TTT_stack_1_1(len,v,ME,result,sizeNeeded,M,SK,SK_end,Duration);
 if(result.size()==0)return List(0);
 List lis(result.size());
-for(unsigned i=0;i<result.size();i++)lis[i]=result[i];
+for(int i=0;i<result.size();i++)lis[i]=result[i];
 return lis;
 }
 
-List FLSSS_SK_catch_throw(unsigned len, NumericVector v, double ME,
-IntegerVector I, NumericVector J, List LK, List LM,unsigned sizeNeeded,double Duration){
-std::vector<std::vector<unsigned> >K=as<std::vector<std::vector<unsigned> > >(LK);
-std::vector<std::vector<double> >M=as<std::vector<std::vector<double> > >(LM);    
+List FLSSS_SK_catch_throw(int len, NumericVector v, double ME,
+IntegerVector I, NumericVector J, List LK, List LM,int sizeNeeded,double Duration){
+std::vector<std::vector<int> >K=as<std::vector<std::vector<int> > >(LK);
+std::vector<std::vector<double> >M=as<std::vector<std::vector<double> > >(LM);
 NumericVector::iterator vbegin=v.begin();
 std::vector<PAT>SK(len+6);
 std::vector<PAT>::iterator SK_end=SK.begin()+I.size()/3+1, pati=SK.begin()+1;
 IntegerVector::iterator Ii=I.begin();
 NumericVector::iterator Ji=J.begin();
-std::vector<std::vector<unsigned> >::iterator Ki=K.begin();
+std::vector<std::vector<int> >::iterator Ki=K.begin();
 for(;pati!=SK_end;++pati)
 {
     pati->position=*Ii;++Ii;
@@ -518,20 +522,20 @@ for(;pati!=SK_end;++pati)
     to_iter(pati->UBI,Ki,vbegin);++Ki;
     to_iter(pati->UBILeftReserve,Ki,vbegin);++Ki;
 }
-std::vector<std::vector<unsigned> >result;
+std::vector<std::vector<int> >result;
 if(sizeNeeded!=0)result.reserve(sizeNeeded+6);
 else result.reserve(1024);
 TTT_stack_1_1(len,v,ME,result,sizeNeeded,M,SK,SK_end,Duration);
 if(result.size()==0)return List(0);
 List lis(result.size());
-for(unsigned i=0;i<result.size();i++)lis[i]=result[i];
+for(int i=0;i<result.size();i++)lis[i]=result[i];
 pati=SK.begin()+1;
-std::vector<unsigned>II(3*(SK_end-SK.begin()-1));
+std::vector<int>II(3*(SK_end-SK.begin()-1));
 std::vector<double>JJ(II.size());
-std::vector<std::vector<unsigned> >KK(II.size());
-std::vector<unsigned>::iterator IIi=II.begin();
+std::vector<std::vector<int> >KK(II.size());
+std::vector<int>::iterator IIi=II.begin();
 std::vector<double>::iterator JJi=JJ.begin();
-std::vector<std::vector<unsigned> >::iterator KKi=KK.begin();
+std::vector<std::vector<int> >::iterator KKi=KK.begin();
 for(;pati!=SK_end;++pati)
 {
     *IIi=pati->position;++IIi;
@@ -547,9 +551,9 @@ for(;pati!=SK_end;++pati)
 return List::create(Named("roots",lis),Named("node",List::create(II,JJ,KK,LM)));
 }
 
-List FLSSS_SK(unsigned len, NumericVector v, double target, double ME, 
-IntegerVector LB, IntegerVector UB, unsigned sizeNeeded, double Duration){
-std::vector<std::vector<unsigned> >result;
+List FLSSS_SK(int len, NumericVector v, double target, double ME,
+IntegerVector LB, IntegerVector UB, int sizeNeeded, double Duration){
+std::vector<std::vector<int> >result;
 if(sizeNeeded!=0)result.reserve(sizeNeeded+6);
 else result.reserve(1024);
 std::vector<PAT>SK(len+6);
@@ -557,7 +561,7 @@ NumericVector::iterator vbegin=v.begin();
 PAT&SKbegin=SK.front();
 SKbegin.LBI.resize(len);
 SKbegin.UBI.resize(len);
-for(unsigned i=0;i<len;++i)
+for(int i=0;i<len;++i)
 {
     SKbegin.LBI[i]=vbegin+LB[i]-1;
     SKbegin.UBI[i]=vbegin+UB[i]-1;
@@ -572,24 +576,24 @@ std::vector<PAT>::iterator SK_end=SK.begin()+1;
 TTT_stack_1_1(len,v,ME,result,sizeNeeded,M,SK,SK_end,Duration);
 if(result.size()==0)return List(0);
 List lis(result.size());
-for(unsigned i=0;i<result.size();i++)lis[i]=result[i];
+for(int i=0;i<result.size();i++)lis[i]=result[i];
 return lis;
 }
 
 // FLSSS_SK_throw
-List FLSSS_SK_throw(unsigned len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, unsigned sizeNeeded, double Duration);
+List FLSSS_SK_throw(int len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, int sizeNeeded, double Duration);
 RcppExport SEXP FLSSS_FLSSS_SK_throw(SEXP lenSEXP, SEXP vSEXP, SEXP targetSEXP, SEXP MESEXP, SEXP LBSEXP, SEXP UBSEXP, SEXP sizeNeededSEXP, SEXP DurationSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< unsigned >::type len(lenSEXP );
+        Rcpp::traits::input_parameter< int >::type len(lenSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP );
         Rcpp::traits::input_parameter< double >::type target(targetSEXP );
         Rcpp::traits::input_parameter< double >::type ME(MESEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type LB(LBSEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type UB(UBSEXP );
-        Rcpp::traits::input_parameter< unsigned >::type sizeNeeded(sizeNeededSEXP );
+        Rcpp::traits::input_parameter< int >::type sizeNeeded(sizeNeededSEXP );
         Rcpp::traits::input_parameter< double >::type Duration(DurationSEXP );
         List __result = FLSSS_SK_throw(len, v, target, ME, LB, UB, sizeNeeded, Duration);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
@@ -599,20 +603,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // FLSSS_SK_catch
-List FLSSS_SK_catch(unsigned len, NumericVector v, double ME, IntegerVector I, NumericVector J, List LK, List LM, unsigned sizeNeeded, double Duration);
+List FLSSS_SK_catch(int len, NumericVector v, double ME, IntegerVector I, NumericVector J, List LK, List LM, int sizeNeeded, double Duration);
 RcppExport SEXP FLSSS_FLSSS_SK_catch(SEXP lenSEXP, SEXP vSEXP, SEXP MESEXP, SEXP ISEXP, SEXP JSEXP, SEXP LKSEXP, SEXP LMSEXP, SEXP sizeNeededSEXP, SEXP DurationSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< unsigned >::type len(lenSEXP );
+        Rcpp::traits::input_parameter< int >::type len(lenSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP );
         Rcpp::traits::input_parameter< double >::type ME(MESEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type I(ISEXP );
         Rcpp::traits::input_parameter< NumericVector >::type J(JSEXP );
         Rcpp::traits::input_parameter< List >::type LK(LKSEXP );
         Rcpp::traits::input_parameter< List >::type LM(LMSEXP );
-        Rcpp::traits::input_parameter< unsigned >::type sizeNeeded(sizeNeededSEXP );
+        Rcpp::traits::input_parameter< int >::type sizeNeeded(sizeNeededSEXP );
         Rcpp::traits::input_parameter< double >::type Duration(DurationSEXP );
         List __result = FLSSS_SK_catch(len, v, ME, I, J, LK, LM, sizeNeeded, Duration);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
@@ -622,20 +626,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // FLSSS_SK_catch_throw
-List FLSSS_SK_catch_throw(unsigned len, NumericVector v, double ME, IntegerVector I, NumericVector J, List LK, List LM, unsigned sizeNeeded, double Duration);
+List FLSSS_SK_catch_throw(int len, NumericVector v, double ME, IntegerVector I, NumericVector J, List LK, List LM, int sizeNeeded, double Duration);
 RcppExport SEXP FLSSS_FLSSS_SK_catch_throw(SEXP lenSEXP, SEXP vSEXP, SEXP MESEXP, SEXP ISEXP, SEXP JSEXP, SEXP LKSEXP, SEXP LMSEXP, SEXP sizeNeededSEXP, SEXP DurationSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< unsigned >::type len(lenSEXP );
+        Rcpp::traits::input_parameter< int >::type len(lenSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP );
         Rcpp::traits::input_parameter< double >::type ME(MESEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type I(ISEXP );
         Rcpp::traits::input_parameter< NumericVector >::type J(JSEXP );
         Rcpp::traits::input_parameter< List >::type LK(LKSEXP );
         Rcpp::traits::input_parameter< List >::type LM(LMSEXP );
-        Rcpp::traits::input_parameter< unsigned >::type sizeNeeded(sizeNeededSEXP );
+        Rcpp::traits::input_parameter< int >::type sizeNeeded(sizeNeededSEXP );
         Rcpp::traits::input_parameter< double >::type Duration(DurationSEXP );
         List __result = FLSSS_SK_catch_throw(len, v, ME, I, J, LK, LM, sizeNeeded, Duration);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
@@ -645,19 +649,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // FLSSS_SK
-List FLSSS_SK(unsigned len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, unsigned sizeNeeded, double Duration);
+List FLSSS_SK(int len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, int sizeNeeded, double Duration);
 RcppExport SEXP FLSSS_FLSSS_SK(SEXP lenSEXP, SEXP vSEXP, SEXP targetSEXP, SEXP MESEXP, SEXP LBSEXP, SEXP UBSEXP, SEXP sizeNeededSEXP, SEXP DurationSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< unsigned >::type len(lenSEXP );
+        Rcpp::traits::input_parameter< int >::type len(lenSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP );
         Rcpp::traits::input_parameter< double >::type target(targetSEXP );
         Rcpp::traits::input_parameter< double >::type ME(MESEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type LB(LBSEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type UB(UBSEXP );
-        Rcpp::traits::input_parameter< unsigned >::type sizeNeeded(sizeNeededSEXP );
+        Rcpp::traits::input_parameter< int >::type sizeNeeded(sizeNeededSEXP );
         Rcpp::traits::input_parameter< double >::type Duration(DurationSEXP );
         List __result = FLSSS_SK(len, v, target, ME, LB, UB, sizeNeeded, Duration);
         PROTECT(__sexp_result = Rcpp::wrap(__result));

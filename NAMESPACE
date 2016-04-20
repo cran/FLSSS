@@ -6,6 +6,8 @@ exportClasses(
      "pointer",
      "Rcpp_foo",
      "Rcpp_NODE",
-     "Rcpp_STACK" 
+     "Rcpp_STACK"
 )
 importFrom(Rcpp, evalCpp)
+import(RcppParallel)
+importFrom("stats", "cor")
