@@ -1,16 +1,18 @@
 Package: FLSSS
 Type: Package
-Title: Multithreaded Fixed Size Subset Sum with Bounded Error in
-        Multidimensional Real Domain
-Version: 5.0.1
-Date: 2016-04-18
+Title: Multi-Threaded Multidimensional Fixed Size Subset Sum Solver and
+        Extension to General-Purpose Knapsack Problem
+Version: 5.1
+Date: 2016-12-11
 Author: Charlie Wusuo Liu
 Maintainer: Charlie Wusuo Liu <liuwusuo@gmail.com>
-Description: A novel algorithm for solving the fixed size Subset Sum Problem with bounded error in multidimensional real domain.
+Description: A novel algorithm for solving the subset sum problem with bounded error in multidimensional real domain and its application to the general-purpose knapsack problem.
 License: GPL-2
 Imports: Rcpp,RcppParallel
 LinkingTo: Rcpp,RcppParallel
 NeedsCompilation: yes
-Packaged: 2016-04-19 22:55:14 UTC; i56087
 Repository: CRAN
-Date/Publication: 2016-04-20 08:53:22
+Suggests: R.rsp
+VignetteBuilder: R.rsp
+Packaged: 2016-12-13 16:07:28 UTC; i56087
+Date/Publication: 2016-12-13 19:52:38
