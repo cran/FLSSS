@@ -101,17 +101,17 @@ randomOrder=sample(1L:((nrow(v)-L)*L+1L), (nrow(v)-L)*L+1L)
 # an index vector of size (N-L)*L+1
 
 system.time({tmp=mFLSSSpar(L, v, target, ME, maxCore=7,
-randomizeTargetOrder = randomOrder, tlimit = 10)})
-# try finding at least one solution within total time 10 seconds
-# with 7 CPUs. Change tlimit for heavier tasks. 10s limit is
+randomizeTargetOrder = randomOrder, tlimit = 5)})
+# try finding at least one solution within total time 5 seconds
+# with 7 CPUs. Change tlimit for heavier tasks. The 5s limit is
 # only for passing R package check
 
 if(length(tmp)!=0)abs(as.numeric(colSums(v[tmp[[1]],]))/target-1)
 # exam the solution
 
 system.time({tmp=mFLSSSpar(L,v,target,ME,viaConjugate=1,maxCore=7,
-randomizeTargetOrder = TRUE, tlimit = 10)})
-# try finding at least one solution within 10 seconds with 7 CPUs
+randomizeTargetOrder = TRUE, tlimit = 5)})
+# try finding at least one solution within 5 seconds with 7 CPUs
 
 # exam the solution
 if(length(tmp)!=0)abs(as.numeric(colSums(v[tmp[[1]],]))/target-1)
@@ -138,7 +138,7 @@ target=as.numeric(colSums(v[solution,]))
 ME=abs(target)*0.05
 
 system.time({tmp=mFLSSSpar(0, v, target, ME, maxCore=7,
-  randomizeTargetOrder = TRUE, tlimit = 10)})
+  randomizeTargetOrder = TRUE, tlimit = 5)})
 tmp
 solution
 }

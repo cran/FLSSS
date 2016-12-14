@@ -202,17 +202,16 @@ if(firstKeyTarget>=lastKeyTarget)
   return(rst)
 }
 
-keyTarget=seq(firstKeyTarget, lastKeyTarget, by=max(as.integer(2*keyME),1L))
+if(2*keyME<1)By=1L
+else if(2L*as.integer(keyME)==as.integer(2*keyME))
+  By=as.integer(2*keyME)+1L
+else By=as.integer(2*keyME)
 
-# if(length(randomizeTargetOrder)!=1L&fixedSize)
-# {
-#   if(length(randomizeTargetOrder)!=len*(nrow(mV)-len)+1L)
-#   {
-#     return("wrong randomizedTargetOrder size")
-#   }
-#   keyTarget=keyTarget[randomizeTargetOrder[randomizeTargetOrder<=length(keyTarget)]]
-# }
-# else
+keyTarget=seq(firstKeyTarget, lastKeyTarget+as.integer(keyME), by=By)
+if(keyTarget[length(keyTarget)]<lastKeyTarget+as.integer(keyME))
+  keyTarget=c(keyTarget, lastKeyTarget+as.integer(keyME))
+
+
 if(length(randomizeTargetOrder)!=1L)
 {
   if(length(randomizeTargetOrder)!=len*(nrow(mV)-len)+1L)

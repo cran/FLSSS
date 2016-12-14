@@ -772,14 +772,7 @@ return 1;
 void mTTT_stack_1_1(int LEN, std::vector<mdouble>&v, mdouble&ME,
                 std::vector<std::vector<int> >&result, int sizeNeeded,
                 std::vector<std::vector<mdouble> >&M, std::vector<mPAT>&SK,
-                std::vector<mPAT>::iterator&SK_end, double duration){
-
-// std::ofstream myfile;
-// myfile.precision(3);
-// myfile.setf(std::ios::fixed);
-// myfile.setf(std::ios::showpoint);
-// myfile.open("C:/Users/Charles Liu/Desktop/experiment/error.csv", std::ios_base::app);
-
+                std::vector<mPAT>::iterator&SK_end, double duration, std::clock_t totalTimeEnd){
 
 int _d=SK.front().target.size();
 if(LEN==1)
@@ -808,6 +801,8 @@ if(LEN==1)
 if(SK.front().UBI.size()==0&&SK_end-SK.begin()<2)return;
 int boo;
 std::clock_t timeend=std::clock()+duration*(double)CLOCKS_PER_SEC;
+if(timeend>totalTimeEnd)timeend=totalTimeEnd;
+
 std::vector<int>common(LEN);
 std::vector<int>::iterator xi;
 
@@ -817,41 +812,7 @@ while(true){
 //*SK_end=*(SK_end-1);
 SK_end->copy(*(SK_end-1));
 
-// myfile<<"just copied SK_end-1 to SK_end------------------------\n";
-// myfile<<"address of (SK_end-1)->LBI.begin=="<<&*(SK_end-1)->LBI.begin<<std::endl;
-// myfile<<"contents of (SK_end-1)->LBI==";printBI((SK_end-1)->LBI,v,myfile);
-// myfile<<"contents of (SK_end-1)->UBI==";printBI((SK_end-1)->UBI,v,myfile);
-// myfile<<"(SK_end-1)->position=="<<(SK_end-1)->position<<std::endl;
-// myfile<<"(SK_end-1)->s=="<<(SK_end-1)->s-v.begin()+1<<std::endl;
-// myfile<<"(SK_end-1)->send=="<<(SK_end-1)->send-v.begin()+1<<std::endl;
-//
-// myfile<<"address of (SK_end)->LBI.begin=="<<&*(SK_end)->LBI.begin<<std::endl;
-// myfile<<"contents of (SK_end)->LBI==";printBI((SK_end)->LBI,v,myfile);
-// myfile<<"contents of (SK_end)->UBI==";printBI((SK_end)->UBI,v,myfile);
-// myfile<<"(SK_end)->position=="<<(SK_end)->position<<std::endl;
-// myfile<<"(SK_end)->s=="<<(SK_end)->s-v.begin()+1<<std::endl;
-// myfile<<"(SK_end)->send=="<<(SK_end)->send-v.begin()+1<<std::endl;
-// myfile<<"------------------------\n\n";
-
 boo=mgiveBirth(SK_end,v,ME,M);
-
-// myfile<<"just ran giveBith------------------------\n";
-// myfile<<"address of (SK_end-1)->LBI.begin=="<<&*(SK_end-1)->LBI.begin<<std::endl;
-// myfile<<"contents of (SK_end-1)->LBI==";printBI((SK_end-1)->LBI,v,myfile);
-// myfile<<"contents of (SK_end-1)->UBI==";printBI((SK_end-1)->UBI,v,myfile);
-// myfile<<"(SK_end-1)->position=="<<(SK_end-1)->position<<std::endl;
-// myfile<<"(SK_end-1)->s=="<<(SK_end-1)->s-v.begin()+1<<std::endl;
-// myfile<<"(SK_end-1)->send=="<<(SK_end-1)->send-v.begin()+1<<std::endl;
-//
-// myfile<<"address of (SK_end)->LBI.begin=="<<&*(SK_end)->LBI.begin<<std::endl;
-// myfile<<"contents of (SK_end)->LBI==";printBI((SK_end)->LBI,v,myfile);
-// myfile<<"contents of (SK_end)->UBI==";printBI((SK_end)->UBI,v,myfile);
-// myfile<<"(SK_end)->position=="<<(SK_end)->position<<std::endl;
-// myfile<<"(SK_end)->s=="<<(SK_end)->s-v.begin()+1<<std::endl;
-// myfile<<"(SK_end)->send=="<<(SK_end)->send-v.begin()+1<<std::endl;
-// myfile<<"------------------------\n\n";
-
-
 
 if(boo==1)
 {
@@ -889,7 +850,7 @@ while(mupdate(SK_end-1, M)==0)
     --SK_end;
     if(SK_end-SK.begin()<2)return;
 }
-if((sizeNeeded!=0&&int(result.size())>=sizeNeeded)||(duration!=-1&&std::clock()>timeend))break;
+if((int)result.size()>=sizeNeeded||std::clock()>timeend)break;
 }
 }
 
@@ -979,7 +940,7 @@ for(int i=0,iend=keyTarget.size();;++i)
   //                      tlimit,solutionsObtained,sizeNeededForAll);
 
   mTTT_stack_1_1(len, v, mME, rst, sizeNeededForAll,
-                M, SK, SK_end, DurationForEach);
+                M, SK, SK_end, DurationForEach, endTime);
 
   // mTTT_stack_1_1_par_redist(len,v,mME,rst,sizeNeeded,M,SK,SK_end,
   //                      tlimit,sizeNeededForAll);
@@ -1084,7 +1045,8 @@ SKbegin.target.assign(targetr.begin(),targetr.end());
 
 std::vector<mPAT>::iterator SK_end=SK.begin()+1;
 
-mTTT_stack_1_1(len,v,mME,rst,sizeNeededForAll,M,SK,SK_end,duration);
+mTTT_stack_1_1(len,v,mME,rst,sizeNeededForAll,M,SK,SK_end,duration,
+               std::clock()+duration*(double)CLOCKS_PER_SEC);
 if(rst.size()==0)return List::create();
 List lis(rst.size());
 for(int i=0,iend=rst.size();i!=iend;++i)
@@ -1691,15 +1653,10 @@ void mTTT_stack_1_1_par_redist(int LEN, std::vector<mdouble>&v, mdouble&ME,
                 std::vector<std::vector<std::vector<int> > >&result, int cpuI,
                 int sizeNeeded,
                 std::vector<std::vector<mdouble> >&M, std::vector<mPAT>&SK,
-                std::vector<mPAT>::iterator&SK_end, double durationForEach,
-                // volatile int&entireResultSize,
-                // int entireResultNeeded, bool isMaster, std::vector<double>&keyTarget,
-                // volatile bool&someoneQuit, int*coreStartIndex, int*coreCurrentIndex,
-                // int*coreEndIndex, int NofCore, bool&beenThroughThreadManagement,
+                std::vector<mPAT>::iterator&SK_end, double durationForEach, std::clock_t totalTimeEnd,
                 dynamicTasking&dT){
 
 int _d=SK.front().target.size();
-//int resultOriginalSize=result.size();
 
 if(LEN==1)
 {
@@ -1715,22 +1672,13 @@ if(LEN==1)
       x.front()=i-v.begin()+1;
       result[cpuI].push_back(x);
     }
-    else if(!lessEqual(*i,Max))
-    {
-      //int gap=result.size()-resultOriginalSize;
-      //if(gap!=0)entireResultSize+=gap;
-      break;
-    }
+    else if(!lessEqual(*i,Max))break;
   }
   return;
 }
 
-if(SK.front().UBI.size()==0&&SK_end-SK.begin()<2)
-{
-  // int gap=result.size()-resultOriginalSize;
-  // if(gap!=0)entireResultSize+=gap;
-  return;
-}
+if(SK.front().UBI.size()==0&&SK_end-SK.begin()<2)return;
+
 
 int boo;
 
@@ -1738,8 +1686,7 @@ std::vector<int>common(LEN);
 std::vector<int>::iterator xi;
 
 std::clock_t endTime=std::clock()+durationForEach*(double)CLOCKS_PER_SEC;
-
-//std::cout<<"inside TTT_stack phase\n";
+if(endTime>totalTimeEnd)endTime=totalTimeEnd;
 
 while(true){
 
@@ -1750,6 +1697,7 @@ if(boo==1)
     ++SK_end;
     continue;
 }
+
 if(boo==3)
 {
     xi=common.begin();
@@ -1760,42 +1708,31 @@ if(boo==3)
     {
         common.back()=i;
         result[cpuI].push_back(common);
-        //++entireResultSize;
     }
 }
 else if(boo==2)
 {
     xi=common.begin();
     for(std::vector<mPAT>::iterator SKi=SK.begin()+1;SKi!=SK_end;++SKi,++xi)*xi=SKi->s-v.begin()+1;
-    //std::vector<mdouble>::iterator*i=SK_end->UBI.begin;
     std::vector<std::vector<mdouble>::iterator>::iterator i=SK_end->UBI.begin();
     for(;i!=SK_end->UBI.end();++i,++xi)*xi=*i-v.begin()+1;
     result[cpuI].push_back(common);
-    //++entireResultSize;
 }
 
 while(mupdate(SK_end-1, M)==0)
 {
     --SK_end;
-    if(SK_end-SK.begin()<2)
-    {
-      //int gap=result.size()-resultOriginalSize;
-      //if(gap!=0){entireResultSize+=gap;}
-      return;
-    }
+    if(SK_end-SK.begin()<2)return;
 }
 
-//if(std::clock()>endTime or solutionPoolSize(result)>=sizeNeeded)break;
 if(std::clock()>endTime)
 {
-  Rcout<<"single time elapsed\n";
+  Rcout<<"time elapsed\n";
   break;
 }
 if(solutionPoolSize(result)>=sizeNeeded)break;
 }
 
-//int gap=result.size()-resultOriginalSize;
-//if(gap!=0)entireResultSize+=gap;
 }
 
 
@@ -1934,28 +1871,16 @@ std::vector<std::vector<mdouble> >&M;
 mdouble&mTarget;
 mdouble&mME;
 int&len;
-//std::clock_t&tlimit;
 double&durationForEach;
-double&totalTimeLimit;
-//std::vector<int>&LB;
-//std::vector<int>&UB;
+std::clock_t&totalTimeLimit;
 std::vector<std::vector<mdouble>::iterator>&commonLBI;
 std::vector<std::vector<mdouble>::iterator>&commonUBI;
 mdouble&commonSumLBI;
 mdouble&commonSumUBI;
-//int&sizeNeeded;
 int&sizeNeededForAll;
 std::vector<std::vector<std::vector<int> > >&rst;
 mdouble&thek;
-//std::vector<double>&keyTarget;
 double*&keyTarget;
-//std::vector<lowHigh>&paraInd;
-// int*&coreStartIndex;
-// int*&coreCurrentIndex;
-// int*&coreEndIndex;
-// volatile bool&someoneQuit;
-// volatile int&solutionsObtained;
-// int&NofCore;
 dynamicTasking&dT;
 
 paraRedistributed(std::vector<mdouble>&v,
@@ -1963,45 +1888,26 @@ paraRedistributed(std::vector<mdouble>&v,
      mdouble&mTarget,
      mdouble&mME,
      int&len,
-     //std::clock_t&tlimit,
      double&durationForEach,
-     double&totalTimeLimit,
+     std::clock_t&totalTimeLimit,
      std::vector<std::vector<mdouble>::iterator>&commonLBI,
      std::vector<std::vector<mdouble>::iterator>&commonUBI,
      mdouble&commonSumLBI,
      mdouble&commonSumUBI,
-     //int&sizeNeeded,
      int&sizeNeededForAll,
      std::vector<std::vector<std::vector<int> > >&rst,
      mdouble&thek,
-     //std::vector<double>&keyTarget,
      double*&keyTarget,
-     //std::vector<lowHigh>&paraInd,
-     // int*&coreStartIndex,
-     // int*&coreCurrentIndex,
-     // int*&coreEndIndex,
-     // volatile bool&someoneQuit,
-     // volatile int&solutionsObtained,
-     // int&NofCore
      dynamicTasking&dT
       ):
-  v(v), M(M), mTarget(mTarget), mME(mME), len(len), //tlimit(tlimit),
+  v(v), M(M), mTarget(mTarget), mME(mME), len(len),
   durationForEach(durationForEach), totalTimeLimit(totalTimeLimit),
-  //LB(LB), UB(UB),
   commonLBI(commonLBI),
   commonUBI(commonUBI),
   commonSumLBI(commonSumLBI),
   commonSumUBI(commonSumUBI),
-  //sizeNeeded(sizeNeeded),
   sizeNeededForAll(sizeNeededForAll),
   rst(rst), thek(thek), keyTarget(keyTarget),
-  //paraInd(paraInd),
-  // coreStartIndex(coreStartIndex),
-  // coreCurrentIndex(coreCurrentIndex),
-  // coreEndIndex(coreEndIndex),
-  // someoneQuit(someoneQuit),
-  // solutionsObtained(solutionsObtained),
-  // NofCore(NofCore)
   dT(dT)
   {}
 
@@ -2010,21 +1916,17 @@ for(;st!=end;++st)
 {
   int _d=mME.size();
   rst[st].reserve(sizeNeededForAll);
-  std::clock_t timeEnd=std::clock()+(double)CLOCKS_PER_SEC*totalTimeLimit;
+  //std::clock_t timeEnd=std::clock()+(double)CLOCKS_PER_SEC*totalTimeLimit;
   for(;;)
   {
-    if(std::clock()>timeEnd)
+    if(std::clock()>totalTimeLimit)
     {
-      Rcout<<"total time elapsed\n";
+      //Rcout<<"total time elapsed\n";
       break;
     }
 
     unsigned objI=0;
-    //if(!dT.nextTaskID(st, objI))break;
     if(!dT.nextTaskID(objI))break;
-
-    //std::cout<<objI<<std::endl;
-
     std::vector<mPAT>SK(len+6);
 
     mPAT&SKbegin=SK.front();
@@ -2043,7 +1945,7 @@ for(;st!=end;++st)
 
     std::vector<mPAT>::iterator SK_end=SK.begin()+1;
     mTTT_stack_1_1_par_redist(len, v, mME, rst, st, sizeNeededForAll, M, SK, SK_end,
-                       durationForEach, dT);
+                       durationForEach, totalTimeLimit, dT);
 
   }
 }
@@ -2067,22 +1969,11 @@ for(;st!=end;++st)
 List mFLSSS_SK_par(int maxCore, int len, int vlen, DataFrame vr, NumericVector keyTarget,
                    NumericVector targetr, NumericVector thekr,
                    NumericVector MEr, IntegerVector LBr, IntegerVector UBr,
-                   int sizeNeededForAll, //int sizeNeeded,
+                   int sizeNeededForAll,
                    double durationForEach, double totalTimeLimit){
 
 std::vector<std::vector<std::vector<int> > >result(maxCore);
 int _d=vr.size();
-
-// std::vector<mdouble>v(vlen,mdouble(_d));
-// for(int i=0,iend=vr.size();i!=iend;++i)
-// {
-//   NumericVector tmp=vr[i];
-//   for(int j=0,jend=vlen;j!=jend;++j)
-//   {
-//     v[j][i]=tmp[j];
-//   }
-// }
-
 
 std::vector<std::vector<mdouble> >M(len);
 {
@@ -2100,8 +1991,6 @@ std::vector<std::vector<mdouble> >M(len);
 
 std::vector<mdouble>&v=M.front();
 
-
-//std::vector<std::vector<mdouble> >M(len);
 mtheMatrix(v,M);
 
 
@@ -2129,7 +2018,9 @@ dynamicTasking dT(keyTarget.size());
 
 double*keyTargetPtr=&keyTarget[0];
 
-paraRedistributed T(v, M, mTarget, mME, len, durationForEach, totalTimeLimit,
+std::clock_t totalTlimit=std::clock()+(double)CLOCKS_PER_SEC*totalTimeLimit;
+
+paraRedistributed T(v, M, mTarget, mME, len, durationForEach, totalTlimit,
        commonLBI, commonUBI, commonSumLBI, commonSumUBI,
        sizeNeededForAll, result,
        thek, keyTargetPtr, dT);

@@ -112,11 +112,12 @@ lbound=c(-Inf, log2(0.5), sum(expectVal)*0.75)
 # try if a portfolio with total expect value no less than 75\% of the maximum
 # can be found. Change "0.75" manually or in loop to detect the optimal
 
-ubound=c(3.5e7, Inf, Inf)
+ubound=c(2e7, Inf, Inf)
 # -Inf or Inf in bounding vectors can be replaced with NA
 
-# singleTimeLimit and tlimit shall be changed for heavier task
-rst=mmFLknapsack(N, mV, lbound, ubound, totalSolutionNeeded = 1, tlimit=10)
+# singleTimeLimit and tlimit shall be changed for heavier task. The 5s is
+# merely for passing R package publish requirement
+rst=mmFLknapsack(N, mV, lbound, ubound, totalSolutionNeeded = 1, tlimit=5)
 
 # exclude the dummy elements which also could lead to identical solutions
 if(length(rst)>0L)rst=unique(lapply(rst, function(x)x[x>N]-N))
@@ -124,7 +125,7 @@ if(length(rst)>0L)rst=unique(lapply(rst, function(x)x[x>N]-N))
 # exam the solutions
 all(unlist(lapply(rst, function(x)
 {
-  c(sum(price[x])<=3.5e7, prod(prob[x])>=0.5)
+  c(sum(price[x])<=2e7, prod(prob[x])>=0.5)
 })))
 
 
@@ -132,11 +133,13 @@ all(unlist(lapply(rst, function(x)
 # EQUIVALENTLY:
 
 rst=mmFLknapsack(0, data.frame(price, log2(prob), expectVal), lbound, ubound,
-  totalSolutionNeeded = 1, tlimit=10)
+  totalSolutionNeeded = 1, tlimit=5)
+# The 5s is merely for passing R package publish requirement
 
 all(unlist(lapply(rst, function(x)
 {
-  c(sum(price[x])<=3.5e7, prod(prob[x])>=0.5)
+  c(sum(price[x])<=2e7, prod(prob[x])>=0.5)
 })))
+rst
 }
 
