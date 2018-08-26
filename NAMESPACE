@@ -1,13 +1,7 @@
-useDynLib(FLSSS)
-exportPattern("^[[:alpha:]]+")
-exportClasses(
-    "linknode",
-     "node",
-     "pointer",
-     "Rcpp_foo",
-     "Rcpp_NODE",
-     "Rcpp_STACK"
-)
+export(FLSSS, FLSSSmultiset, GAP, GAPintegerized, mFLSSSpar,
+       mFLSSSparImposeBounds, mFLSSSparImposeBoundsIntegerized,
+       mFLSSSparIntegerized, mmKnapsack, mmKnapsackIntegerized)
 importFrom(Rcpp, evalCpp)
-import(RcppParallel)
-importFrom("stats", "cor")
+importFrom(RcppParallel, RcppParallelLibs)
+importFrom("stats", "aggregate", "cor")
+useDynLib(FLSSS, .registration = TRUE)
