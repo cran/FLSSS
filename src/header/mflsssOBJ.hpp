@@ -965,7 +965,8 @@ inline int mflsssOBJ<valtype, indtype, mk, useBiSearch>::
         {
           f->optimalProfit = tmpProfit;
           std::copy(hopeV.begin(), hopeV.end(), f->optimalSolution);
-          if(verbose) Rcpp::Rcout << "Updated profit = " << tmpProfit << "\n";
+          // if(verbose) std::cout << "Updated profit = " << tmpProfit << "\n";
+          // In Linux environment, the above still smashes C stack.
         }
       }
       mx->unlock();

@@ -458,7 +458,7 @@ signed char TTTstack(
         {
           std::copy(common, common + LEN, optimalRst);
           *optimalSolProfit = tmpProfit;
-          if(verbose) Rcout << "Updated profit = " << tmpProfit << "\n";
+          // if(verbose) Rcout << "Updated profit = " << tmpProfit << "\n";
         }
       }
       mx->unlock();
@@ -1022,6 +1022,7 @@ IntegerVector GAPcpp(
     }
 
 
+    valtype previousProfit = optimalProfit;
     parMgap<valtype, indtype, mk, useBiSearch> (
       verbose, len, N, _d, dlst, dl, dust, du,
       &profitVec[0], V, endTime, mask,
@@ -1029,7 +1030,11 @@ IntegerVector GAPcpp(
       &optimalProfit, maxCore, SKfamily.size());
 
 
-    if(heuristic and optimalProfit > 0) break;
+    if(optimalProfit > previousProfit)
+    {
+      if(verbose) Rcout << "Updated profit = " << optimalProfit << "\n";
+      if(heuristic) break;
+    }
   }
 
 

@@ -198,7 +198,7 @@ mmKnapsackIntegerized <- function(maxCore = 7L, len, itemsProfits, itemsCosts, c
 
 
   if(verbose) cat("Dimensionality reduced from", ncol(INT$mV) + 1L, "to", ncol(mV), "\n")
-  if(returnBeforeMining) return(list(soltution = integer(0), INT = c(INT, list(compressedDim = ncol(mV)))))
+  if(returnBeforeMining) return(list(solution = integer(0), INT = c(INT, list(compressedDim = ncol(mV)))))
 
 
   rst = z_Gknapsack(len, mV, maskV, profits, targetMat, mME, 1L : len, (N - len + 1L) : N, tlimit, useBiSrchInFB, maxCore, threadLoad, verbose, heuristic)
@@ -221,7 +221,7 @@ mmKnapsackIntegerized <- function(maxCore = 7L, len, itemsProfits, itemsCosts, c
     rst = tmp[-rst]
   }
   if(!fixedSize) rst = backout(rst, len)
-  list(soltution = rst, INT = c(INT, list(compressedDim = ncol(mV))))
+  list(solution = rst, INT = c(INT, list(compressedDim = ncol(mV))))
 }
 
 

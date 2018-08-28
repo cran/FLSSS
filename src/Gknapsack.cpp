@@ -41,6 +41,9 @@ IntegerVector GknapsackCpp(
   }
 
 
+  // std::cout << "targetMat.ncol() = " << targetMat.ncol() << "\n";
+
+
   for(int i = 0, iend = targetMat.ncol(); i < iend; ++i)
   {
     valtype *target = (valtype*)&targetMat[0] + i * _d;
@@ -51,15 +54,20 @@ IntegerVector GknapsackCpp(
         descendants, f, LBtmp, UBtmp, target, (valtype*)&MEr[0],
         maxCore, avgThreadLoad, verbose);
 
-    // std::cout << "\n" << &descendants[0] << ", " << descendants.capacity() << "\n";
+
+    // std::cout << "\n" << &descendants[0] << ", " << descendants.size() << "\n";
     // if(descendants.size() == 0)
     // {
     //   std::cout << "descendants.size() == 0\n";
     //   continue;
     // }
+    valtype previousProfit = f.optimalProfit;
     parMflsssOBJforKnapsack<valtype, indtype, mk, useBiSearch> (descendants, maxCore);
-    // parMflsssOBJforKnapsack<valtype, indtype, mk, useBiSearch> (descendants, 1);
-    if(approx and f.optimalProfit > 0) break;
+    if(f.optimalProfit > previousProfit)
+    {
+      if(verbose) Rcout << "Updated profit = " << f.optimalProfit << "\n";
+      if(approx) break;
+    }
   }
 
 

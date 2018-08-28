@@ -1,71 +1,3 @@
-\name{GAPintegerized}
-\alias{GAPintegerized}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-An advanced version of \code{GAP()}.
-}
-\description{
-See the description of \code{mFLSSSparIntegerized()}.
-}
-\usage{
-GAPintegerized(
-  maxCore = 7L,
-  agentsCosts,
-  agentsProfits,
-  agentsBudgets,
-  heuristic = FALSE,
-  precisionLevel = integer(length(agentsBudgets)),
-  returnBeforeMining = FALSE,
-  tlimit = 60,
-  useBiSrchInFB = FALSE,
-  threadLoad = 8L,
-  verbose = TRUE
-  )
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{maxCore}{
-Maximal threads to invoke. Ideally \code{maxCore} should not surpass the total logical processors on machine.
-}
-  \item{agentsCosts}{
-A numeric matrix. \code{agentsCosts[i, j]} is the cost for agent \code{i} to finish task \code{j}.
-}
-  \item{agentsProfits}{
-A numeric matrix. \code{agentsProfits[i, j]} is the profit from agent \code{i} finishing task \code{j}.
-}
-  \item{agentsBudgets}{
-A numeric vector. \code{agentsBudgets[i]} is agent \code{j}'s budget.
-}
-  \item{heuristic}{
-A boolean value. If \code{TRUE}, the function returns once it has found a solution whose sum of ranks of the profits becomes no less than that of the optimal. See \code{heuristic} in \code{mmKnapsack()}.
-}
-  \item{precisionLevel}{
-See \code{precisionLevel} in \code{mFLSSSparIntegerized()}.
-}
-  \item{returnBeforeMining}{
-See \code{returnBeforeMining} in \code{mFLSSSparIntegerized()}.
-}
-  \item{tlimit}{
-See \code{tlimit} in \code{FLSSS()}.
-}
-  \item{useBiSrchInFB}{
-See \code{useBiSrchInFB} in \code{FLSSS()}.
-}
-  \item{threadLoad}{
-See \code{avgThreadLoad} in \code{mFLSSSpar()}.
-}
-  \item{verbose}{
-If \code{TRUE}, function prints progress.
-}
-}
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
-\value{
-See function value of \code{GAP()}.
-}
-\note{32-bit architecture unsupported.}
-\examples{
 if(.Machine$sizeof.pointer == 8L){
 # =====================================================================================
 # 64-bit architecture required.
@@ -103,10 +35,10 @@ dimnames(costs) = NULL
 dimnames(profits) = NULL
 names(budgets) = NULL
 
-\donttest{
-rst = FLSSS::GAPintegerized(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
+# \donttest{
+rst = FLSSS::GAPintegerized(maxCore = 7L, agentsCosts = costs, agentsProfits = profits,
                             agentsBudgets = budgets, heuristic = FALSE,
-                            precisionLevel = rep(tasks * 4L, agents), tlimit = 2,
+                            precisionLevel = rep(tasks * 4L, agents), tlimit = 30,
                             useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 
 
@@ -126,7 +58,7 @@ if(sum(rst$assignedAgents) > 0) # all zeros mean the function has not found a so
 if(sum(rst$assignedAgents) > 0)
   sum(agentCostsOrProfits(rst$assignedAgents, profits))
 # Should equal rst$assignmentProfit
-}
+# }
 
 
 
@@ -147,8 +79,8 @@ costs = matrix(c(
 budgets = c(26, 25, 34)
 
 
-rst = FLSSS::GAPintegerized(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
-                            agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
+rst = FLSSS::GAPintegerized(maxCore = 7L, agentsCosts = costs, agentsProfits = profits,
+                            agentsBudgets = budgets, heuristic = FALSE, tlimit = 30,
                             useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 agentCostsOrProfits(rst$assignedAgents, costs)
 # Should equal rst$assignmentCosts and not surpass budgets
@@ -166,4 +98,6 @@ rst$assignmentProfit
 # =====================================================================================
 # =====================================================================================
 }
-}
+
+
+

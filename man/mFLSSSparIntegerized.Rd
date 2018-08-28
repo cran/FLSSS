@@ -174,8 +174,6 @@ if(length(rst$solution) > 0)
 }
 
 
-
-
 # Mine subsets, the first 3 dimensions lower bounded,
 # the last 4 dimension upper bounded
 rst = FLSSS::mFLSSSparIntegerized(

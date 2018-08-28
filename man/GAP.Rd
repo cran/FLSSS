@@ -109,7 +109,7 @@ names(budgets) = NULL
 
 \donttest{
 rst = FLSSS::GAP(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
-                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 3,
+                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
                  useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 # Function also saves the assignment costs and profits
 rst$assignedAgents
@@ -149,7 +149,7 @@ budgets = c(26, 25, 34)
 
 
 rst = FLSSS::GAP(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
-                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 3,
+                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
                  useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 agentCostsOrProfits(rst$assignedAgents, costs)
 # Should equal rst$assignmentCosts and not surpass budgets

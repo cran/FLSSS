@@ -1,78 +1,3 @@
-\name{mmKnapsackIntegerized}
-\alias{mmKnapsackIntegerized}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-An advanced version of \code{mmKnapsack()}
-}
-\description{
-See the description of \code{mFLSSSparIntegerized()}.
-}
-\usage{
-mmKnapsackIntegerized(
-  maxCore = 7L,
-  len,
-  itemsProfits,
-  itemsCosts,
-  capacities,
-  heuristic = FALSE,
-  precisionLevel = integer(length(capacities)),
-  returnBeforeMining = FALSE,
-  tlimit = 60,
-  useBiSrchInFB = FALSE,
-  threadLoad = 8L,
-  verbose = TRUE
-  )
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{maxCore}{
-See \code{maxCore} in \code{mmKnapsack()}.
-}
-  \item{len}{
-See \code{len} in \code{mmKnapsack()}.
-}
-  \item{itemsProfits}{
-See \code{itemsProfits} in \code{mmKnapsack()}.
-}
-  \item{itemsCosts}{
-See \code{itemsCosts} in \code{mmKnapsack()}.
-}
-  \item{capacities}{
-See \code{capacities} in \code{mmKnapsack()}.
-}
-  \item{heuristic}{
-See \code{heuristic} in \code{mmKnapsack()}.
-}
-\item{precisionLevel}{
-See \code{precisionLevel} in \code{mFLSSSparIntegerized()}.
-}
-\item{returnBeforeMining}{
-See \code{returnBeforeMining} in \code{mFLSSSparIntegerized()}.
-}
-  \item{tlimit}{
-See \code{tlimit} in \code{mmKnapsack()}.
-}
-  \item{useBiSrchInFB}{
-See \code{useBiSrchInFB} in \code{FLSSS()}.
-}
-  \item{threadLoad}{
-See \code{avgThreadLoad} in \code{mFLSSSpar()}.
-}
-  \item{verbose}{
-If \code{TRUE}, function prints progress.
-}
-}
-\value{
-A list of two.
-\item{Value$solution}{is a list of solution index vectors.}
-\item{Value$INT}{is a list of three.}
-\item{Value$INT$mV}{is the integerized superset.}
-\item{Value$INT$mTarget}{is the integerized subset sum.}
-\item{Value$INT$mME}{is the integerized subset sum error threshold.}
-\item{Value$INT$compressedDim}{is the dimensionality after integerization.}
-}
-\note{32-bit architecture unsupported.}
-\examples{
 if(.Machine$sizeof.pointer == 8L){
 # =====================================================================================
 # 64-bit architecture required.
@@ -85,7 +10,7 @@ subsetSize = 6
 supersetSize = 60
 NcostsAttr = 4
 
-\donttest{
+# \donttest{
 # Make up costs for each item.
 costs = abs(6 * (rnorm(supersetSize * NcostsAttr) ^ 3 +
   2 * runif(supersetSize * NcostsAttr) ^ 2 +
@@ -108,15 +33,15 @@ gains = rnorm(supersetSize) ^ 2 * 10000 + 100
 
 
 rst1 = FLSSS::mmKnapsackIntegerized(
-  maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 2, useBiSrchInFB = FALSE,
+  maxCore = 7L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
+  capacities = budgets, heuristic = FALSE, tlimit = 30, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
 
 
 # Examine if 'mmKnapsackIntegerized()' gives the same solution as 'mmKnapsack()'.
 rst2 = FLSSS::mmKnapsack(
-  maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 2, useBiSrchInFB = FALSE,
+  maxCore = 7L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
+  capacities = budgets, heuristic = FALSE, tlimit = 30, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
 # Differences in solutions are due to real-integer conversion
 
@@ -126,15 +51,15 @@ rst2 = FLSSS::mmKnapsack(
 # Let 'x' be the solution given 'heuristic = T'. The sum of ranks of the
 # profits subsetted by 'x' would be no less than that of the optimal solution.
 rst3 = FLSSS::mmKnapsackIntegerized(
-  maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = TRUE, tlimit = 2, useBiSrchInFB = FALSE,
+  maxCore = 7L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
+  capacities = budgets, heuristic = TRUE, tlimit = 30, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
 
 
 # Exam difference in total profits given by the heuristic and the optimal:
 if(length(rst3$solution) > 0 & length(rst1$solution) > 0)
   sum(gains[rst3$solution]) / sum(gains[rst1$solution])
-}
+# }
 
 
 
@@ -162,8 +87,8 @@ budgets = 6404180
 # 'len = 0' would cause severe deceleration. Looping 'len' over possible
 # values is recommended if 'len' is ungiven.
 rst = FLSSS::mmKnapsackIntegerized(
-  maxCore = 2L, len = 12L, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 2, threadLoad = 4L, verbose = TRUE)
+  maxCore = 7L, len = 12L, itemsProfits = gains, itemsCosts = costs,
+  capacities = budgets, heuristic = FALSE, tlimit = 30, threadLoad = 4L, verbose = TRUE)
 rst = sort(rst$solution)
 
 
@@ -176,9 +101,9 @@ cat(rst, "\n")
 
 # Increase the precision level
 rst = FLSSS::mmKnapsackIntegerized(
-  maxCore = 2L, len = 12L, itemsProfits = gains, itemsCosts = costs,
+  maxCore = 7L, len = 12L, itemsProfits = gains, itemsCosts = costs,
   capacities = budgets, heuristic = FALSE, precisionLevel = rep(500L, 1),
-  tlimit = 2, threadLoad = 4L, verbose = TRUE)
+  tlimit = 30, threadLoad = 4L, verbose = TRUE)
 # 'precisionLevel = 500' shifts, scales and rounds 'itemCosts' such that its
 # maximal element is no less than 500.
 rst = sort(rst$solution)
@@ -187,4 +112,3 @@ cat(rst, "\n")
 }
 # =====================================================================================
 # =====================================================================================
-}

@@ -90,7 +90,7 @@ gains = rnorm(supersetSize) ^ 2 * 10000 + 100
 
 rst1 = FLSSS::mmKnapsack(
   maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 3, useBiSrchInFB = FALSE,
+  capacities = budgets, heuristic = FALSE, tlimit = 2, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
 
 
@@ -98,13 +98,15 @@ rst1 = FLSSS::mmKnapsack(
 # profits subsetted by 'x' would be no less than that of the optimal solution.
 rst2 = FLSSS::mmKnapsack(
   maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = TRUE, tlimit = 3, useBiSrchInFB = FALSE,
+  capacities = budgets, heuristic = TRUE, tlimit = 2, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
 
 
 # Exam difference in total profits given by the heuristic and the optimal:
+cat(length(rst1)); cat(length(rst2)) # See if solution exists.
 if(length(rst1) > 0 & length(rst2) > 0) sum(gains[rst2]) / sum(gains[rst1])
 }
+
 
 
 
@@ -133,7 +135,7 @@ budgets = 6404180
 # values is recommended if 'len' is ungiven.
 rst1 = FLSSS::mmKnapsack(
   maxCore = 2L, len = 12L, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 3, threadLoad = 4L,
+  capacities = budgets, heuristic = FALSE, tlimit = 2, threadLoad = 4L,
   verbose = TRUE)
 rst1 = sort(rst1)
 
@@ -160,7 +162,7 @@ budgets = 750
 
 rst2 = FLSSS::mmKnapsack(
   maxCore = 2L, len = 8L, itemsProfits = gains, itemsCosts = costs,
-  capacities = budgets, heuristic = FALSE, tlimit = 3,
+  capacities = budgets, heuristic = FALSE, tlimit = 2,
   threadLoad = 4L, verbose = TRUE)
 rst2 = sort(rst2)
 
