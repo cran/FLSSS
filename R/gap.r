@@ -1,10 +1,110 @@
-
-
-
-
-GAP <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heuristic = FALSE, tlimit = 60, useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
+gapfindB <-function(X, Min, Max, LB = NULL, UB = NULL)
 {
-  # quick fail
+  nagent = length(Min) - 1L
+  ntask = ncol(X) / nagent
+  v = list()
+  k = 1L
+  for(i in seq(1L, by = nagent, len = ntask))
+  {
+    v[[k]] = X[, i : (i + nagent - 1L)]
+    v[[k]] = rbind(v[[k]], 0L : (nagent - 1L))
+    k = k + 1L
+  }
+  if(is.null(LB) | is.null(UB))
+  {
+    LB = rep(1L, ntask)
+    UB = rep(nagent, ntask)
+  }
+
+
+  # print("========================")
+  # print(Min - rowSums(as.data.frame(mapply(function(x, y)
+  # {
+  #   x[, y]
+  # }, v, UB, SIMPLIFY = F))))
+  # print("========================")
+  # print("========================")
+  # print(Max - rowSums(as.data.frame(mapply(function(x, y)
+  # {
+  #   x[, y]
+  # }, v, LB, SIMPLIFY = F))))
+  # print("========================")
+
+
+  first = T
+  while(T)
+  {
+    LBresv = LB
+    for(i in 1L : ntask)
+    {
+      S = Min - rowSums(as.data.frame(mapply(function(x, y)
+      {
+        x[, y]
+      }, v[-i], UB[-i], SIMPLIFY = F)))
+      names(S) = NULL
+      currentTask = v[[i]]
+      # cat("Min_rowSums =", S, "\n")
+      for(k in LB[i] : UB[i])
+      {
+        # cat("k =", k, ", ")
+        # print(currentTask[, k])
+        # if(all(currentTask[, k] >= S - 1e-10))
+        if(currentTask[nrow(currentTask), k] >= S[nrow(currentTask)] - 1e-10)
+        {
+          # print("all(currentTask[, k] >= S - 1e-10)")
+          break
+        }
+      }
+      # if(k >= UB[i] & !all(currentTask[, k] >= S - 1e-10)) return(list(LB, UB, F))
+      if(k >= UB[i] & !(currentTask[nrow(currentTask), k] >= S[nrow(currentTask)] - 1e-10)) return(list(LB, UB, F))
+      LB[i] = k
+      # cat('LB[i] = ', LB[i], '\n')
+    }
+
+
+    # cat("LB =", LB - 1L, "\n")
+
+
+    if(all(LBresv == LB) & !first) break
+    first = F
+
+
+    UBresv = UB
+    for(i in 1L : ntask)
+    {
+      S = Max - rowSums(as.data.frame(mapply(function(x, y)
+      {
+        x[, y]
+      }, v[-i], LB[-i], SIMPLIFY = F)))
+      currentTask = v[[i]]
+      # cat("Max_rowSums =", S, "\n")
+      for(k in UB[i] : LB[i])
+      {
+        if(all(currentTask[, k] <= S + 1e-10))
+        {
+          # print("all(currentTask[, k] <= S + 1e-10)")
+          break
+        }
+      }
+      if(k <= LB[i] & !all(currentTask[, k] <= S + 1e-10)) return(list(LB, UB, F))
+      UB[i] = k
+    }
+
+
+    # cat("UB =", UB - 1L, "\n")
+
+
+    if(all(UBresv == UB)) break
+  }
+  return(list(LB - 1L, UB - 1L))
+}
+
+
+
+
+GAPpre <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heuristic = FALSE, tlimit = 60, threadLoad = 8L, verbose = TRUE)
+{
+  # Quick fail
   {
     minCosts = apply(agentsCosts, 1, function(x) min(x))
     if(!all(minCosts <= agentsBudgets))
@@ -50,72 +150,46 @@ GAP <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heurist
 
 
   Vresv = V
-  V = cbind(numeric(nrow(V)), V)
-  scaleFactor = c(1, apply(V[, -1], 2, function(x) max(x)))
+  scaleFactor = max(agentsCosts) * 1.1
 
 
   for(i in 1L : ncol(V))
   {
-    V[, i] =  V[, i] + indCol * scaleFactor[i]
+    V[, i] =  V[, i] + indCol * scaleFactor
   }
 
 
   keyTarget = ((agents - 1L) * tasks) : 0L
-  target = c(0, agentsBudgets / 2)
-  ME = c(1 / 8, agentsBudgets / 2)
 
 
-  targetMat = as.data.frame(lapply(keyTarget, function(x)
+  MAXmat = as.matrix(as.data.frame(lapply(keyTarget, function(x)
   {
-    scaleFactor * x + target
-  }))
-  colnames(targetMat) = NULL
+    scaleFactor * x + agentsBudgets
+  })))
 
 
-  dlst = 0L
-  dl = 1L
-  dust = 0L
-  du = ncol(V)
+  V = V / scaleFactor
+  MAXmat = MAXmat / scaleFactor
 
 
-  targetMat = as.matrix(targetMat)
-  dimnames(targetMat) = NULL
+  MAXmat = rbind(MAXmat, keyTarget)
+  dimnames(MAXmat) = NULL
 
 
-  rst = z_GAP(maxCore, len = ncol(agentsCosts), t(V), numeric(0), dlst, dl, dust, du, targetMat, profits, ME, zeroBasedLB = seq(0L, by = agents, len = tasks), zeroBasedUB = seq(agents - 1L, by = agents, len = tasks), tlimit, useBiSrchInFB, threadLoad, verbose, heuristic) + 1L
-
-
-  if(rst[1] == 1L & rst[length(rst)] == 1L) rst = integer(0)
-
-
-  list(assignedAgents = data.frame(task = 1L : tasks, agent = agentsIndex[rst] + 1L),
-       assignmentProfit = sum(profits[rst]),
-       assignmentCosts = colSums(Vresv[rst, ]),
-       agentsBudgets = agentsBudgets,
-       unconstrainedMaxProfit = sum(apply(agentsProfits, 2, function(x) max(x))),
-       FLSSSsolution = rst,
-       FLSSSvec = V,
-       FLSSStargets = as.matrix(targetMat),
-       FLSSSme = ME,
-       foreShadowFLSSSvec = Vresv)
+  return(list(V = V, MAXmat = MAXmat))
 }
 
 
 
 
-GAPintegerized <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heuristic = FALSE, precisionLevel = integer(length(agentsBudgets)), returnBeforeMining = FALSE, tlimit = 60, useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
+GAP <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heuristic = FALSE, tlimit = 60, threadLoad = 8L, verbose = TRUE)
 {
-  # quick fail
+  # Quick fail
   {
-    if(.Machine$sizeof.pointer == 4L)
-    {
-      message("32-bit architecture unsupported")
-      return()
-    }
     minCosts = apply(agentsCosts, 1, function(x) min(x))
     if(!all(minCosts <= agentsBudgets))
     {
-      stop("Agent budgets supress any assignment.")
+      stop("Agent budgets supressed any assignment.")
     }
     if(ncol(agentsCosts) == 1L)
     {
@@ -138,130 +212,77 @@ GAPintegerized <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudge
     column[seq(i, len = tasks, by = agents)] = cost
     column
   }, 1L : agents, as.data.frame(t(agentsCosts)))
-  mVresv = costColumns
-
-
-  # integerize
-  if(all(precisionLevel == 0L))
-  {
-    precisionLevel = rep(ncol(agentsCosts) * 8L, length(agentsBudgets))
-  }
-
-
-  {
-    tmp = z_integerize(tasks, costColumns, agentsBudgets / 2, agentsBudgets / 2, precisionLevel)
-    mV = tmp$integerized
-    mTarget = tmp$target
-    mME = tmp$ME
-  }
-
-
-  INT = list(mV = mV, mTarget = mTarget, mME = mME)
 
 
   indCol = rep(0L : (agents - 1L), tasks)
+  V = costColumns
   agentsIndex = indCol
   i = 1L
-  while(i <= nrow(mV)) # order costs according to profits in each agent block
+  while(i <= nrow(V))
   {
     rg = i : (i + agents - 1L)
     tmpOrder = order(profits[rg])
-    mV[rg, ] = mV[rg, ][tmpOrder, ]
+    V[rg, ] = V[rg, ][tmpOrder, ]
     agentsIndex[rg] = agentsIndex[rg][tmpOrder]
     profits[rg] = profits[rg][tmpOrder]
     i = i + agents
   }
 
 
-  mV = cbind(integer(nrow(mV)), mV)
-  scaleFactor = c(1L, apply(mV[, -1L], 2L, function(x) abs(max(x))))
+  Vresv = V
+  scaleFactor = max(agentsCosts) * 1.1
 
 
-  for(i in 1L : ncol(mV))
+  for(i in 1L : ncol(V))
   {
-    mV[, i] =  mV[, i] + indCol * scaleFactor[i]
+    V[, i] =  V[, i] + indCol * scaleFactor
   }
 
 
   keyTarget = ((agents - 1L) * tasks) : 0L
-  mTarget = c(0L, mTarget)
-  mME = c(0L, mME)
 
 
-  targetMat = as.data.frame(lapply(keyTarget, function(x)
+  MAXmat = as.matrix(as.data.frame(lapply(keyTarget, function(x)
   {
-    scaleFactor * x + mTarget
-  }))
-  targetMat = as.matrix(targetMat)
-  dimnames(targetMat) = NULL
+    scaleFactor * x + agentsBudgets
+  })))
 
 
-  # find the largest subset sums
-  {
-    tmp = seq(1L, by = agents, len = tasks)
-    lowestSS = apply(mV, 2, function(x)
-    {
-      S = 0L
-      for(i in 1L : length(tmp))
-      {
-        S = S + x[tmp[i]]
-      }; S
-    })
-    largestSS = apply(mV, 2, function(x)
-    {
-      S = 0L
-      for(i in 1L : length(tmp))
-      {
-        S = S + x[tmp[i] + agents - 1L]
-      }; S
-    })
-  }
+  V = V / scaleFactor
+  MAXmat = MAXmat / scaleFactor
 
 
-  # adjust targetMat and find max magnitude
-  targetMatAndMaxMag = z_filterTargetFindLargestMagnitude(tasks, mV, targetMat, mME, lowestSS, largestSS)
-  targetMat = targetMatAndMaxMag$targetMat
-  maxMag = targetMatAndMaxMag$maxMag
+  MAXmat = rbind(MAXmat, keyTarget)
+  dimnames(MAXmat) = NULL
 
 
-  # return(list(mV = mV, targetMat = targetMat, mME = mME, lowestSS = lowestSS, largestSS = largestSS, maxMag = maxMag))
+  rst = z_GAP(maxCore, t(V), profits, MAXmat, rep(0L, tasks), rep(agents - 1L, tasks), tlimit, threadLoad, verbose = verbose, heuristic = heuristic)
 
 
-  # crunch integers
-  {
-    tmp = z_crunchIntegers(tasks, mV, targetMat, mME, maxMag = maxMag)
-    mV = tmp$mV
-    targetMat = tmp$targetMat
-    mME = tmp$mME
-    maskV = tmp$maskV
-  }
+  rst = rst + 1L
 
 
-  dlst = 0L
-  dl = 1L
-  dust = 0L
-  du = ncol(mV)
-  if(returnBeforeMining) return(c(INT, list(compressedDim = ncol(mV))))
-  if(verbose) cat("Dimensionality reduced from", agents + 1L, "to", du, "\n")
+  if(rst[1] == 1L & rst[length(rst)] == 1L) rst = NA
+  if(is.na(rst[1])) foundAgent = NA
+  else foundAgent = agentsIndex[rst] + 1L
 
 
-  rst = z_GAP(maxCore, len = ncol(agentsCosts), t(mV), maskV, dlst, dl, dust, du, targetMat, profits, mME, zeroBasedLB = seq(0L, by = agents, len = tasks), zeroBasedUB = seq(agents - 1L, by = agents, len = tasks), tlimit, useBiSrchInFB, threadLoad, verbose) + 1L
-
-
-  if(rst[1] == 1L & rst[length(rst)] == 1L) rst = integer(0)
-
-
-  list(assignedAgents = data.frame(task = 1L : tasks, agent = agentsIndex[rst] + 1L),
+  names(agentsBudgets) = NULL
+  list(assignedAgents = data.frame(task = 1L : tasks, agent = foundAgent),
        assignmentProfit = sum(profits[rst]),
-       assignmentCosts = colSums(mVresv[agentsIndex[rst] + seq(0L, by = agents, len = tasks) + 1L, ]),
+       assignmentCosts = colSums(Vresv[rst, ]),
        agentsBudgets = agentsBudgets,
        unconstrainedMaxProfit = sum(apply(agentsProfits, 2, function(x) max(x))),
        FLSSSsolution = rst,
-       FLSSSvec = mV,
-       FLSSStargets = as.matrix(targetMat),
-       FLSSSme = mME,
-       foreShadowFLSSSvec = mVresv)
+       FLSSSvec = V,
+       MAXmat = MAXmat,
+       foreShadowFLSSSvec = Vresv)
 }
+
+
+
+
+
 
 
 

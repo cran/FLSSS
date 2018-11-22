@@ -184,7 +184,7 @@ all(unlist(lapply(rst, function(x)
 
 
 # Find a subset without size specification.
-rst = FLSSS::FLSSS(len = subsetSize, v = superset, target = subsetSum,
+rst = FLSSS::FLSSS(len = 0, v = superset, target = subsetSum,
                    ME = subsetSumError, solutionNeed = 1, tlimit = 4)
 # Verify:
 all(unlist(lapply(rst, function(x)

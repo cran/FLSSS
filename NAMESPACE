@@ -1,4 +1,4 @@
-export(FLSSS, FLSSSmultiset, GAP, GAPintegerized, mFLSSSpar,
+export(FLSSS, FLSSSmultiset, GAP, mFLSSSpar,
        mFLSSSparImposeBounds, mFLSSSparImposeBoundsIntegerized,
        mFLSSSparIntegerized, mmKnapsack, mmKnapsackIntegerized)
 importFrom(Rcpp, evalCpp)

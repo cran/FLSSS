@@ -31,17 +31,13 @@ IntegerVector GknapsackCpp(
       &*optimalSolution.begin());
 
 
-  // indtype LBtmp[len], UBtmp[len];
-  vec<indtype> acntr((int)2 * len);
+  vec<indtype> acntr(int(2) * len);
   indtype *LBtmp = &*acntr.begin(), *UBtmp = LBtmp + len;
   for(indtype i = 0, iend = len; i < iend; ++i)
   {
     LBtmp[i] = LBr[i] - 1;
     UBtmp[i] = UBr[i] - 1;
   }
-
-
-  // std::cout << "targetMat.ncol() = " << targetMat.ncol() << "\n";
 
 
   for(int i = 0, iend = targetMat.ncol(); i < iend; ++i)
@@ -55,12 +51,6 @@ IntegerVector GknapsackCpp(
         maxCore, avgThreadLoad, verbose);
 
 
-    // std::cout << "\n" << &descendants[0] << ", " << descendants.size() << "\n";
-    // if(descendants.size() == 0)
-    // {
-    //   std::cout << "descendants.size() == 0\n";
-    //   continue;
-    // }
     valtype previousProfit = f.optimalProfit;
     parMflsssOBJforKnapsack<valtype, indtype, mk, useBiSearch> (descendants, maxCore);
     if(f.optimalProfit > previousProfit)

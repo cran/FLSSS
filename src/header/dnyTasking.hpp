@@ -16,7 +16,7 @@ struct dynamicTasking
   void reset(std::size_t NofCPU, std::size_t NofTask)
   {
     NofCore = NofCPU;
-    if(NofCore > NofTask)NofCore = NofTask;
+    if(NofCore > NofTask) NofCore = NofTask;
     NofAtom = NofTask;
     counter = 0;
   }
@@ -30,10 +30,15 @@ struct dynamicTasking
 
   bool nextTaskID(std::size_t &taskID)
   {
-    // taskID = counter.fetch_and_add(1);
     taskID = counter.fetch_and_increment();
-    if(taskID >= NofAtom) return 0;
-    return 1;
+    return taskID < NofAtom;
+  }
+
+
+  bool nextTaskID(std::size_t &taskID, std::size_t increment)
+  {
+    taskID = counter.fetch_and_add(increment);
+    return taskID < NofAtom;
   }
 };
 

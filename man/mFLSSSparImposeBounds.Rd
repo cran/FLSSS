@@ -4,7 +4,7 @@
 \title{
 Multithreaded multidimensional Subset Sum in bounded solution space given error thresholds}
 \description{
-For comparison, function \code{mFLSSSpar()} puts no bounds on the solution space so it can sort \code{mV} internally in a special order to accelerate computing speed. Function \code{mFLSSSparImposeBounds()} bounds the solution space and keeps the order of \code{mV}. See Examples for its application to the generalized assignment problem [1].
+For comparison, function \code{mFLSSSpar()} puts no bounds on the solution space so it sorts \code{mV} internally in a special order for mining accerlation.
 }
 \usage{
 mFLSSSparImposeBounds(
@@ -60,7 +60,7 @@ See \code{dl} in \code{mFLSSSpar()}.
 See \code{du} in \code{mFLSSSpar()}.
 }
   \item{targetsOrder}{
-This argument is mainly for research and not recommended for use. Depending on certain structural characteristic of \code{mV}, \code{mFLSSSpar()} and \cr\code{mFLSSSparImposeBounds()} would break the mining task into a collection of no more than \code{len * (nrow(mV) - len) + 1} independent subtasks. Threads work on these subtasks, sequentially coordinated by an atomic counter [1]. Different subtasks have different probabilities of yielding a qualified subset, thus the order of subtasks matters to the mining time cost. \code{targetsOrder} is an index vector of size \code{len} \code{*} \code{(nrow(mV)} \code{-} \code{len)} \code{+} \code{1} for ordering the subtasks. \code{targetsOrder <- NULL} makes a special order, and is implicitly the choice in \code{mFLSSSpar()}. This order is empirically optimal based on simulations. See the \href{https://arxiv.org/abs/1612.04484}{package documentation} for details.
+This argument is mainly for research and unrecommended for use. Depending on the structure of \code{mV}, \code{mFLSSSpar()} or \cr\code{mFLSSSparImposeBounds()} would break the mining task into a collection of no more than \code{len * (nrow(mV) - len) + 1} independent subtasks. Threads work on these subtasks, sequentially coordinated by an atomic counter [1]. Different subtasks have different probabilities of yielding a qualified subset, thus the order of subtasks matters to the mining speed. \code{targetsOrder} is an index vector of size \code{len} \code{*} \code{(nrow(mV)} \code{-} \code{len)} \code{+} \code{1} for ordering the subtasks. \code{targetsOrder <- NULL} makes a special order, and is implicitly the choice in \code{mFLSSSpar()}. This order is empirically optimal based on simulations. See the \href{https://arxiv.org/abs/1612.04484}{package documentation} for details.
 }
   \item{useBiSrchInFB}{
 See \code{useBiSrchInFB} in \code{mFLSSSpar()}.

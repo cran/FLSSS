@@ -5,22 +5,21 @@
 # include "oneDoperation.hpp"
 # include "mvalOperation.hpp"
 # include "macros.hpp"
-# include <fstream>
-# include <bitset>
 // using namespace Rcpp;
 // jmp_buf env;
 
 
+// int BBB = 1;
 
 
-template<typename valtype, typename indtype, bool mk, bool useBiSearch>
+template<typename valtype, typename indtype>
 // inline unsigned char LBiFind(
 //     indtype &ciLB, valtype ***M, indtype ci_1LB, valtype *SR,
 //     indtype d, indtype I, indtype &J, indtype *UB, bool useBinarySearch)
 inline unsigned char LBiFind(
     indtype &ciLB, valtype ***M, indtype ci_1LB, valtype *SR,
     indtype cmpst, indtype dcmp,
-    indtype I, indtype &J, indtype *UB, INT *mask)
+    indtype I, indtype &J, indtype *UB, bool useBinarySearch)
 {
 
   if(ciLB < ci_1LB + 1) ciLB = ci_1LB + 1;
@@ -49,15 +48,11 @@ inline unsigned char LBiFind(
   {
     // what is the upper bound of I? UB[I], and the actual value is [UB[I]]
     // icPre = ic;
-    // std::cout << (int)I << ", " << (int)J << "\n";
     if(J >= I)
     {
       // if(notAllGreaterEqual(v[UB[I]], SR, ic, d))
-      if(notAllGreaterEqual<valtype, indtype, mk> (
-          v[UB[I]] + cmpst, SR + cmpst, ic, dcmp, mask))
+      if(notAllGreaterEqual(v[UB[I]] + cmpst, SR + cmpst, ic, dcmp))
       {
-        // std::cout << "J >= I, return 0\n";
-        // std::cout << (int)I << ", " << (int)J << "\n";
         return 0;
       }
       break;
@@ -68,8 +63,7 @@ inline unsigned char LBiFind(
     // what is the value we are looking for? v[UB[J]]+v[UB[J]+1]+...+v[UB[J]+I-J]
     // which row in that column?: M[I-J][UB[J]]
     // if(notAllGreaterEqual(M[I - J][UB[J]], SR, ic, d))
-    if(notAllGreaterEqual<valtype, indtype, mk> (
-        M[I - J][UB[J]] + cmpst, SR + cmpst, ic, dcmp, mask))
+    if(notAllGreaterEqual(M[I - J][UB[J]] + cmpst, SR + cmpst, ic, dcmp))
     {
       // mvalMinus(SR, SR, v[UB[J]], d);
       mvalMinus(SR + cmpst, SR + cmpst, v[UB[J]] + cmpst, dcmp);
@@ -81,18 +75,16 @@ inline unsigned char LBiFind(
 
   // the free point J is now located, conduct binary search
   indtype I_J = I - J;
-  if(useBiSearch)
+  if(useBinarySearch)
   {
     // ciLB = mvalLowerBoundBiMan(&M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, d) - &M[I_J][0] + I_J;
-    ciLB = mvalLowerBoundBiMan<valtype, indtype, mk> (
-      &M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, cmpst, dcmp, mask) - &M[I_J][0] + I_J;
+    ciLB = mvalLowerBoundBiMan(&M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, cmpst, dcmp) - &M[I_J][0] + I_J;
   }
   else
   {
     ic = 0;
     // ciLB = mvalLowerBoundLr(&M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, ic, d) - &M[I_J][0] + I_J;
-    ciLB = mvalLowerBoundLr<valtype, indtype, mk> (
-      &M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, ic, cmpst, dcmp, mask) - &M[I_J][0] + I_J;
+    ciLB = mvalLowerBoundLr(&M[I_J][ciLB - I_J], &M[I_J][UB[J]] + 1, SR, ic, cmpst, dcmp) - &M[I_J][0] + I_J;
   }
 
 
@@ -102,12 +94,12 @@ inline unsigned char LBiFind(
 
 
 
-template<typename valtype, typename indtype, bool mk, bool useBiSearch>
+template<typename valtype, typename indtype>
 // inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtype *SR,
 //                              indtype d, indtype I, indtype &J, indtype *LB, bool useBinarySearch)
 inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtype *SR,
                              indtype cmpst, indtype dcmp,
-                             indtype I, indtype &J, indtype *LB, INT *mask)
+                             indtype I, indtype &J, indtype *LB, bool useBinarySearch)
 {
   if(ciUB > ciP1UB - 1) ciUB = ciP1UB - 1;
   valtype **v = M[0];
@@ -134,8 +126,7 @@ inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtyp
     if(I == J)
     {
       // if(notAllLessEqual(v[LB[I]], SR, ic, d))
-      if(notAllLessEqual<valtype, indtype, mk> (
-          v[LB[I]] + cmpst, SR + cmpst, ic, dcmp, mask))
+      if(notAllLessEqual(v[LB[I]] + cmpst, SR + cmpst, ic, dcmp))
       {
         return 0;
       }
@@ -144,8 +135,7 @@ inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtyp
 
 
     // if(notAllLessEqual(M[J - I][LB[J] - (J - I)], SR, ic, d)) // M[J-I][LB[J]-(J-I)]>SR
-    if(notAllLessEqual<valtype, indtype, mk> (
-        M[J - I][LB[J] - (J - I)] + cmpst, SR + cmpst, ic, dcmp, mask)) // M[J-I][LB[J]-(J-I)] > SR
+    if(notAllLessEqual(M[J - I][LB[J] - (J - I)] + cmpst, SR + cmpst, ic, dcmp)) // M[J-I][LB[J]-(J-I)] > SR
     {
       // mvalMinus(SR, SR, v[LB[J]], d);
       mvalMinus(SR + cmpst, SR + cmpst, v[LB[J]] + cmpst, dcmp);
@@ -157,18 +147,16 @@ inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtyp
 
   // the free point J is now located, conduct binary search
   indtype J_I = J - I;
-  if(useBiSearch)
+  if(useBinarySearch)
   {
     // ciUB = mvalUpperBoundBiMan(&M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, d) - 1 - &M[J_I][0];
-    ciUB = mvalUpperBoundBiMan<valtype, indtype, mk> (
-      &M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, cmpst, dcmp, mask) - 1 - &M[J_I][0];
+    ciUB = mvalUpperBoundBiMan(&M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, cmpst, dcmp) - 1 - &M[J_I][0];
   }
   else
   {
     ic = 0;
     // ciUB = mvalUpperBoundLr(&M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, ic, d) - &M[J_I][0];
-    ciUB = mvalUpperBoundLr<valtype, indtype, mk> (
-      &M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, ic, cmpst, dcmp, mask) - &M[J_I][0];
+    ciUB = mvalUpperBoundLr(&M[J_I][LB[J] - J_I], &M[J_I][ciUB] + 1, SR, ic, cmpst, dcmp) - &M[J_I][0];
   }
 
 
@@ -185,7 +173,7 @@ inline unsigned char UBiFind(indtype &ciUB, valtype ***M, indtype ciP1UB, valtyp
 
 
 //_________________________________________________________________________________________________
-template<typename valtype, typename indtype, bool mk, bool useBiSearch>
+template<typename valtype, typename indtype>
 // inline indtype findBoundCpp(
 //     indtype len, indtype d, valtype *x, valtype *ME, indtype *LB, valtype *sumLB, indtype *UB, valtype *sumUB,
 //     valtype ***M, bool useBinarySearch)
@@ -194,18 +182,43 @@ inline indtype findBoundCpp(
     valtype *Min, valtype *Max, // valtype *ME,
     indtype *LB, valtype *sumLB, // int &sumLBind,
     indtype *UB, valtype *sumUB, // int &sumUBind,
-    valtype ***M, INT *mask, vec<valtype> &SRVcntr)
+    valtype ***M, bool useBinarySearch)
 // Min is of size dl, Max is of size du
 // Min, Min + dl is aligned with value + dlst ~ value + dlst + dl
 // Max, Max + du is aligned with value + dust ~ value + dust + du
 {
+  // valtype MAX[d], *Max = MAX, MIN[d], *Min = MIN;
+  // {
+  //   for(indtype k = 0; k < d; ++k)
+  //   {
+  //     Max[k] = x[k] + ME[k];
+  //     Min[k] = x[k] - ME[k];
+  //   }
+  // }
+
+
+  // // test if it's worth finding the bounds
+  // {
+  //   indtype k = 0;
+  //   for(; k < d; ++k)
+  //   {
+  //     if(absDiff(sumUB[k], sumLB[k]) > relaEps) break;
+  //     if(sumUB[k] < Min[k] or sumLB[k] > Max[k]) return 0;
+  //   }
+  //   if(k == d) return 2;
+  //   for(; k < d; ++k)
+  //   {
+  //     if(sumUB[k] < Min[k] or sumLB[k] > Max[k]) return 0;
+  //   }
+  // }
+
+
   bool boo = 0;
   valtype **v = M[0];
 
 
-  // vec<valtype> SRVcntr(d);
-  // SRVcntr.resize(d);
-  valtype *SRV = &*SRVcntr.begin();
+  vec<valtype> SRcontainer(d);
+  valtype *SRV = &SRcontainer[0], *SR = SRV;
   unsigned LBsum = 0, UBsum = 0;
   while(true)
   {
@@ -213,9 +226,10 @@ inline indtype findBoundCpp(
 
 
     indtype I = 0, J = 0;
-    valtype *SR = SRV;
+    // valtype SRV[d], *SR = SRV;
 
 
+    // mvalPlusMinus(SR, Min, v[UB[I]], sumUB, d);
     mvalPlusMinus(SR + dlst, Min + dlst, v[UB[I]] + dlst, sumUB + dlst, dl);
 
 
@@ -223,18 +237,19 @@ inline indtype findBoundCpp(
     LBsum = 0;
     {
       indtype tmpLB = LB[I];
-      if(useBiSearch)
+      if(useBinarySearch)
       {
-        LB[I] = mvalLowerBoundBiMan<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl, mask) - v;
+        // LB[I] = mvalLowerBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, d) - v;
+        LB[I] = mvalLowerBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl) - v;
       }
       else
       {
-        LB[I] = mvalLowerBoundLr<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl, mask) - v;
+        // LB[I] = mvalLowerBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, d) - v;
+        LB[I] = mvalLowerBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl) - v;
       }
       if(LB[I] > UB[I]) return 0;
-      boundChanged = boundChanged or (tmpLB != LB[I]);
+      if(tmpLB != LB[I]) boundChanged = 1;
+      // std::copy(v[LB[I]], v[LB[I]] + d, sumLB);
       std::memcpy(sumLB, v[LB[I]], sizeof(valtype) * d); // every sumLB's dimension matters!
     }
     LBsum += LB[I];
@@ -248,14 +263,42 @@ inline indtype findBoundCpp(
       for(; I < len; ++I)
       {
         indtype LBI = LB[I];
-        unsigned char b = LBiFind<valtype, indtype, mk, useBiSearch> (
-          LB[I], M, LB[I - 1], SR, dlst, dl, I, J, UB, mask);
+        // unsigned char b = LBiFind(LB[I], M, LB[I - 1], SR, d, I, J, UB, useBinarySearch);
+        unsigned char b = LBiFind(LB[I], M, LB[I - 1], SR, dlst, dl, I, J, UB, useBinarySearch);
         if(b == 0) return 0;
-        boundChanged = boundChanged or (LBI != LB[I]);
+        if(!boundChanged)
+        {
+          boundChanged = (LBI != LB[I]);
+        }
         mvalPlus(sumLB, sumLB, v[LB[I]], d); // every sumLB's dimension matters!
         LBsum += LB[I];
       }
     }
+
+
+    // {
+    //   if(!boo) boo = 1;
+    //   else
+    //   {
+    //     if(!boundChanged)
+    //     {
+    //       if(LBsum == UBsum) // double insurance and faster
+    //       {
+    //         bool LBequalUB = 1;
+    //         for(indtype k = 0; k < d; ++k)
+    //         {
+    //           if(absDiff(sumUB[k], sumLB[k]) > relaEps)
+    //           {
+    //             LBequalUB = 0;
+    //             break;
+    //           }
+    //         }
+    //         if(LBequalUB) return 2;
+    //       }
+    //       break;
+    //     }
+    //   }
+    // }
 
 
     {
@@ -271,26 +314,27 @@ inline indtype findBoundCpp(
     }
 
 
-    boundChanged = 0;
     J = len - 1; I = J;
+    // mvalPlusMinus(SR, Max, v[LB[I]], sumLB, d);
     mvalPlusMinus(SR + dust, Max, v[LB[I]] + dust, sumLB + dust, du);
+    boundChanged = 0;
 
 
     UBsum = 0;
     {
       indtype tmpUB = UB[I];
-      if(useBiSearch)
+      if(useBinarySearch)
       {
-        UB[I] = mvalUpperBoundBiMan<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dust, du, mask) - v - 1;
+        // UB[I] = mvalUpperBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, d) - v - 1;
+        UB[I] = mvalUpperBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, dust, du) - v - 1;
       }
       else
       {
-        UB[I] = mvalUpperBoundLr<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dust, du, mask) - v;
+        // UB[I] = mvalUpperBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, d) - v;
+        UB[I] = mvalUpperBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, dust, du) - v;
       }
       if(LB[I] > UB[I]) return 0;
-      boundChanged = boundChanged or (tmpUB != UB[I]);
+      if(tmpUB != UB[I]) boundChanged = 1;
       std::memcpy(sumUB, v[UB[I]], sizeof(valtype) * d);
       UBsum += UB[I];
     }
@@ -304,10 +348,17 @@ inline indtype findBoundCpp(
       for(; I >= 0; --I)
       {
         indtype UBI = UB[I];
-        unsigned char b = UBiFind<valtype, indtype, mk, useBiSearch> (
-          UB[I], M, UB[I + 1], SR, dust, du, I, J, LB, mask);
+
+
+        // unsigned char b = UBiFind(UB[I], M, UB[I + 1], SR, d, I, J, LB, useBinarySearch);
+        unsigned char b = UBiFind(UB[I], M, UB[I + 1], SR, dust, du, I, J, LB, useBinarySearch);
+
+
         if(b == 0) return 0;
-        boundChanged = boundChanged or (UBI != UB[I]);
+        if(!boundChanged)
+        {
+          boundChanged = (UBI != UB[I]);
+        }
         mvalPlus(sumUB, sumUB, v[UB[I]], d); // every dimension of sumUB matters.
         UBsum += UB[I];
       }
@@ -318,10 +369,32 @@ inline indtype findBoundCpp(
     {
       if(!boundChanged)
       {
-        if(LBsum == UBsum) return 2;
+        if(LBsum == UBsum)
+        // {
+        //   bool LBequalUB = 1;
+        //   for(indtype k = 0; k < d; ++k)
+        //   {
+        //     if(absDiff(sumUB[k], sumLB[k]) > relaEps)
+        //     {
+        //       LBequalUB = 0;
+        //       break;
+        //     }
+        //   }
+        //   if(LBequalUB) return 2;
+        // }
+          return 2;
         break;
       }
     }
+
+
+    // {
+    //   if(!boundChanged)
+    //   {
+    //     if(LBsum == UBsum) return 2;
+    //     break;
+    //   }
+    // }
   }
 
 
@@ -331,15 +404,17 @@ inline indtype findBoundCpp(
 
 
 
-
 //_________________________________________________________________________________________________
-template<typename valtype, typename indtype, bool mk, bool useBiSearch>
+template<typename valtype, typename indtype>
+// inline indtype findBoundCpp(
+//     indtype len, indtype d, valtype *x, valtype *ME, indtype *LB, valtype *sumLB, indtype *UB, valtype *sumUB,
+//     valtype ***M, bool useBinarySearch)
 inline indtype findBoundUpFirstCpp(
     indtype len, indtype d, indtype dlst, indtype dl, indtype dust, indtype du,
     valtype *Min, valtype *Max, // valtype *ME,
     indtype *LB, valtype *sumLB, // int &sumLBind,
     indtype *UB, valtype *sumUB, // int &sumUBind,
-    valtype ***M, INT *mask, vec<valtype> &SRVcntr)
+    valtype ***M, bool useBinarySearch)
 {
   bool boo = 0;
   valtype **v = M[0];
@@ -348,8 +423,9 @@ inline indtype findBoundUpFirstCpp(
   unsigned LBsum = 0, UBsum = 0;
   bool boundChanged;
   indtype I, J;
-  // vec<valtype> SRVcntr(d);
-  valtype *SRV = &*SRVcntr.begin(), *SR = SRV;
+  valtype SRcontainer(d);
+  valtype *SRV = &SRcontainer[0], *SR = SRV;
+  // valtype SRV[d], *SR = SRV;
   while(true)
   {
     J = len - 1;
@@ -361,18 +437,16 @@ inline indtype findBoundUpFirstCpp(
     UBsum = 0;
     {
       indtype tmpUB = UB[I];
-      if(useBiSearch)
+      if(useBinarySearch)
       {
-        UB[I] = mvalUpperBoundBiMan<valtype, indtype, mk>(
-          &v[LB[I]], &v[UB[I]] + 1, SR, dust, du, mask) - v - 1;
+        UB[I] = mvalUpperBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, dust, du) - v - 1;
       }
       else
       {
-        UB[I] = mvalUpperBoundLr<valtype, indtype, mk>(
-          &v[LB[I]], &v[UB[I]] + 1, SR, dust, du, mask) - v;
+        UB[I] = mvalUpperBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, dust, du) - v;
       }
       if(LB[I] > UB[I]) return 0;
-      boundChanged = boundChanged or (tmpUB != UB[I]);
+      if(tmpUB != UB[I]) boundChanged = 1;
       std::memcpy(sumUB, v[UB[I]], sizeof(valtype) * d);
       UBsum += UB[I];
     }
@@ -386,10 +460,12 @@ inline indtype findBoundUpFirstCpp(
       for(; I >= 0; --I)
       {
         indtype UBI = UB[I];
-        unsigned char b = UBiFind<valtype, indtype, mk, useBiSearch> (
-          UB[I], M, UB[I + 1], SR, dust, du, I, J, LB, mask);
+        unsigned char b = UBiFind(UB[I], M, UB[I + 1], SR, dust, du, I, J, LB, useBinarySearch);
         if(b == 0) return 0;
-        boundChanged = boundChanged or (UBI != UB[I]);
+        if(!boundChanged)
+        {
+          boundChanged = (UBI != UB[I]);
+        }
         mvalPlus(sumUB, sumUB, v[UB[I]], d); // every dimension of sumUB matters.
         UBsum += UB[I];
       }
@@ -420,18 +496,16 @@ inline indtype findBoundUpFirstCpp(
     LBsum = 0;
     {
       indtype tmpLB = LB[I];
-      if(useBiSearch)
+      if(useBinarySearch)
       {
-        LB[I] = mvalLowerBoundBiMan<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl, mask) - v;
+        LB[I] = mvalLowerBoundBiMan(&v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl) - v;
       }
       else
       {
-        LB[I] = mvalLowerBoundLr<valtype, indtype, mk> (
-          &v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl, mask) - v;
+        LB[I] = mvalLowerBoundLr(&v[LB[I]], &v[UB[I]] + 1, SR, dlst, dl) - v;
       }
       if(LB[I] > UB[I]) return 0;
-      boundChanged = boundChanged or (tmpLB != LB[I]);
+      if(tmpLB != LB[I]) boundChanged = 1;
       std::memcpy(sumLB, v[LB[I]], sizeof(valtype) * d); // every sumLB's dimension matters!
     }
     LBsum += LB[I];
@@ -445,10 +519,12 @@ inline indtype findBoundUpFirstCpp(
       for(; I < len; ++I)
       {
         indtype LBI = LB[I];
-        unsigned char b = LBiFind<valtype, indtype, mk, useBiSearch> (
-          LB[I], M, LB[I - 1], SR, dlst, dl, I, J, UB, mask);
+        unsigned char b = LBiFind(LB[I], M, LB[I - 1], SR, dlst, dl, I, J, UB, useBinarySearch);
         if(b == 0) return 0;
-        boundChanged = boundChanged or (LBI != LB[I]);
+        if(!boundChanged)
+        {
+          boundChanged = (LBI != LB[I]);
+        }
         mvalPlus(sumLB, sumLB, v[LB[I]], d); // every sumLB's dimension matters!
         LBsum += LB[I];
       }

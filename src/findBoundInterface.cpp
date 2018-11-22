@@ -77,6 +77,7 @@ List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector m
     Min[i] = x[i] - ME[i];
     Max[i] = x[i] + ME[i];
   }
+  vec<double> SRVcntr(d);
   for(int I = 0; ;)
   {
     std::clock_t t = std::clock();
@@ -84,9 +85,9 @@ List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector m
 
 
     if(UBfirst) findOrNot = findBoundUpFirstCpp<double, int, 0, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr, SRVcntr);
     else findOrNot = findBoundCpp<double, int, 0, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr, SRVcntr);
 
 
     ++I;
@@ -186,6 +187,7 @@ List z_findBoundIntegerized(
     Min[i] = x[i] - ME[i];
     Max[i] = x[i] + ME[i];
   }
+  vec<INT> SRVcntr(d);
   for(int I = 0; ;)
   {
     std::clock_t t = std::clock();
@@ -193,9 +195,9 @@ List z_findBoundIntegerized(
 
 
     if(UBfirst) findOrNot = findBoundUpFirstCpp<INT, int, 1, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, (INT*)&mask[0]);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, (INT*)&mask[0], SRVcntr);
     else findOrNot = findBoundCpp<INT, int, 1, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, (INT*)&mask[0]);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, (INT*)&mask[0], SRVcntr);
 
 
     ++I;

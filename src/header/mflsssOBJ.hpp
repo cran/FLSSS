@@ -71,15 +71,17 @@ struct dummyContainers
   vec<mPAT<valtype, indtype, mk, useBiSearch> > SKvec;
   vec<indtype> indvec;
   vec<valtype> valvec;
+  vec<valtype> SRVcntr;
   void swap(vec<indtype> &ahopeV,
             vec<mPAT<valtype, indtype, mk, useBiSearch> > &aSKvec,
             vec<indtype> &aindvec,
-            vec<valtype> &avalvec)
+            vec<valtype> &avalvec, vec<valtype> &aSRVcntr)
   {
     hopeV.swap(ahopeV);
     SKvec.swap(aSKvec);
     indvec.swap(aindvec);
     valvec.swap(avalvec);
+    SRVcntr.swap(aSRVcntr);
   }
 };
 
@@ -101,6 +103,7 @@ struct mflsssOBJ
   mPAT<valtype, indtype, mk, useBiSearch> *SKback;
   vec<indtype> indvec;
   vec<valtype> valvec;
+  vec<valtype> SRVcntr;
   vec<vec<indtype> > result;
 
 
@@ -114,6 +117,7 @@ struct mflsssOBJ
     std::swap(X.SKback, SKback);
     std::swap(X.indvec, indvec);
     std::swap(X.valvec, valvec);
+    std::swap(X.SRVcntr, SRVcntr);
     std::swap(X.result, result);
   }
 
@@ -146,13 +150,14 @@ struct mflsssOBJ
     // about '+3': once, there was a failed test case given '+0'
     if(dummies != nullptr)
     {
-      dummies->swap(hopeV, SKvec, indvec, valvec);
+      dummies->swap(hopeV, SKvec, indvec, valvec, SRVcntr);
     }
     indvec.assign(stackLen * (stackLen + 1) / 2 * 3 * biscaleFactor, 0);
     valvec.assign((3 * (std::size_t)f->d + (std::size_t)f->dl +
       (std::size_t)f->du) * stackLen * biscaleFactor, 0);
     SKvec.resize((unsigned)f->subsetSize * biscaleFactor);
     hopeV.assign(f->subsetSize, 0);
+    SRVcntr.assign(f->d, 0);
     hope = &hopeV[0];
     // extraDimSum = 0; // No need to initialize this for subset sum
     mPAT<valtype, indtype, mk, useBiSearch> *SKbegin = &SKvec.front();
@@ -171,77 +176,19 @@ struct mflsssOBJ
 
     // assign MIN and MAX
     {
-      // {
-      //   std::ofstream of("debug.csv", std::ios::app);
-      //   of << "in mflsssobj initilization, f->dlst = " << (int)f->dlst <<
-      //     ", f->dl = " << (int)f->dl;
-      //   of << "in mflsssobj initilization, f->dust = " << (int)f->dust <<
-      //     ", f->du = " << (int)f->du;
-      //   of.close();
-      // }
-
-
       for(indtype i = f->dlst, iend = f->dlst + f->dl; i < iend; ++i)
       {
         SKbegin->MIN[i - f->dlst] = target[i] - ME[i];
-        // {
-        //   std::ofstream of("debug.csv", std::ios::app);
-        //   {
-        //     std::bitset<64> tmp(target[i]);
-        //     of << "in mflsssobj initilization, target = " << tmp << "\n";
-        //   }
-        //   {
-        //     std::bitset<64> tmp(ME[i]);
-        //     of << "in mflsssobj initilization, ME = " << tmp << "\n";
-        //   }
-        //   {
-        //     std::bitset<64> tmp(SKbegin->MIN[i - f->dlst]);
-        //     of << "in mflsssobj initilization, MIN = " << tmp << "\n";
-        //   }
-        //   of.close();
-        // }
       }
       for(indtype i = f->dust, iend = f->dust + f->du; i < iend; ++i)
       {
         SKbegin->MAX[i - f->dust] = target[i] + ME[i];
-        // {
-        //   std::ofstream of("debug.csv", std::ios::app);
-        //   {
-        //     std::bitset<64> tmp(SKbegin->MAX[i - f->dlst]);
-        //     of << "in mflsssobj initilization, MAX = " << tmp << "\n";
-        //   }
-        //   of.close();
-        // }
       }
     }
 
 
     iterSum<valtype, indtype> (SKbegin->sumLB, f->M[0], SKbegin->LB, SKbegin->len, f->d);
     iterSum<valtype, indtype> (SKbegin->sumUB, f->M[0], SKbegin->UB, SKbegin->len, f->d);
-    // {
-    //   std::cout << "print mV after initilization:\n";
-    //   std::size_t *tmp = (std::size_t*)f->M[0][0];
-    //   for(int i = 0; i < 4; ++i)
-    //   {
-    //     std::bitset<64> tmpv(tmp[i]);
-    //     std::cout << tmpv << ", ";
-    //     std::cout << tmp[i] << "\n";
-    //   }
-    //   {
-    //     std::cout << "print sumUB = ";
-    //     std::cout << tmp[2] + tmp[3] << "\n";
-    //   }
-    //   std::ofstream of("debug.csv", std::ios::app);
-    //   {
-    //     std::bitset<64> tmp(SKbegin->sumLB[0]);
-    //     of << "in mflsssobj initilization, sumLB = " << tmp << "\n";
-    //   }
-    //   {
-    //     std::bitset<64> tmp(SKbegin->sumUB[0]);
-    //     of << "in mflsssobj initilization, sumUB = " << tmp << "\n";
-    //   }
-    //   of.close();
-    // }
 
 
     result.reserve(f->sizeNeed);
@@ -249,12 +196,11 @@ struct mflsssOBJ
   }
 
 
-  void finalize(dummyContainers<valtype, indtype, mk, useBiSearch>
-                  *dummies = nullptr)
+  void finalize(dummyContainers<valtype, indtype, mk, useBiSearch> *dummies = nullptr)
   {
     if(dummies != nullptr)
     {
-      dummies->swap(hopeV, SKvec, indvec, valvec);
+      dummies->swap(hopeV, SKvec, indvec, valvec, SRVcntr);
     }
   }
 
@@ -272,16 +218,6 @@ struct mflsssOBJ
 
 
     valtype **V = f->M[0];
-    // {
-    //   for(int i = 0; i < f->N; ++i)
-    //   {
-    //     for(int j = 0; j < f->d; ++j)
-    //     {
-    //       outfile << V[i][j] << ",";
-    //     }
-    //     outfile << "\n";
-    //   }
-    // }
 
 
     if((SKback - 1)->len == 1)
@@ -328,7 +264,7 @@ struct mflsssOBJ
 
 
       indtype boo = SKback->grow(f->M, f->d, f->dlst, f->dl, f->dust, f->du, hope,
-                                 f->mask //, &outfile
+                                 f->mask, SRVcntr //, &outfile
                                  );
 
 
@@ -426,13 +362,9 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
   X.copyParentGene(*(Xmflsss.SKback - 1), f.d, f.dl, f.du);
 
 
-  // X.print(f.d, f.dl, f.du, *outfile);
-  // *outfile << "\n\n";
-
-
   indtype boo = findBoundCpp<valtype, indtype, mk, useBiSearch> (
     X.len, f.d, f.dlst, f.dl, f.dust, f.du, X.MIN, X.MAX,
-    X.LB, X.sumLB, X.UB, X.sumUB, f.M, f.mask);
+    X.LB, X.sumLB, X.UB, X.sumUB, f.M, f.mask, Xmflsss.SRVcntr);
 
 
   if(outfile != nullptr)
@@ -452,23 +384,8 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
   indtype nonzeroMin = -1;
 
 
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "0.8, " << (int)X.len << "\n";
-  //   outfile.close();
-  // }
-
-
   vec<indtype> acntr(X.len);
   indtype *overlapPosition = &*acntr.begin(), *olpend = overlapPosition;
-  // indtype overlapPosition[X.len], *olpend = overlapPosition;
-
-
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "0.9\n";
-  //   outfile.close();
-  // }
 
 
   for(indtype i = 0; i < X.len; ++i)
@@ -489,20 +406,11 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
   }
 
 
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.0\n";
-  //   outfile.close();
-  // }
-
-
   // erase all positions where LB and UB meet.
   indtype &Nzeroed = X.Nzeroed;
   Nzeroed = olpend - overlapPosition;
   if(Nzeroed > 0)
   {
-    // valtype S[f.d];
-    // std::fill(S, S + f.d, 0);
     vec<valtype> cntrS(f.d); valtype *S = &*cntrS.begin();
     *olpend = X.len;
     for(indtype i = 0; i < Nzeroed; ++i)
@@ -534,13 +442,6 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
   }
 
 
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.1\n";
-  //   outfile.close();
-  // }
-
-
   // x, pass wisdom to your twin!
   {
     Ymflsss.f = &f;
@@ -551,16 +452,9 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
     Ymflsss.SKback = &Ymflsss.SKvec[1];
     Ymflsss.indvec.assign(Xmflsss.indvec.size() - 2 * (int)Xmflsss.SKvec[0].len, 0);
     Ymflsss.valvec.assign(Xmflsss.valvec.size() - 2 * ((int)f.d + f.dl + f.du), 0);
+    Ymflsss.SRVcntr.assign(f.d, 0);
     Ymflsss.result.reserve(f.sizeNeed);
   }
-
-
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.11\n";
-  //   outfile.close();
-  // }
-
 
 
   // initialize Ymflsss.SKvec, the first element
@@ -568,22 +462,12 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
                   &Ymflsss.valvec[0], Xmflsss.SKback->len);
 
 
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.2\n";
-  //   outfile.close();
-  // }
-
-
   // X takes the lower half, Y takes the upper half
-  // mPAT<valtype, indtype> &P = *X.SKback, &Q = *(Ymflsss.SKback - 1);
   mPAT<valtype, indtype, mk, useBiSearch> &Y = *(Ymflsss.SKback - 1);
-  // mPAT<valtype, indtype> &X = *Xmflsss.SKback;
 
 
   X.beenUpdated = 1;
   Y.beenUpdated = 1;
-  // std::memcpy(Y.MIN, X.MIN, sizeof(valtype) * ((unsigned)f.dl + f.du));
   std::copy(X.MIN, X.MIN + f.dl + f.du, Y.MIN);
 
 
@@ -599,13 +483,6 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
     X.UB[i] = cap;
   }
   mvalPlus(X.sumUB, X.sumUB, f.M[X.position - i - 1][X.UB[i + 1]], f.d);
-
-
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.3\n";
-  //   outfile.close();
-  // }
 
 
   cap = capResv;
@@ -624,13 +501,6 @@ indtype growTwin(mflsssOBJ<valtype, indtype, mk, useBiSearch> &Xmflsss,
     Y.LB[i] = cap;
   }
   mvalPlus(Y.sumLB, Y.sumLB, f.M[i - X.position - 1][Y.LB[X.position]], f.d);
-
-
-  // {
-  //   std::ofstream outfile("debug.csv", std::ios::app);
-  //   outfile << "1.4\n";
-  //   outfile.close();
-  // }
 
 
   ++Xmflsss.SKback;
@@ -656,8 +526,6 @@ void mitosis(vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > &descendants,
   descendants[0].initialize(&f, target, ME, LB, UB);
   vec<unsigned char> acntr(Ndescendants, 0);
   unsigned char *dead = &*acntr.begin();
-  // bool dead[Ndescendants];
-  // std::fill(dead, dead + Ndescendants, 0);
   int j = 1;
 
 
@@ -716,7 +584,6 @@ void mitosis(vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > &descendants,
 
   // cleansing descendants[]
   int validDescendents = Ndescendants - std::accumulate(dead, dead + Ndescendants, (int)0);
-  // mfile << "\n\nRemaining tasks = " << validDescendents << "\n\n";
   if(validDescendents == Ndescendants) return;
 
 
@@ -841,6 +708,7 @@ inline void mflsssOBJ<valtype, indtype, mk, useBiSearch>::
   valvec.assign((3 * (std::size_t)f->d + (std::size_t)f->dl +
     (std::size_t)f->du) * stackLen * biscaleFactor, 0);
   SKvec.resize((unsigned)f->subsetSize * biscaleFactor);
+  SRVcntr.assign(f->d, 0);
 
 
   hopeV.assign(f->subsetSize, 0);
@@ -912,7 +780,7 @@ inline int mflsssOBJ<valtype, indtype, mk, useBiSearch>::
 
     indtype boo = SKback->growForKnapsack(
       f->M, f->d, f->dlst, f->dl, f->dust, f->du, hope,
-      f->mask, f->profitVec, existingProfitSum, f->optimalProfit);
+      f->mask, f->profitVec, existingProfitSum, f->optimalProfit, SRVcntr);
 
 
     // outfile << "boo == " << (int)boo << "\n";
@@ -932,28 +800,6 @@ inline int mflsssOBJ<valtype, indtype, mk, useBiSearch>::
     if(boo != 0)
     {
       std::copy(SKback->UB, SKback->UB + SKback->len, hope);
-
-      // {
-      //   double theExistingSum = 0;
-      //   for(int i = 0; i < f->subsetSize - SKback->len; ++i)
-      //   {
-      //     theExistingSum += f->profitVec[hopeV[i]];
-      //   }
-      // // }
-      // // {
-      //   double theS = 0;
-      //   for(int i = f->subsetSize - SKback->len; i < f->subsetSize; ++i)
-      //   {
-      //     theS += f->profitVec[hopeV[i]];
-      //   }
-      //   if(theExistingSum + theS < 1.33e7)
-      //   {
-      //     std::cout << "theExistingSum = " << theExistingSum << "\n";
-      //     std::cout << "theS = " << theS << "\n";
-      //   }
-      // }
-
-
       valtype tmpProfit = 0;
       for(indtype i = 0; i < f->subsetSize; ++i)
       {
@@ -1037,7 +883,7 @@ inline indtype growTwinForKnapsack(
 
   indtype boo = findBoundCpp<valtype, indtype, mk, useBiSearch> (
     X.len, f.d, f.dlst, f.dl, f.dust, f.du, X.MIN, X.MAX,
-    X.LB, X.sumLB, X.UB, X.sumUB, f.M, f.mask);
+    X.LB, X.sumLB, X.UB, X.sumUB, f.M, f.mask, Xmflsss.SRVcntr);
 
 
   // See if the sum of upper bounds is less than the current maximal profit
@@ -1048,10 +894,6 @@ inline indtype growTwinForKnapsack(
     {
       S += f.profitVec[X.UB[i]];
     }
-    // std::cout << "in growTwinForKnapsack(), findBound boo == " << int(boo);
-    // std::cout << ", S = " << S;
-    // std::cout << ", Xmflsss.existingProfitSum = " << Xmflsss.existingProfitSum;
-    // std::cout << ", f.optimalProfit = " << f.optimalProfit << "\n";
     if(S <= f.optimalProfit) return 0;
   }
 
@@ -1074,23 +916,8 @@ inline indtype growTwinForKnapsack(
     indtype nonzeroMin = -1;
 
 
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "0.8, " << (int)X.len << "\n";
-    //   outfile.close();
-    // }
-
-
     vec<indtype> acntr(X.len);
     indtype *overlapPosition = &*acntr.begin(), *olpend = overlapPosition;
-    // indtype overlapPosition[X.len], *olpend = overlapPosition;
-
-
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "0.9\n";
-    //   outfile.close();
-    // }
 
 
     for(indtype i = 0; i < X.len; ++i)
@@ -1114,21 +941,13 @@ inline indtype growTwinForKnapsack(
     }
 
 
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.0\n";
-    //   outfile.close();
-    // }
-
-
     // erase all positions where LB and UB meet.
     indtype &Nzeroed = X.Nzeroed;
     Nzeroed = olpend - overlapPosition;
     if(Nzeroed > 0)
     {
-      // valtype S[f.d];
-      // std::fill(S, S + f.d, 0);
-      vec<valtype> cntrS(f.d); valtype *S = &*cntrS.begin();
+      vec<valtype> cntrS(f.d);
+      valtype *S = &*cntrS.begin();
       *olpend = X.len;
       for(indtype i = 0; i < Nzeroed; ++i)
       {
@@ -1159,13 +978,6 @@ inline indtype growTwinForKnapsack(
     }
 
 
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.1\n";
-    //   outfile.close();
-    // }
-
-
     // x, pass wisdom to your twin!
     {
       Ymflsss.f = &f;
@@ -1181,16 +993,9 @@ inline indtype growTwinForKnapsack(
       Ymflsss.SKback = &Ymflsss.SKvec[1];
       Ymflsss.indvec.assign(Xmflsss.indvec.size() - 2 * (int)Xmflsss.SKvec[0].len, 0);
       Ymflsss.valvec.assign(Xmflsss.valvec.size() - 2 * ((int)f.d + f.dl + f.du), 0);
+      Ymflsss.SRVcntr.assign(f.d, 0);
       Ymflsss.result.reserve(f.sizeNeed);
     }
-
-
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.11\n";
-    //   outfile.close();
-    // }
-
 
 
     // initialize Ymflsss.SKvec, the first element
@@ -1198,22 +1003,12 @@ inline indtype growTwinForKnapsack(
                     &Ymflsss.valvec[0], Xmflsss.SKback->len);
 
 
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.2\n";
-    //   outfile.close();
-    // }
-
-
     // X takes the lower half, Y takes the upper half
-    // mPAT<valtype, indtype> &P = *X.SKback, &Q = *(Ymflsss.SKback - 1);
     mPAT<valtype, indtype, mk, useBiSearch> &Y = *(Ymflsss.SKback - 1);
-    // mPAT<valtype, indtype> &X = *Xmflsss.SKback;
 
 
     X.beenUpdated = 1;
     Y.beenUpdated = 1;
-    // std::memcpy(Y.MIN, X.MIN, sizeof(valtype) * ((unsigned)f.dl + f.du));
     std::copy(X.MIN, X.MIN + f.dl + f.du, Y.MIN);
 
 
@@ -1229,13 +1024,6 @@ inline indtype growTwinForKnapsack(
       X.UB[i] = cap;
     }
     mvalPlus(X.sumUB, X.sumUB, f.M[X.position - i - 1][X.UB[i + 1]], f.d);
-
-
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.3\n";
-    //   outfile.close();
-    // }
 
 
     cap = capResv;
@@ -1254,13 +1042,6 @@ inline indtype growTwinForKnapsack(
       Y.LB[i] = cap;
     }
     mvalPlus(Y.sumLB, Y.sumLB, f.M[i - X.position - 1][Y.LB[X.position]], f.d);
-
-
-    // {
-    //   std::ofstream outfile("debug.csv", std::ios::app);
-    //   outfile << "1.4\n";
-    //   outfile.close();
-    // }
 
 
     ++Xmflsss.SKback;
@@ -1288,8 +1069,6 @@ inline void mitosisForKnapsack(
   descendants[0].initializeForKnapsack(&f, target, ME, LB, UB);
   vec<unsigned char> acntr(Ndescendants, 0);
   unsigned char *dead = &*acntr.begin();
-  // bool dead[Ndescendants];
-  // std::fill(dead, dead + Ndescendants, 0);
   int j = 1;
 
 
@@ -1298,9 +1077,6 @@ inline void mitosisForKnapsack(
     int iend = j;
     for(int i = 0; i < iend; ++i, ++j)
     {
-      // if(f.totalSize >= f.sizeNeed) return;
-
-
       if(dead[i])
       {
         dead[j] = 1;
@@ -1308,8 +1084,6 @@ inline void mitosisForKnapsack(
       }
 
 
-      // std::ofstream outfile("debug.csv", std::ios::app);
-      // outfile << "growTwin starts, i = " << i << ", j = " << j << "\n";
       indtype boo = growTwinForKnapsack(descendants[i], descendants[j] //, &outfile
                                         );
 
@@ -1320,7 +1094,6 @@ inline void mitosisForKnapsack(
         dead[i] = 1;
         dead[j] = 1;
       }
-      // else if(boo == 3 or boo == 2)
       else if(boo != 1)
       {
         std::copy(tmp.UB, tmp.UB + tmp.len, descendants[i].hope);

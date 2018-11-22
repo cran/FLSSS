@@ -1,6 +1,7 @@
 # include <Rcpp.h>
 # include <bitset>
 # include "header/integerize.hpp"
+// # include "gapH/GAPfindBound.hpp"
 using namespace Rcpp;
 
 

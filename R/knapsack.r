@@ -2,6 +2,12 @@
 
 mmKnapsack <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, heuristic = FALSE, tlimit = 60, useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 {
+  profitResv = itemsProfits
+  costResv = itemsCosts
+  capacityResv = capacities
+  lenResv = len
+
+
   d = length(capacities)
   mV = itemsCosts
 
@@ -18,7 +24,6 @@ mmKnapsack <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, 
 
 
   N = length(itemsProfits)
-  # minCosts = apply(mV, 2, function(x) sum(sort(x)[1L : len]))
   minCosts = 0
   mTarget = (capacities + minCosts) / 2
   mME = (capacities - minCosts) / 2
@@ -58,12 +63,7 @@ mmKnapsack <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, 
   rst = z_Gknapsack(len, mV, numeric(0), profits, targetMat, mME, 1L : len, (N - len + 1L) : N, tlimit, useBiSrchInFB, maxCore, threadLoad, verbose, heuristic)
 
 
-  # print(targetMat[, 1] - mME)
-  # print(colSums(mV[rst, ]))
-  # print(targetMat[, 1] + mME)
-
-
-  if(rst[1] == 1L & rst[length(rst)] == 1L) return(integer(0))
+  if(rst[1] == 1L & rst[length(rst)] == 1L) return(list())
 
 
   # rst = theOrder[rst$optimalSelection]
@@ -74,7 +74,12 @@ mmKnapsack <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, 
     rst = tmp[-rst]
   }
   if(!fixedSize) rst = backout(rst, len)
-  rst
+
+
+  selectionProfit = sum(profitResv[rst])
+  if(ncol(costResv) > 1L) selectionCosts = colSums(costResv[rst, ])
+  else selectionCosts = sum(costResv[rst, ])
+  list(solution = rst, selectionCosts = selectionCosts, budgets = capacityResv, selectionProfit = selectionProfit, unconstrainedMaxProfit = sum(sort(profitResv)[(length(profitResv) - lenResv + 1L) : length(profitResv)]))
 }
 
 
@@ -86,10 +91,16 @@ mmKnapsack <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, 
 
 mmKnapsackIntegerized <- function(maxCore = 7L, len, itemsProfits, itemsCosts, capacities, heuristic = FALSE, precisionLevel = integer(length(capacities)), returnBeforeMining = FALSE, tlimit = 60, useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
 {
+  profitResv = itemsProfits
+  costResv = itemsCosts
+  capacityResv = capacities
+  lenResv = len
+
+
   if(.Machine$sizeof.pointer == 4L)
   {
     message("32-bit architecture unsupported")
-    return()
+    return(list())
   }
 
 
@@ -204,16 +215,9 @@ mmKnapsackIntegerized <- function(maxCore = 7L, len, itemsProfits, itemsCosts, c
   rst = z_Gknapsack(len, mV, maskV, profits, targetMat, mME, 1L : len, (N - len + 1L) : N, tlimit, useBiSrchInFB, maxCore, threadLoad, verbose, heuristic)
 
 
-  # print(targetMat[, 1] - mME)
-  # print(colSums(mV[rst, ]))
-  # print(targetMat[, 1] + mME)
+  if(rst[1] == 1L & rst[length(rst)] == 1L) return(list(soltution = integer(0), selectionCosts = NA, budgets = capacityResv, selectionProfit = NA, unconstrainedMaxProfit = sum(sort(profitResv)[(length(profitResv) - lenResv + 1L) : length(profitResv)]), INT = c(INT, list(compressedDim = ncol(mV)))))
 
 
-  if(rst[1] == 1L & rst[length(rst)] == 1L) return(list(soltution = integer(0), INT = c(INT, list(compressedDim = ncol(mV)))))
-
-
-
-  # rst = theOrder[rst$optimalSelection]
   rst = theOrder[rst]
   if(shouldConjugate)
   {
@@ -221,7 +225,14 @@ mmKnapsackIntegerized <- function(maxCore = 7L, len, itemsProfits, itemsCosts, c
     rst = tmp[-rst]
   }
   if(!fixedSize) rst = backout(rst, len)
-  list(solution = rst, INT = c(INT, list(compressedDim = ncol(mV))))
+
+
+  selectionProfit = sum(profitResv[rst])
+  if(ncol(costResv) > 1L) selectionCosts = colSums(costResv[rst, ])
+  else selectionCosts = sum(costResv[rst, ])
+
+
+  list(solution = rst, selectionCosts = selectionCosts, budgets = capacityResv, selectionProfit = selectionProfit, unconstrainedMaxProfit = sum(sort(profitResv)[(length(profitResv) - lenResv + 1L) : length(profitResv)]), INT = c(INT, list(compressedDim = ncol(mV))))
 }
 
 

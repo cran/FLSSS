@@ -50,14 +50,6 @@ List mFLSSScpp(
 
   // int len, List vr, int _d, int dlst, int dl, int dust, int du, int keyInd, int N,
   shared<valtype, indtype> f(len, N, _d, dlst, dl, dust, du, sizeNeeded, endTime, M, mask);
-  // {
-  //   std::cout << "after shared\n";
-  //   for(int i = 0; i < 4; ++i)
-  //   {
-  //     std::cout << std::bitset<64>(M[0][0][i]) << "\n";
-  //   }
-  //   std::cout << "\n\n";
-  // }
 
 
   vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > mflsssTasks(Ntasks);

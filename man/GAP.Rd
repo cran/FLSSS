@@ -15,7 +15,6 @@ GAP(
   agentsBudgets,
   heuristic = FALSE,
   tlimit = 60,
-  useBiSrchInFB = FALSE,
   threadLoad = 8L,
   verbose = TRUE
   )
@@ -40,9 +39,6 @@ A boolean value. If \code{TRUE}, the function returns once it has found a soluti
   \item{tlimit}{
 A numeric value. Enforce function to return in \code{tlimit} seconds.
 }
-  \item{useBiSrchInFB}{
-See \code{useBiSrchInFB} in \code{FLSSS()}.
-}
   \item{threadLoad}{
 See \code{avgThreadLoad} in \code{mFLSSSpar()}.
 }
@@ -51,15 +47,15 @@ If \code{TRUE}, function prints progress.
 }
 }
 \value{
-A list of size ten.
+A list of size nine.
 
-\item{Value$assignedAgents}{is an integer vector, the mining result. The \code{i}th element denotes the agent assigned to task \code{i}.}
+\item{assignedAgents}{is a 2-column data frame, the mining result. The 1st column is task indexes. The 2nd column is agent indexes.}
 
-\item{Value$assignmentProfit}{is the profit resulted from such assignment.}
+\item{assignmentProfit}{is the profit resulted from such assignment.}
 
-\item{Value$assignmentCosts}{is a numeric vector. \code{Value$assignmentCosts[i]} is the cost of agent \code{i}.}
+\item{assignmentCosts}{is a numeric vector. \code{Value$assignmentCosts[i]} is the cost of agent \code{i}.}
 
-\item{Value$agentsBudgets}{is a numeric vector. \code{Value$agentsBudgets[i]} shows the budget of agent \code{i}.}
+\item{agentsBudgets}{is a numeric vector. \code{Value$agentsBudgets[i]} shows the budget of agent \code{i}.}
 
 \item{unconstrainedMaxProfit}{is the would-be maximal profit if agents had infinite budgets.}
 
@@ -67,9 +63,7 @@ A list of size ten.
 
 \item{FLSSSvec}{is the multidimensional vector (a matrix) going into the multidimensional Subset Sum miner.}
 
-\item{FLSSStargets}{is the subset sum targets going into the multidimensional Subset Sum miner.}
-
-\item{FLSSSme}{is the subset sum errors going into the multidimensional Subset Sum miner.}
+\item{MAXmat}{is the subset sum targets' upper bounds going into the multidimensional Subset Sum miner.}
 
 \item{foreShadowFLSSSvec}{is the multidimensional vector before comonotonization.}
 }
@@ -108,9 +102,9 @@ dimnames(profits) = NULL
 names(budgets) = NULL
 
 \donttest{
-rst = FLSSS::GAP(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
+rst = FLSSS::GAP(maxCore = 7L, agentsCosts = costs, agentsProfits = profits,
                  agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
-                 useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
+                 threadLoad = 8L, verbose = TRUE)
 # Function also saves the assignment costs and profits
 rst$assignedAgents
 rst$assignmentProfit
@@ -150,7 +144,7 @@ budgets = c(26, 25, 34)
 
 rst = FLSSS::GAP(maxCore = 2L, agentsCosts = costs, agentsProfits = profits,
                  agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
-                 useBiSrchInFB = FALSE, threadLoad = 8L, verbose = TRUE)
+                 threadLoad = 8L, verbose = TRUE)
 agentCostsOrProfits(rst$assignedAgents, costs)
 # Should equal rst$assignmentCosts and not surpass budgets
 
@@ -161,11 +155,7 @@ knownOptSolution = data.frame(task = 1L : tasks, agent = knownOptSolution)
 
 # Total profit from knownOptSolution:
 sum(agentCostsOrProfits(knownOptSolution, profits))
-# Total profit frim FLSSS::GAP():
+# Total profit from FLSSS::GAP():
 rst$assignmentProfit
-# FLSSS::GAP() generated a better solution.
+# FLSSS::GAP() granted a better solution.
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-%\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

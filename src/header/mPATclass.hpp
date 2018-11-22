@@ -150,16 +150,11 @@ struct mPAT
   // inline indtype grow(valtype *ME, valtype ***M, indtype d, bool useBiSearch, std::ofstream *outfile = nullptr)
   inline indtype grow(
       valtype ***M, indtype d, indtype dlst, indtype dl, indtype dust, indtype du,
-      indtype *&hope, INT *mask, std::ofstream *outfile = nullptr)
+      indtype *&hope, INT *mask, vec<valtype> &SRVcntr, std::ofstream *outfile = nullptr)
   {
     // std::clock_t t = std::clock();
     indtype boo = findBoundCpp<valtype, indtype, mk, useBiSearch> (
-      len, d, dlst, dl, dust, du, MIN, MAX, LB, sumLB, UB, sumUB, M, mask);
-    // {
-    //   std::ofstream of("debug.csv", std::ios::app);
-    //     of << "\nboo = " << (int)boo << "\n";
-    //   of.close();
-    // }
+      len, d, dlst, dl, dust, du, MIN, MAX, LB, sumLB, UB, sumUB, M, mask, SRVcntr);
 
 
     if(outfile != nullptr)
@@ -330,46 +325,26 @@ struct mPAT
   inline indtype growForKnapsack(
       valtype ***M, indtype d, indtype dlst, indtype dl, indtype dust, indtype du,
       indtype *&hope, INT *mask,
-      double *profitVec, double &existingSum, double optimalProfit,
+      double *profitVec, double &existingSum, double optimalProfit, vec<valtype> &SRVcntr,
       std::ofstream *outfile = nullptr)
   {
     // std::clock_t t = std::clock();
     indtype boo = findBoundCpp<valtype, indtype, mk, useBiSearch> (
-      len, d, dlst, dl, dust, du, MIN, MAX, LB, sumLB, UB, sumUB, M, mask);
+      len, d, dlst, dl, dust, du, MIN, MAX, LB, sumLB, UB, sumUB, M, mask, SRVcntr);
 
 
     // See if the sum of upper bounds is less than optimalProfit
-    if(boo != 0)
+    if(optimalProfit > 0 and boo != 0)
     {
       double S = existingSum;
       for(indtype i = 0; i < len; ++i)
       {
         S += profitVec[UB[i]];
       }
-      // if(optimalProfit < 1.33e7)
-      // {
-      //   std::cout << "boo = " << int(boo) << ", ";
-      //   std::cout << "print hopeV sum:";
-      //   double hopeVsum = 0;
-      //   for(indtype i = 0; i < 12 - len; ++i)
-      //   {
-      //      hopeVsum += profitVec[hope[-1 - i]];
-      //   }
-      //   std::cout << hopeVsum << "\n";
-      //   if(S + existingSum < optimalProfit) std::cout <<
-      //     "S + existingSum < optimalProfit: " << "S = " << S << ", existingSum = "
-      //             << existingSum << ", optimalProfit = " << optimalProfit << "\n";
-      //   else std::cout <<
-      //     "S + existingSum >= optimalProfit: " << "S = " << S << ", existingSum = " <<
-      //     existingSum << ", optimalProfit = " << optimalProfit << "\n";
-      // }
+
+
       if(S <= optimalProfit)
       {
-        // if(optimalProfit < 1.35e7)
-        // {
-        //   std::cout << "S + existingSum < optimalProfit: " << "S = " << S << ", existingSum = "
-        //           << existingSum << ", optimalProfit = " << optimalProfit << "\n";
-        // }
         return 0;
       }
     }

@@ -63,13 +63,17 @@ If \code{TRUE}, function prints progress.
 }
 }
 \value{
-A list of two.
-\item{Value$solution}{is a list of solution index vectors.}
-\item{Value$INT}{is a list of three.}
-\item{Value$INT$mV}{is the integerized superset.}
-\item{Value$INT$mTarget}{is the integerized subset sum.}
-\item{Value$INT$mME}{is the integerized subset sum error threshold.}
-\item{Value$INT$compressedDim}{is the dimensionality after integerization.}
+A list of six:
+\item{solution}{ The optimal solution.}
+\item{selectionCosts}{ Solution costs.}
+\item{budgets}{ Knapsack capacities.}
+\item{selectionProfit}{ Solution total profit.}
+\item{unconstrainedMaxProfit}{ Maximal profit given infinite budgets.}
+\item{INT}{ A list of four:}
+\item{INT$mV}{ The integerized superset.}
+\item{INT$mTarget}{ The integerized subset sum.}
+\item{INT$mME}{ The integerized subset sum error threshold.}
+\item{INT$compressedDim}{ The dimensionality after integerization.}
 }
 \note{32-bit architecture unsupported.}
 \examples{
@@ -118,7 +122,7 @@ rst2 = FLSSS::mmKnapsack(
   maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
   capacities = budgets, heuristic = FALSE, tlimit = 2, useBiSrchInFB = FALSE,
   threadLoad = 4L, verbose = TRUE)
-# Differences in solutions are due to real-integer conversion
+# Possible differences in solutions are due to real-integer conversion
 
 
 

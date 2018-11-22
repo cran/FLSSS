@@ -13,8 +13,20 @@ z_FLSSS <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, 
     .Call(`_FLSSS_z_FLSSS`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
 }
 
-z_GAP <- function(maxCore, len, V, maskV, dlst, dl, dust, du, targetMat, profitVec, MEr, zeroBasedLB, zeroBasedUB, duration, useBiSearch, threadLoad = 8L, verbose = TRUE, heuristic = FALSE) {
-    .Call(`_FLSSS_z_GAP`, maxCore, len, V, maskV, dlst, dl, dust, du, targetMat, profitVec, MEr, zeroBasedLB, zeroBasedUB, duration, useBiSearch, threadLoad, verbose, heuristic)
+z_FLSSSvariableTree <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE) {
+    .Call(`_FLSSS_z_FLSSSvariableTree`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
+}
+
+testFindBound003GAP <- function(dividedV, target, profit, ME) {
+    .Call(`_FLSSS_testFindBound003GAP`, dividedV, target, profit, ME)
+}
+
+testFindBound003GAP2 <- function(dividedV, targetMAX) {
+    .Call(`_FLSSS_testFindBound003GAP2`, dividedV, targetMAX)
+}
+
+z_GAP <- function(maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad = 8L, verbose = TRUE, heuristic = FALSE) {
+    .Call(`_FLSSS_z_GAP`, maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad, verbose, heuristic)
 }
 
 z_Gknapsack <- function(len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx) {
@@ -27,6 +39,10 @@ z_mFLSSS <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetMat, 
 
 z_mFLSSScomoPar <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetr, MEr, LBr, UBr, sizeNeededForAll, duration, useBiSearch = 0L, avgThreadLoad = 8L) {
     .Call(`_FLSSS_z_mFLSSScomoPar`, maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetr, MEr, LBr, UBr, sizeNeededForAll, duration, useBiSearch, avgThreadLoad)
+}
+
+z_mFLSSSvariableTree <- function(maxCore, len, vr, d, dlst, dl, dust, du, keyInd, originalTarget, keyTarget, scaleFactor, MEr, LBr, UBr, sizeNeed, duration, useFloat, useBisearchInFindBounds = 0L) {
+    .Call(`_FLSSS_z_mFLSSSvariableTree`, maxCore, len, vr, d, dlst, dl, dust, du, keyInd, originalTarget, keyTarget, scaleFactor, MEr, LBr, UBr, sizeNeed, duration, useFloat, useBisearchInFindBounds)
 }
 
 z_integerize <- function(len, V, target, ME, precisionLevel) {
