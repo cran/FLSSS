@@ -287,14 +287,3 @@ inline std::size_t TTTstack(
 }
 
 
-
-
-
-
-
-
-
-
-
-
-

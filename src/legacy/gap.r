@@ -272,19 +272,3 @@ GAPintegerized <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudge
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

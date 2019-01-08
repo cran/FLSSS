@@ -184,6 +184,7 @@ GAPpre <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heur
 
 GAP <- function(maxCore = 7L, agentsCosts, agentsProfits, agentsBudgets, heuristic = FALSE, tlimit = 60, threadLoad = 8L, verbose = TRUE)
 {
+  message("This function solves the generalized assignment problem via hypercube contraction and is most likely less efficient than functions like 'auxGAPbb()'.")
   # Quick fail
   {
     minCosts = apply(agentsCosts, 1, function(x) min(x))

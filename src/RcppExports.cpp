@@ -5,6 +5,112 @@
 
 using namespace Rcpp;
 
+// auxKnapsack01bb
+List auxKnapsack01bb(NumericVector weight, NumericVector value, NumericVector caps, IntegerVector itemNcaps, int maxCore, double tlimit, String ub, bool simplify);
+RcppExport SEXP _FLSSS_auxKnapsack01bb(SEXP weightSEXP, SEXP valueSEXP, SEXP capsSEXP, SEXP itemNcapsSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP ubSEXP, SEXP simplifySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type caps(capsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type itemNcaps(itemNcapsSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< String >::type ub(ubSEXP);
+    Rcpp::traits::input_parameter< bool >::type simplify(simplifySEXP);
+    rcpp_result_gen = Rcpp::wrap(auxKnapsack01bb(weight, value, caps, itemNcaps, maxCore, tlimit, ub, simplify));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxGAPbbMulthreadKPs
+List auxGAPbbMulthreadKPs(NumericMatrix cost, NumericMatrix profitOrLoss, NumericVector budget, int maxCore, double tlimit, String ub, bool greedyBranching, String optim);
+RcppExport SEXP _FLSSS_auxGAPbbMulthreadKPs(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP ubSEXP, SEXP greedyBranchingSEXP, SEXP optimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< String >::type ub(ubSEXP);
+    Rcpp::traits::input_parameter< bool >::type greedyBranching(greedyBranchingSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPbbMulthreadKPs(cost, profitOrLoss, budget, maxCore, tlimit, ub, greedyBranching, optim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxGAPbbMulthreadNodes
+List auxGAPbbMulthreadNodes(NumericMatrix cost, NumericMatrix profitOrLoss, NumericVector budget, int maxCore, int threadLoad, double tlimit, String ub, bool greedyBranching, String optim);
+RcppExport SEXP _FLSSS_auxGAPbbMulthreadNodes(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP maxCoreSEXP, SEXP threadLoadSEXP, SEXP tlimitSEXP, SEXP ubSEXP, SEXP greedyBranchingSEXP, SEXP optimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< int >::type threadLoad(threadLoadSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< String >::type ub(ubSEXP);
+    Rcpp::traits::input_parameter< bool >::type greedyBranching(greedyBranchingSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPbbMulthreadNodes(cost, profitOrLoss, budget, maxCore, threadLoad, tlimit, ub, greedyBranching, optim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxKnapsack01dp
+List auxKnapsack01dp(IntegerVector weight, NumericVector value, IntegerVector caps, int maxCore, double tlimit, bool simplify);
+RcppExport SEXP _FLSSS_auxKnapsack01dp(SEXP weightSEXP, SEXP valueSEXP, SEXP capsSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP simplifySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type caps(capsSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< bool >::type simplify(simplifySEXP);
+    rcpp_result_gen = Rcpp::wrap(auxKnapsack01dp(weight, value, caps, maxCore, tlimit, simplify));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxGAPbbDpMulthreadKPs
+List auxGAPbbDpMulthreadKPs(IntegerMatrix cost, NumericMatrix profitOrLoss, IntegerVector budget, int maxCore, double tlimit, bool greedyBranching, String optim);
+RcppExport SEXP _FLSSS_auxGAPbbDpMulthreadKPs(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP greedyBranchingSEXP, SEXP optimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< bool >::type greedyBranching(greedyBranchingSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPbbDpMulthreadKPs(cost, profitOrLoss, budget, maxCore, tlimit, greedyBranching, optim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxGAPbbDpMulthreadNodes
+List auxGAPbbDpMulthreadNodes(IntegerMatrix cost, NumericMatrix profitOrLoss, IntegerVector budget, int maxCore, int threadLoad, double tlimit, bool greedyBranching, String optim);
+RcppExport SEXP _FLSSS_auxGAPbbDpMulthreadNodes(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP maxCoreSEXP, SEXP threadLoadSEXP, SEXP tlimitSEXP, SEXP greedyBranchingSEXP, SEXP optimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< int >::type threadLoad(threadLoadSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< bool >::type greedyBranching(greedyBranchingSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPbbDpMulthreadNodes(cost, profitOrLoss, budget, maxCore, threadLoad, tlimit, greedyBranching, optim));
+    return rcpp_result_gen;
+END_RCPP
+}
 // z_findBound
 List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector me, IntegerVector initialLB, IntegerVector initialUB, int findBoundTimes, bool useBinarySearch, bool UBfirst);
 RcppExport SEXP _FLSSS_z_findBound(SEXP lenSEXP, SEXP VSEXP, SEXP targetSEXP, SEXP meSEXP, SEXP initialLBSEXP, SEXP initialUBSEXP, SEXP findBoundTimesSEXP, SEXP useBinarySearchSEXP, SEXP UBfirstSEXP) {
@@ -289,6 +395,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_FLSSS_auxKnapsack01bb", (DL_FUNC) &_FLSSS_auxKnapsack01bb, 8},
+    {"_FLSSS_auxGAPbbMulthreadKPs", (DL_FUNC) &_FLSSS_auxGAPbbMulthreadKPs, 8},
+    {"_FLSSS_auxGAPbbMulthreadNodes", (DL_FUNC) &_FLSSS_auxGAPbbMulthreadNodes, 9},
+    {"_FLSSS_auxKnapsack01dp", (DL_FUNC) &_FLSSS_auxKnapsack01dp, 6},
+    {"_FLSSS_auxGAPbbDpMulthreadKPs", (DL_FUNC) &_FLSSS_auxGAPbbDpMulthreadKPs, 7},
+    {"_FLSSS_auxGAPbbDpMulthreadNodes", (DL_FUNC) &_FLSSS_auxGAPbbDpMulthreadNodes, 8},
     {"_FLSSS_z_findBound", (DL_FUNC) &_FLSSS_z_findBound, 9},
     {"_FLSSS_z_findBoundIntegerized", (DL_FUNC) &_FLSSS_z_findBoundIntegerized, 10},
     {"_FLSSS_z_FLSSS", (DL_FUNC) &_FLSSS_z_FLSSS, 10},

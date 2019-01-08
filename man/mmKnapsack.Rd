@@ -95,7 +95,7 @@ NcostsAttr = 4
 
   rst1 = FLSSS::mmKnapsack(
     maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-    capacities = budgets, heuristic = FALSE, tlimit = 2, useBiSrchInFB = FALSE,
+    capacities = budgets, heuristic = FALSE, tlimit = 60, useBiSrchInFB = FALSE,
     threadLoad = 4L, verbose = TRUE)
 
 
@@ -103,7 +103,7 @@ NcostsAttr = 4
   # profits subsetted by 'x' would be no less than that of the optimal solution.
   rst2 = FLSSS::mmKnapsack(
     maxCore = 2L, len = subsetSize, itemsProfits = gains, itemsCosts = costs,
-    capacities = budgets, heuristic = TRUE, tlimit = 2, useBiSrchInFB = FALSE,
+    capacities = budgets, heuristic = TRUE, tlimit = 60, useBiSrchInFB = FALSE,
     threadLoad = 4L, verbose = TRUE)
 
 

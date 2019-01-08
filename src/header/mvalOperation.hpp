@@ -394,22 +394,3 @@ inline valtype **mvalUpperBoundLr(valtype **begin, valtype **end, valtype *val, 
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

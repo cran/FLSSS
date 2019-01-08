@@ -102,37 +102,3 @@ inline indtype consecutiveBoundSeqFromRightToLeft(indtype *base, indtype *seqRig
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -103,7 +103,7 @@ names(budgets) = NULL
 
 \donttest{
 rst = FLSSS::GAP(maxCore = 7L, agentsCosts = costs, agentsProfits = profits,
-                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 2,
+                 agentsBudgets = budgets, heuristic = FALSE, tlimit = 60,
                  threadLoad = 8L, verbose = TRUE)
 # Function also saves the assignment costs and profits
 rst$assignedAgents
@@ -125,20 +125,21 @@ if(sum(rst$assignedAgents) > 0)
 
 
 
+
 # =====================================================================================
 # Test case P03 from
 # https://people.sc.fsu.edu/~jburkardt/datasets/generalized_assignment/
 # =====================================================================================
 agents = 3L
 tasks = 8L
-profits = matrix(c(
+profits = t(matrix(c(
 27, 12, 12, 16, 24, 31, 41, 13,
 14,  5, 37,  9, 36, 25,  1, 34,
-34, 34, 20,  9, 19, 19,  3, 34), ncol = tasks)
-costs = matrix(c(
+34, 34, 20,  9, 19, 19,  3, 34), ncol = agents))
+costs = t(matrix(c(
 21, 13,  9,  5,  7, 15,  5, 24,
 20,  8, 18, 25,  6,  6,  9,  6,
-16, 16, 18, 24, 11, 11, 16, 18), ncol = tasks)
+16, 16, 18, 24, 11, 11, 16, 18), ncol = agents))
 budgets = c(26, 25, 34)
 
 
@@ -157,5 +158,4 @@ knownOptSolution = data.frame(task = 1L : tasks, agent = knownOptSolution)
 sum(agentCostsOrProfits(knownOptSolution, profits))
 # Total profit from FLSSS::GAP():
 rst$assignmentProfit
-# FLSSS::GAP() granted a better solution.
 }

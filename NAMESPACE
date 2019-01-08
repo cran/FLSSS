@@ -1,6 +1,7 @@
 export(FLSSS, FLSSSmultiset, GAP, mFLSSSpar,
        mFLSSSparImposeBounds, mFLSSSparImposeBoundsIntegerized,
-       mFLSSSparIntegerized, mmKnapsack, mmKnapsackIntegerized)
+       mFLSSSparIntegerized, mmKnapsack, mmKnapsackIntegerized,
+       auxGAPbb, auxGAPbbDp, auxKnapsack01dp, auxKnapsack01bb)
 importFrom(Rcpp, evalCpp)
 importFrom(RcppParallel, RcppParallelLibs)
 importFrom("stats", "aggregate", "cor")
