@@ -190,6 +190,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// auxGAPgaGivenRandomSeeds
+List auxGAPgaGivenRandomSeeds(NumericMatrix cost, NumericMatrix profitOrLoss, NumericVector budget, IntegerVector randomSeeds, int populationSize, int generations, String optim, int maxCore);
+RcppExport SEXP _FLSSS_auxGAPgaGivenRandomSeeds(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP randomSeedsSEXP, SEXP populationSizeSEXP, SEXP generationsSEXP, SEXP optimSEXP, SEXP maxCoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type randomSeeds(randomSeedsSEXP);
+    Rcpp::traits::input_parameter< int >::type populationSize(populationSizeSEXP);
+    Rcpp::traits::input_parameter< int >::type generations(generationsSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPgaGivenRandomSeeds(cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore));
+    return rcpp_result_gen;
+END_RCPP
+}
 // testFindBound003GAP
 List testFindBound003GAP(NumericMatrix dividedV, NumericVector target, NumericVector profit, NumericVector ME);
 RcppExport SEXP _FLSSS_testFindBound003GAP(SEXP dividedVSEXP, SEXP targetSEXP, SEXP profitSEXP, SEXP MESEXP) {
@@ -405,6 +423,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FLSSS_z_findBoundIntegerized", (DL_FUNC) &_FLSSS_z_findBoundIntegerized, 10},
     {"_FLSSS_z_FLSSS", (DL_FUNC) &_FLSSS_z_FLSSS, 10},
     {"_FLSSS_z_FLSSSvariableTree", (DL_FUNC) &_FLSSS_z_FLSSSvariableTree, 10},
+    {"_FLSSS_auxGAPgaGivenRandomSeeds", (DL_FUNC) &_FLSSS_auxGAPgaGivenRandomSeeds, 8},
     {"_FLSSS_testFindBound003GAP", (DL_FUNC) &_FLSSS_testFindBound003GAP, 4},
     {"_FLSSS_testFindBound003GAP2", (DL_FUNC) &_FLSSS_testFindBound003GAP2, 2},
     {"_FLSSS_z_GAP", (DL_FUNC) &_FLSSS_z_GAP, 10},

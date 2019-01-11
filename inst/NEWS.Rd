@@ -3,9 +3,17 @@
 \title{FLSSS updates}
 
 
-\section{Changes in FLSSS version 8.0 (20190106)}{
+\section{Changes in FLSSS version 8.5 (20190106)}{
   \itemize{
-    \item Implemented binary knapsack solvers and generalized assignment solvers via different algorithms. Functions prefixed with 'aux' are new.
+    \item Bug fix. The previous branch-and-bound knapsack solver did not initialize containers with sufficient sizes. In rare cases a pointer would be realized at the end of the container.
+    \item Added a genetic algorithm with local heuristics for generalized assignment problem.
+  }
+}
+
+
+\section{Changes in FLSSS version 8.3 (20190106)}{
+  \itemize{
+    \item Implemented different algorithms for the binary knapsack and the generalized assignment problems. Functions prefixed with 'aux' (auxiliary) are new.
     \item Future updates will dedicate to implementing existing foundational or state-of-the-art algorithms for combinatorial problems of interest. The implementation will focus on computing speed as usual.
   }
 }

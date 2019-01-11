@@ -1172,3 +1172,4 @@ struct parMflsssOBJforKnapsack: public RcppParallel::Worker // works for mflsssC
 };
 
 
+

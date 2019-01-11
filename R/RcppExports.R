@@ -41,6 +41,10 @@ z_FLSSSvariableTree <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, t
     .Call(`_FLSSS_z_FLSSSvariableTree`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
 }
 
+auxGAPgaGivenRandomSeeds <- function(cost, profitOrLoss, budget, randomSeeds, populationSize = 100L, generations = 1000L, optim = "max", maxCore = 7L) {
+    .Call(`_FLSSS_auxGAPgaGivenRandomSeeds`, cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore)
+}
+
 testFindBound003GAP <- function(dividedV, target, profit, ME) {
     .Call(`_FLSSS_testFindBound003GAP`, dividedV, target, profit, ME)
 }

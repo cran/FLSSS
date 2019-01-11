@@ -59,20 +59,20 @@ An integer. Each thread is loaded with \code{threadLoad} sub-problems on average
 \details{
 A popular library of GAP instances can be found here: https://github.com/WhateverLiu/gapInstances.
 
-This algorithm is based on the foundational paper by Ross and Soland (1975) and is carefully engineered towards speed. Implementation highlights include (i) decomposition for multithreading; (ii) a new branching method (\code{greedyBranching}) that pushes all candidate branching variables at each node into stack instead of pushing only those that have the highest desirabilities and would not affect the subsequent branching after being pushed; (iii) the return of current best solutions in time; (iv) the capability of taking real costs and profits. \code{greedyBranching} may considerably lower the number of nodes having the same series of knapsack problems to solve, thus accelerate the convergence speed.
+This algorithm is based on a foundational paper by Ross and Soland (1975) and is carefully engineered towards speed. Implementation highlights include (i) decomposition for multithreading; (ii) a new branching method (\code{greedyBranching}) that pushes all candidate branching variables at each node into stack instead of pushing only those that have the highest desirabilities and would not affect the subsequent branching after being pushed; (iii) the return of current best solutions in time; (iv) the capability of taking real costs and profits. \code{greedyBranching} may considerably lower the number of nodes having the same series of knapsack problems to solve, thus accelerate the convergence speed.
 }
 \value{
 A list of 5:
 
-\code{totalProfitOrLoss}: total profit or loss generated from the assignment.
+\item{totalProfitOrLoss }{Total profit or loss generated from the assignment.}
 
-\code{agentCost}: a numeric vector of total costs for each agent.
+\item{agentCost }{A numeric vector of total costs for each agent.}
 
-\code{assignment}: an integer vector. \code{assignment[i]} indexes the agent assigned to the \code{i}th task.
+\item{assignment }{An integer vector. \code{assignment[i]} indexes the agent assigned to the \code{i}th task.}
 
-\code{nodes}: the number of branching nodes generated in mining.
+\item{nodes }{The number of branching nodes generated in mining.}
 
-\code{bkpSolved}: the number of binary knapsack problems solved in mining.
+\item{bkpSolved }{The number of binary knapsack problems solved in mining.}
 }
 
 \note{
@@ -142,8 +142,8 @@ system.time({sol = FLSSS::auxGAPbb(
 system.time({sol2 = FLSSS::auxGAPbb(
   cost, profit, budget, maxCore = 2, tlimit = 4, ub = "MT",
   greedyBranching = TRUE, optim = "max")})
-sol[c("nodes", "bkpSolved")]  # 4526, 14671
-sol2[c("nodes", "bkpSolved")] # 4517, 13115
+sol[c("nodes", "bkpSolved")]  # 4526, 14671, can be different.
+sol2[c("nodes", "bkpSolved")] # 4517, 13115, can be different.
 # Greedy branching may lower the numbers of branching nodes and
 # knapsack problems to solve.
 

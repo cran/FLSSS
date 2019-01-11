@@ -1,8 +1,9 @@
 export(FLSSS, FLSSSmultiset, GAP, mFLSSSpar,
        mFLSSSparImposeBounds, mFLSSSparImposeBoundsIntegerized,
        mFLSSSparIntegerized, mmKnapsack, mmKnapsackIntegerized,
-       auxGAPbb, auxGAPbbDp, auxKnapsack01dp, auxKnapsack01bb)
+       auxGAPbb, auxGAPbbDp, auxKnapsack01dp, auxKnapsack01bb,
+       auxGAPga)
 importFrom(Rcpp, evalCpp)
 importFrom(RcppParallel, RcppParallelLibs)
-importFrom("stats", "aggregate", "cor")
+importFrom("stats", "aggregate", "cor", "runif")
 useDynLib(FLSSS, .registration = TRUE)

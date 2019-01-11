@@ -207,7 +207,7 @@ valtype specialBiKpBaB(
   indtype &Xsize = Nitem;
   // indtype lenCap = Xsize + 2; // lenCap is a infinity actually. Dummy.
   // vec<kpEle<double, int> > Xcontain(Xsize + 2);
-  Xcontain.resize(Xsize + 2); // Just for formality. Reallocation will never happen.
+  Xcontain.resize(Xsize + 3); // Just for formality. Reallocation will never happen.
   kpEle<valtype, indtype> *X = &Xcontain[0] + 1;
 
 
@@ -239,8 +239,22 @@ valtype specialBiKpBaB(
     // ================================ transform to maximum problem
     cap = X[Xsize - 1].accWeight - cap;
     // ================================
+    // X[Xsize].accWeight = X[Xsize - 1].accWeight + (cap + 1);
+    // X[Xsize].accValue = X[Xsize - 1].accValue + 0;
+    // X[Xsize + 1].accWeight = X[Xsize].accWeight + (cap + 2);
+    // X[Xsize + 1].accValue = X[Xsize].accValue + 0;
+
+
     X[Xsize].accWeight = X[Xsize - 1].accWeight + (cap + 1);
-    X[Xsize].accValue = X[Xsize - 1].accValue + 0;
+    X[Xsize].valuePerWeight = X[Xsize - 1].valuePerWeight / 2;
+    X[Xsize].accValue = X[Xsize - 1].accValue + X[Xsize].valuePerWeight * (cap + 1);
+    X[Xsize].minWeightAfter = cap + 2;
+
+
+    X[Xsize + 1].accWeight = X[Xsize].accWeight + (cap + 2);
+    X[Xsize + 1].valuePerWeight = X[Xsize].valuePerWeight / 2;
+    X[Xsize + 1].accValue = X[Xsize].accValue + X[Xsize + 1].valuePerWeight * (cap + 2);
+    X[Xsize + 1].minWeightAfter = cap + 3;
 
 
     X[Xsize - 1].minWeightAfter = cap + 1;
@@ -254,8 +268,7 @@ valtype specialBiKpBaB(
 
   // no time constraint.
   valtype penalty = X[Xsize - 1].accValue - bkp<valtype, indtype, fmove, false> (
-    X, Xsize, cap, Xsize + 2, stay, current, std::numeric_limits<double>::max());
-  // lenCap is infinite but is set to Xsize + 2.;
+    X, Xsize, cap, Xsize, stay, current, std::numeric_limits<double>::max());
 
 
   // Rcout << "Inside knapsacking, stay = ";
@@ -270,7 +283,6 @@ valtype specialBiKpBaB(
     else
     {
       stay[i] = unitValOrder[k];
-      // Rcout << stay[i] << ", ";
       ++i;
     }
   }
@@ -497,7 +509,7 @@ valtype gapBab(vec<signed char> &currentSolution, vec<signed char> &Bcontainer,
   // Auxiliary containers.
   maxCore = std::min<int> (maxCore, Nagent);
   vec<vec<kpEle<valtype, indtype> > > Xcontain(maxCore,
-    vec<kpEle<valtype, indtype> > (Ntask + 2)); // aux
+    vec<kpEle<valtype, indtype> > (Ntask + 3)); // aux
   vec<vec<valtype> > valuePerWeight(maxCore, vec<valtype> (Ntask));
   vec<vec<indtype> > unitValOrder(maxCore, vec<indtype> (Ntask)); // aux
   vec<vec<indtype> > current(maxCore, vec<indtype> (Ntask)); // aux
@@ -846,6 +858,7 @@ List auxGAPbbMulthreadKPs(NumericMatrix cost, NumericMatrix profitOrLoss, Numeri
                       Named("nodes") = Nnode,
                       Named("bkpSolved") = Nkp);
 }
+
 
 
 

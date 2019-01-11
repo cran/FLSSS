@@ -59,7 +59,7 @@ List auxKnapsack01bb(
     double tlimit = 60, String ub = "MT", bool simplify = true)
 {
   int Xsize = value.size();
-  vec<kpEle<double, int> > Xcontain(Xsize + 2);
+  vec<kpEle<double, int> > Xcontain(Xsize + 3);
   kpEle<double, int> *X = &Xcontain[0] + 1;
   // Initialize Xcontain.
   double cap = *std::max_element(caps.begin(), caps.end());
@@ -101,8 +101,18 @@ List auxKnapsack01bb(
       X[i].accValue = X[i - 1].accValue + value[unitValOrder[i]];
       X[i].valuePerWeight = valuePerWeight[unitValOrder[i]];
     }
+
+
     X[Xsize].accWeight = X[Xsize - 1].accWeight + (cap + 1);
-    X[Xsize].accValue = X[Xsize - 1].accValue + 0;
+    X[Xsize].valuePerWeight = X[Xsize - 1].valuePerWeight / 2;
+    X[Xsize].accValue = X[Xsize - 1].accValue + X[Xsize].valuePerWeight * (cap + 1);
+    X[Xsize].minWeightAfter = cap + 2;
+
+
+    X[Xsize + 1].accWeight = X[Xsize].accWeight + (cap + 2);
+    X[Xsize + 1].valuePerWeight = X[Xsize].valuePerWeight / 2;
+    X[Xsize + 1].accValue = X[Xsize].accValue + X[Xsize + 1].valuePerWeight * (cap + 2);
+    X[Xsize + 1].minWeightAfter = cap + 3;
 
 
     X[Xsize - 1].minWeightAfter = cap + 1;
@@ -172,6 +182,7 @@ IntegerVector testCmp(NumericVector x)
   return a;
 }
 */
+
 
 
 
