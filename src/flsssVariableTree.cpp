@@ -10,6 +10,8 @@ using namespace Rcpp;
 
 
 
+namespace legacy {
+
 
 template<typename valtype, typename indtype>
 List FLSSScpp(
@@ -151,6 +153,10 @@ List FLSSScatchCpp(List memoryImage, int sizeNeed, double durationLimit)
 
 
 
+}
+
+
+
 // [[Rcpp::export]]
 List z_FLSSSvariableTree(
     int len, NumericVector v, double target, double ME,
@@ -165,21 +171,22 @@ List z_FLSSSvariableTree(
 
   if(N < 127)
   {
-    if(useFloat) result = FLSSScpp <float, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = legacy::FLSSScpp <float, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = legacy::FLSSScpp <double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else if(N < 32767)
   {
-    if(useFloat) result = FLSSScpp <float, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = legacy::FLSSScpp <float, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = legacy::FLSSScpp <double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else
   {
-    if(useFloat) result = FLSSScpp <float, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = legacy::FLSSScpp <float, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = legacy::FLSSScpp <double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   return result;
 }
+
 
 
 

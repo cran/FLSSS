@@ -2,9 +2,8 @@
 # include <Rcpp.h>
 
 
-
-
-
+namespace legacy
+{
 template<typename indtype>
 inline void raiseSeqBy1(indtype *begin, indtype *end)
 {
@@ -102,4 +101,5 @@ inline indtype consecutiveBoundSeqFromRightToLeft(indtype *base, indtype *seqRig
 }
 
 
+}
 

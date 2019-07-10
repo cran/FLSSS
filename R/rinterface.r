@@ -165,10 +165,20 @@ FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (le
     sortOrder = order(v)
     v = v[sortOrder]
     vindex = vindex[sortOrder]
+    target = (target - v[1] * len) / ME
+    v = (v - v[1]) / ME
+    ME = 1
+    # v = v / ME
+    # target = target / ME
     rst = z_FLSSS(len, v, target, ME, LB = 1L : len, UB = (length(v) - len + 1L) : length(v), solutionNeed, tlimit, useBiSrchInFB, useFloat)
     rst = unique(lapply(rst, function(x) sort(vindex[x][vindex[x] > 0L])))
     return(rst)
   }
+
+
+  target = (target - v[1] * len) / ME
+  v = (v - v[1]) / ME
+  ME = 1
 
 
   if(is.null(viaConjugate))

@@ -161,18 +161,18 @@ List z_FLSSS(
 
   if(N < 127)
   {
-    if(useFloat) result = FLSSScpp <float, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = FLSSScpp<float, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = FLSSScpp<double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else if(N < 32767)
   {
-    if(useFloat) result = FLSSScpp <float, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = FLSSScpp<float, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = FLSSScpp<double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else
   {
-    if(useFloat) result = FLSSScpp <float, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp <double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(useFloat) result = FLSSScpp<float, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else result = FLSSScpp<double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   return result;
 }

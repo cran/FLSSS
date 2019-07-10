@@ -21,9 +21,10 @@ inline int TTTstack(
   {
     for(indtype i = 0; i < N; ++i)
     {
-      if(V[i] <= SK->target + ME and V[i] >= SK->target - ME)
+      // if(V[i] <= SK->target + ME and V[i] >= SK->target - ME)
+      if(std::abs(V[i] - SK->target) <= ME)
       {
-        result.push_back(vec<indtype>(1, i));
+        result.push_back(vec<indtype> (1, i));
       }
     }
     return SKback - SK;
@@ -38,17 +39,17 @@ inline int TTTstack(
   indtype *hope = &hopeV[0];
   while(true)
   {
-    // (SKback - 1)->print(outfile);
-    // outfile << "parent printed ___________________________________\n\n";
+    // (SKback - 1)->print();
+    // Rcpp::Rcout << "parent printed ___________________________________\n\n";
     SKback->copyParentGene(*(SKback - 1));
-    // SKback->print(outfile);
-    // outfile << "parent copied ___________________________________\n\n";
+    // SKback->print();
+    // Rcpp::Rcout << "parent copied ___________________________________\n\n";
 
 
     indtype boo = SKback->grow(M, ME, hope, useBisearchInFindBounds // , &outfile
                                );
-    // SKback->print(outfile);
-    // outfile << "child grown ___________________________________\n\n";
+    // SKback->print();
+    // Rcpp::Rcout << "child grown ___________________________________\n\n";
 
 
     // continue to give birth.
@@ -79,8 +80,8 @@ inline int TTTstack(
     while(true)
     {
       bool updateBool = (SKback - 1)->update(M);
-      // (SKback - 1)->print(outfile);
-      // outfile << "parent updated ___________________________________\n\n";
+      // (SKback - 1)->print();
+      // Rcpp::Rcout << "parent updated ___________________________________\n\n";
 
 
       if(updateBool != 0) break;
@@ -91,7 +92,7 @@ inline int TTTstack(
         return 0; // All the combinations have been tried
       }
     }
-    if(result.size() >= (unsigned)sizeNeed or std::clock() > timeEnd) break;
+    if(result.size() >= unsigned(sizeNeed) or std::clock() > timeEnd) break;
   }
 
 

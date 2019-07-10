@@ -3,6 +3,14 @@
 \title{FLSSS updates}
 
 
+\section{Changes in FLSSS version 8.5.5 (20190709)}{
+  \itemize{
+    \item Bug reported and fixed for \code{FLSSS::FLSSS()}. At a certain step, the algorithm uses a relative error threshold to decide if two floats are equal. Due to limited numeric precision, in an unusual instance the algorithm ended up comparing two subset sums 1e-14 and 1.2e-14. These two sums should both equal 0 theoretically (superset has negative elements). A wrong decision was thus made upon the significant relative error between 1e-14 and 1.2e-14. Bug fix consists of shifting superset \code{v} to nonnegative domain and scaling error bound \code{ME} to 1 before mining. The rest functions are not affected by this incident.
+    \item Added namespaces to suppress link-time optimization warnings.
+  }
+}
+
+
 \section{Changes in FLSSS version 8.5 (20190106)}{
   \itemize{
     \item Bug fix. The previous branch-and-bound knapsack solver did not initialize containers with sufficient sizes. In rare cases a pointer would be realized at the end of the container.

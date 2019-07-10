@@ -25,6 +25,26 @@ auxGAPbbDpMulthreadNodes <- function(cost, profitOrLoss, budget, maxCore = 7L, t
     .Call(`_FLSSS_auxGAPbbDpMulthreadNodes`, cost, profitOrLoss, budget, maxCore, threadLoad, tlimit, greedyBranching, optim)
 }
 
+testFindBound003GAP <- function(dividedV, target, profit, ME) {
+    .Call(`_FLSSS_testFindBound003GAP`, dividedV, target, profit, ME)
+}
+
+testFindBound003GAP2 <- function(dividedV, targetMAX) {
+    .Call(`_FLSSS_testFindBound003GAP2`, dividedV, targetMAX)
+}
+
+z_GAP <- function(maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad = 8L, verbose = TRUE, heuristic = FALSE) {
+    .Call(`_FLSSS_z_GAP`, maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad, verbose, heuristic)
+}
+
+auxGAPgaGivenRandomSeeds <- function(cost, profitOrLoss, budget, randomSeeds, populationSize = 100L, generations = 1000L, optim = "max", maxCore = 7L) {
+    .Call(`_FLSSS_auxGAPgaGivenRandomSeeds`, cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore)
+}
+
+z_Gknapsack <- function(len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx) {
+    .Call(`_FLSSS_z_Gknapsack`, len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx)
+}
+
 z_findBound <- function(len, V, target, me, initialLB = -1L, initialUB = -1L, findBoundTimes = 1L, useBinarySearch = 0L, UBfirst = 0L) {
     .Call(`_FLSSS_z_findBound`, len, V, target, me, initialLB, initialUB, findBoundTimes, useBinarySearch, UBfirst)
 }
@@ -39,26 +59,6 @@ z_FLSSS <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, 
 
 z_FLSSSvariableTree <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE) {
     .Call(`_FLSSS_z_FLSSSvariableTree`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
-}
-
-auxGAPgaGivenRandomSeeds <- function(cost, profitOrLoss, budget, randomSeeds, populationSize = 100L, generations = 1000L, optim = "max", maxCore = 7L) {
-    .Call(`_FLSSS_auxGAPgaGivenRandomSeeds`, cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore)
-}
-
-testFindBound003GAP <- function(dividedV, target, profit, ME) {
-    .Call(`_FLSSS_testFindBound003GAP`, dividedV, target, profit, ME)
-}
-
-testFindBound003GAP2 <- function(dividedV, targetMAX) {
-    .Call(`_FLSSS_testFindBound003GAP2`, dividedV, targetMAX)
-}
-
-z_GAP <- function(maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad = 8L, verbose = TRUE, heuristic = FALSE) {
-    .Call(`_FLSSS_z_GAP`, maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad, verbose, heuristic)
-}
-
-z_Gknapsack <- function(len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx) {
-    .Call(`_FLSSS_z_Gknapsack`, len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx)
 }
 
 z_mFLSSS <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, duration, useBiSearch = 0L) {

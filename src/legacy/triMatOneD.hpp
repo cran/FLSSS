@@ -3,6 +3,8 @@
 # include <fstream>
 
 
+namespace legacy
+{
 template<typename valtype, typename indtype>
 struct triMoneD
 {
@@ -70,6 +72,6 @@ struct triMoneD
 
 
 };
-
+}
 
 

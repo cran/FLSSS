@@ -51,7 +51,7 @@ List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector m
   }
 
 
-  vec <double> sumLB(d, 0), sumUB(d, 0);
+  vec<double> sumLB(d, 0), sumUB(d, 0);
 
 
   for(int i = 0; i < len; ++i)

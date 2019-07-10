@@ -111,6 +111,94 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// testFindBound003GAP
+List testFindBound003GAP(NumericMatrix dividedV, NumericVector target, NumericVector profit, NumericVector ME);
+RcppExport SEXP _FLSSS_testFindBound003GAP(SEXP dividedVSEXP, SEXP targetSEXP, SEXP profitSEXP, SEXP MESEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type profit(profitSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ME(MESEXP);
+    rcpp_result_gen = Rcpp::wrap(testFindBound003GAP(dividedV, target, profit, ME));
+    return rcpp_result_gen;
+END_RCPP
+}
+// testFindBound003GAP2
+List testFindBound003GAP2(NumericMatrix dividedV, NumericVector targetMAX);
+RcppExport SEXP _FLSSS_testFindBound003GAP2(SEXP dividedVSEXP, SEXP targetMAXSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type targetMAX(targetMAXSEXP);
+    rcpp_result_gen = Rcpp::wrap(testFindBound003GAP2(dividedV, targetMAX));
+    return rcpp_result_gen;
+END_RCPP
+}
+// z_GAP
+IntegerVector z_GAP(int maxCore, NumericMatrix dividedV, NumericVector profitV, NumericMatrix MAXmat, IntegerVector zeroBasedLB, IntegerVector zeroBasedUB, double duration, int threadLoad, bool verbose, bool heuristic);
+RcppExport SEXP _FLSSS_z_GAP(SEXP maxCoreSEXP, SEXP dividedVSEXP, SEXP profitVSEXP, SEXP MAXmatSEXP, SEXP zeroBasedLBSEXP, SEXP zeroBasedUBSEXP, SEXP durationSEXP, SEXP threadLoadSEXP, SEXP verboseSEXP, SEXP heuristicSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type profitV(profitVSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type MAXmat(MAXmatSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type zeroBasedLB(zeroBasedLBSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type zeroBasedUB(zeroBasedUBSEXP);
+    Rcpp::traits::input_parameter< double >::type duration(durationSEXP);
+    Rcpp::traits::input_parameter< int >::type threadLoad(threadLoadSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< bool >::type heuristic(heuristicSEXP);
+    rcpp_result_gen = Rcpp::wrap(z_GAP(maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad, verbose, heuristic));
+    return rcpp_result_gen;
+END_RCPP
+}
+// auxGAPgaGivenRandomSeeds
+List auxGAPgaGivenRandomSeeds(NumericMatrix cost, NumericMatrix profitOrLoss, NumericVector budget, IntegerVector randomSeeds, int populationSize, int generations, String optim, int maxCore);
+RcppExport SEXP _FLSSS_auxGAPgaGivenRandomSeeds(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP randomSeedsSEXP, SEXP populationSizeSEXP, SEXP generationsSEXP, SEXP optimSEXP, SEXP maxCoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type cost(costSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type budget(budgetSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type randomSeeds(randomSeedsSEXP);
+    Rcpp::traits::input_parameter< int >::type populationSize(populationSizeSEXP);
+    Rcpp::traits::input_parameter< int >::type generations(generationsSEXP);
+    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(auxGAPgaGivenRandomSeeds(cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore));
+    return rcpp_result_gen;
+END_RCPP
+}
+// z_Gknapsack
+IntegerVector z_Gknapsack(int len, NumericMatrix vr, NumericVector maskV, NumericVector profitVec, NumericMatrix targetMat, NumericVector MEr, IntegerVector LBr, IntegerVector UBr, double duration, bool useBiSearch, int maxCore, int avgThreadLoad, bool verbose, bool approx);
+RcppExport SEXP _FLSSS_z_Gknapsack(SEXP lenSEXP, SEXP vrSEXP, SEXP maskVSEXP, SEXP profitVecSEXP, SEXP targetMatSEXP, SEXP MErSEXP, SEXP LBrSEXP, SEXP UBrSEXP, SEXP durationSEXP, SEXP useBiSearchSEXP, SEXP maxCoreSEXP, SEXP avgThreadLoadSEXP, SEXP verboseSEXP, SEXP approxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type vr(vrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type maskV(maskVSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type profitVec(profitVecSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type targetMat(targetMatSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type MEr(MErSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type LBr(LBrSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type UBr(UBrSEXP);
+    Rcpp::traits::input_parameter< double >::type duration(durationSEXP);
+    Rcpp::traits::input_parameter< bool >::type useBiSearch(useBiSearchSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< int >::type avgThreadLoad(avgThreadLoadSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< bool >::type approx(approxSEXP);
+    rcpp_result_gen = Rcpp::wrap(z_Gknapsack(len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx));
+    return rcpp_result_gen;
+END_RCPP
+}
 // z_findBound
 List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector me, IntegerVector initialLB, IntegerVector initialUB, int findBoundTimes, bool useBinarySearch, bool UBfirst);
 RcppExport SEXP _FLSSS_z_findBound(SEXP lenSEXP, SEXP VSEXP, SEXP targetSEXP, SEXP meSEXP, SEXP initialLBSEXP, SEXP initialUBSEXP, SEXP findBoundTimesSEXP, SEXP useBinarySearchSEXP, SEXP UBfirstSEXP) {
@@ -187,94 +275,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type useBiSrchInFB(useBiSrchInFBSEXP);
     Rcpp::traits::input_parameter< bool >::type useFloat(useFloatSEXP);
     rcpp_result_gen = Rcpp::wrap(z_FLSSSvariableTree(len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// auxGAPgaGivenRandomSeeds
-List auxGAPgaGivenRandomSeeds(NumericMatrix cost, NumericMatrix profitOrLoss, NumericVector budget, IntegerVector randomSeeds, int populationSize, int generations, String optim, int maxCore);
-RcppExport SEXP _FLSSS_auxGAPgaGivenRandomSeeds(SEXP costSEXP, SEXP profitOrLossSEXP, SEXP budgetSEXP, SEXP randomSeedsSEXP, SEXP populationSizeSEXP, SEXP generationsSEXP, SEXP optimSEXP, SEXP maxCoreSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type cost(costSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type profitOrLoss(profitOrLossSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type budget(budgetSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type randomSeeds(randomSeedsSEXP);
-    Rcpp::traits::input_parameter< int >::type populationSize(populationSizeSEXP);
-    Rcpp::traits::input_parameter< int >::type generations(generationsSEXP);
-    Rcpp::traits::input_parameter< String >::type optim(optimSEXP);
-    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
-    rcpp_result_gen = Rcpp::wrap(auxGAPgaGivenRandomSeeds(cost, profitOrLoss, budget, randomSeeds, populationSize, generations, optim, maxCore));
-    return rcpp_result_gen;
-END_RCPP
-}
-// testFindBound003GAP
-List testFindBound003GAP(NumericMatrix dividedV, NumericVector target, NumericVector profit, NumericVector ME);
-RcppExport SEXP _FLSSS_testFindBound003GAP(SEXP dividedVSEXP, SEXP targetSEXP, SEXP profitSEXP, SEXP MESEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type target(targetSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type profit(profitSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type ME(MESEXP);
-    rcpp_result_gen = Rcpp::wrap(testFindBound003GAP(dividedV, target, profit, ME));
-    return rcpp_result_gen;
-END_RCPP
-}
-// testFindBound003GAP2
-List testFindBound003GAP2(NumericMatrix dividedV, NumericVector targetMAX);
-RcppExport SEXP _FLSSS_testFindBound003GAP2(SEXP dividedVSEXP, SEXP targetMAXSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type targetMAX(targetMAXSEXP);
-    rcpp_result_gen = Rcpp::wrap(testFindBound003GAP2(dividedV, targetMAX));
-    return rcpp_result_gen;
-END_RCPP
-}
-// z_GAP
-IntegerVector z_GAP(int maxCore, NumericMatrix dividedV, NumericVector profitV, NumericMatrix MAXmat, IntegerVector zeroBasedLB, IntegerVector zeroBasedUB, double duration, int threadLoad, bool verbose, bool heuristic);
-RcppExport SEXP _FLSSS_z_GAP(SEXP maxCoreSEXP, SEXP dividedVSEXP, SEXP profitVSEXP, SEXP MAXmatSEXP, SEXP zeroBasedLBSEXP, SEXP zeroBasedUBSEXP, SEXP durationSEXP, SEXP threadLoadSEXP, SEXP verboseSEXP, SEXP heuristicSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type dividedV(dividedVSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type profitV(profitVSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type MAXmat(MAXmatSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type zeroBasedLB(zeroBasedLBSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type zeroBasedUB(zeroBasedUBSEXP);
-    Rcpp::traits::input_parameter< double >::type duration(durationSEXP);
-    Rcpp::traits::input_parameter< int >::type threadLoad(threadLoadSEXP);
-    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    Rcpp::traits::input_parameter< bool >::type heuristic(heuristicSEXP);
-    rcpp_result_gen = Rcpp::wrap(z_GAP(maxCore, dividedV, profitV, MAXmat, zeroBasedLB, zeroBasedUB, duration, threadLoad, verbose, heuristic));
-    return rcpp_result_gen;
-END_RCPP
-}
-// z_Gknapsack
-IntegerVector z_Gknapsack(int len, NumericMatrix vr, NumericVector maskV, NumericVector profitVec, NumericMatrix targetMat, NumericVector MEr, IntegerVector LBr, IntegerVector UBr, double duration, bool useBiSearch, int maxCore, int avgThreadLoad, bool verbose, bool approx);
-RcppExport SEXP _FLSSS_z_Gknapsack(SEXP lenSEXP, SEXP vrSEXP, SEXP maskVSEXP, SEXP profitVecSEXP, SEXP targetMatSEXP, SEXP MErSEXP, SEXP LBrSEXP, SEXP UBrSEXP, SEXP durationSEXP, SEXP useBiSearchSEXP, SEXP maxCoreSEXP, SEXP avgThreadLoadSEXP, SEXP verboseSEXP, SEXP approxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type vr(vrSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type maskV(maskVSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type profitVec(profitVecSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type targetMat(targetMatSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type MEr(MErSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type LBr(LBrSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type UBr(UBrSEXP);
-    Rcpp::traits::input_parameter< double >::type duration(durationSEXP);
-    Rcpp::traits::input_parameter< bool >::type useBiSearch(useBiSearchSEXP);
-    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
-    Rcpp::traits::input_parameter< int >::type avgThreadLoad(avgThreadLoadSEXP);
-    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    Rcpp::traits::input_parameter< bool >::type approx(approxSEXP);
-    rcpp_result_gen = Rcpp::wrap(z_Gknapsack(len, vr, maskV, profitVec, targetMat, MEr, LBr, UBr, duration, useBiSearch, maxCore, avgThreadLoad, verbose, approx));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -419,15 +419,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FLSSS_auxKnapsack01dp", (DL_FUNC) &_FLSSS_auxKnapsack01dp, 6},
     {"_FLSSS_auxGAPbbDpMulthreadKPs", (DL_FUNC) &_FLSSS_auxGAPbbDpMulthreadKPs, 7},
     {"_FLSSS_auxGAPbbDpMulthreadNodes", (DL_FUNC) &_FLSSS_auxGAPbbDpMulthreadNodes, 8},
+    {"_FLSSS_testFindBound003GAP", (DL_FUNC) &_FLSSS_testFindBound003GAP, 4},
+    {"_FLSSS_testFindBound003GAP2", (DL_FUNC) &_FLSSS_testFindBound003GAP2, 2},
+    {"_FLSSS_z_GAP", (DL_FUNC) &_FLSSS_z_GAP, 10},
+    {"_FLSSS_auxGAPgaGivenRandomSeeds", (DL_FUNC) &_FLSSS_auxGAPgaGivenRandomSeeds, 8},
+    {"_FLSSS_z_Gknapsack", (DL_FUNC) &_FLSSS_z_Gknapsack, 14},
     {"_FLSSS_z_findBound", (DL_FUNC) &_FLSSS_z_findBound, 9},
     {"_FLSSS_z_findBoundIntegerized", (DL_FUNC) &_FLSSS_z_findBoundIntegerized, 10},
     {"_FLSSS_z_FLSSS", (DL_FUNC) &_FLSSS_z_FLSSS, 10},
     {"_FLSSS_z_FLSSSvariableTree", (DL_FUNC) &_FLSSS_z_FLSSSvariableTree, 10},
-    {"_FLSSS_auxGAPgaGivenRandomSeeds", (DL_FUNC) &_FLSSS_auxGAPgaGivenRandomSeeds, 8},
-    {"_FLSSS_testFindBound003GAP", (DL_FUNC) &_FLSSS_testFindBound003GAP, 4},
-    {"_FLSSS_testFindBound003GAP2", (DL_FUNC) &_FLSSS_testFindBound003GAP2, 2},
-    {"_FLSSS_z_GAP", (DL_FUNC) &_FLSSS_z_GAP, 10},
-    {"_FLSSS_z_Gknapsack", (DL_FUNC) &_FLSSS_z_Gknapsack, 14},
     {"_FLSSS_z_mFLSSS", (DL_FUNC) &_FLSSS_z_mFLSSS, 16},
     {"_FLSSS_z_mFLSSScomoPar", (DL_FUNC) &_FLSSS_z_mFLSSScomoPar, 17},
     {"_FLSSS_z_mFLSSSvariableTree", (DL_FUNC) &_FLSSS_z_mFLSSSvariableTree, 19},

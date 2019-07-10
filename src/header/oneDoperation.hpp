@@ -20,7 +20,7 @@ inline valtype absDiff(valtype x, valtype y)
   if(y == 0)
   {
     if(x == 0) return 0;
-    return 1e308;
+    return std::numeric_limits<valtype>::max();
   }
   return std::abs(x / y - 1);
 }

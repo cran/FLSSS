@@ -364,6 +364,52 @@ struct PAT
   }
 
 
+  inline void print()
+  {
+    Rcpp::Rcout << "position =, " << (int)position << // ", s =, " << (int)s <<", send =, " << (int)send <<
+      ", len =, " << (int)len << ",beenUpdated =," << beenUpdated << "\n";
+    Rcpp::Rcout << "target =," << target;
+    Rcpp::Rcout << "\n";
+
+
+    Rcpp::Rcout << "sumLB =," << sumLB;
+    Rcpp::Rcout << ",,";
+
+
+    Rcpp::Rcout << "sumUB =," << sumUB;
+    Rcpp::Rcout << ",,";
+
+
+    Rcpp::Rcout << "sumBresv =," << sumBresv;
+    Rcpp::Rcout << "\n";
+
+
+    Rcpp::Rcout << "LB =,";
+    for(int i = 0, iend = len; i < iend; ++i)
+    {
+      Rcpp::Rcout << (int)LB[i] << ",";
+    }
+    Rcpp::Rcout << "\n";
+
+
+    Rcpp::Rcout << "UB =,";
+    for(int i = 0, iend = len; i < iend; ++i)
+    {
+      Rcpp::Rcout << (int)UB[i] << ",";
+    }
+    Rcpp::Rcout << "\n";
+
+
+    Rcpp::Rcout << "Bresv =,";
+    indtype BresvSize = position + 1;
+    for(int i = 0, iend = BresvSize; i < iend; ++i)
+    {
+      Rcpp::Rcout << (int)Bresv[i] << ",";
+    }
+    Rcpp::Rcout << "\n";
+  }
+
+
   // len is the parent's subset size
   inline void copyParentGene(PAT &x) // x is the parent
   {
@@ -410,7 +456,22 @@ struct PAT
 
 
     // print(*outfile);
-    // *outfile << "Bounds found ___________________________________, boo = " << (int)boo << "\n\n";
+    // Rcpp::Rcout << "Bounds found ___________________________________, boo = " << (int)boo << "\n\n";
+    if(false)
+    {
+      Rcpp::Rcout << "LB = " << " ";
+      for(int i = 0, iend = len; i < iend; ++i)
+      {
+        Rcpp::Rcout << int(LB[i]) << ", ";
+      }
+      Rcpp::Rcout << "\n";
+      Rcpp::Rcout << "UB = " << " ";
+      for(int i = 0, iend = len; i < iend; ++i)
+      {
+        Rcpp::Rcout << int(UB[i]) << ", ";
+      }
+      Rcpp::Rcout << "\n";
+    }
 
 
     if(boo == 0) return 0;

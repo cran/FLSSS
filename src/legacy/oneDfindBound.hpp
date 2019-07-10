@@ -6,6 +6,8 @@
 // jmp_buf env;
 
 
+namespace legacy
+{
 template<typename valtype, typename indtype>
 inline unsigned char LBiFind(
     indtype &ciLB, valtype **M, indtype ci_1LB, valtype &SR, indtype I, indtype &J, indtype *UB, bool useBinarySearch)
@@ -248,6 +250,16 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
 
   return 1;
 }
+
+
+}
+
+
+
+
+
+
+
 
 
 

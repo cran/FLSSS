@@ -147,7 +147,8 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     valtype SR = Min + v[UB[I]] - sumUB;
 
 
-    //update first lower bound, 0;
+    // Update first lower bound, 0;
+    if(true)
     {
       indtype tmpLB = LB[I];
       if(useBinarySearch)
@@ -167,7 +168,8 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     ++I;
 
 
-    //update lower bounds from 1 to the end
+    // Update lower bounds from 1 to the end
+    if(true)
     {
       for(; I < len; ++I)
       {
@@ -180,7 +182,7 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     }
 
 
-    // see if can jump out now
+    if(true) // See if can jump out now
     {
       if(!boo) boo = 1;
       else
@@ -200,6 +202,7 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     boundChanged = 0;
 
 
+    if(true)
     {
       indtype tmpUB = UB[I];
       if(useBinarySearch)
@@ -219,7 +222,8 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     --I;
 
 
-    // refresh the rest UB bounds
+    // Refresh the rest UB bounds
+    if(true)
     {
       for(; I >= 0; --I)
       {
@@ -232,7 +236,8 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     }
 
 
-    // see if keep updating LB is worth it
+    // See if keep updating LB is worth it
+    if(true)
     {
       if(!boundChanged)
       {
@@ -247,6 +252,40 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
 
   return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

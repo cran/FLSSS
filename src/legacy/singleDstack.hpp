@@ -5,6 +5,7 @@
 // using namespace Rcpp;
 
 
+namespace legacy {
 
 
 template<typename valtype, typename indtype>
@@ -120,3 +121,5 @@ inline int TTTstack(
 
 
 
+
+}

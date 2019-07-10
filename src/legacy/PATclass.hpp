@@ -6,7 +6,8 @@
 # include "raiseSupressBound.hpp"
 
 
-
+namespace legacy
+{
 template<typename valtype, typename indtype>
 struct PAT
 {
@@ -300,6 +301,43 @@ struct PAT
     return 1;
   }
 };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
