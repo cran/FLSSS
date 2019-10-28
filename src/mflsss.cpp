@@ -119,24 +119,24 @@ List z_mFLSSS(int maxCore, int len, NumericMatrix vr,
   }
   else if(std::max(vlen, d) < 32767)
   {
-         if(mk == 0 and useBiSearch == 0) result = mFLSSScpp<double, signed char, 0, 0> (
+         if(mk == 0 and useBiSearch == 0) result = mFLSSScpp<double, short, 0, 0> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 0 and useBiSearch == 1) result = mFLSSScpp<double, signed char, 0, 1> (
+    else if(mk == 0 and useBiSearch == 1) result = mFLSSScpp<double, short, 0, 1> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 1 and useBiSearch == 0) result = mFLSSScpp<INT,          short, 1, 0> (
+    else if(mk == 1 and useBiSearch == 0) result = mFLSSScpp<INT,    short, 1, 0> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 1 and useBiSearch == 1) result = mFLSSScpp<INT,          short, 1, 1> (
+    else if(mk == 1 and useBiSearch == 1) result = mFLSSScpp<INT,    short, 1, 1> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
   }
   else
   {
-         if(mk == 0 and useBiSearch == 0) result = mFLSSScpp<double, signed char, 0, 0> (
+         if(mk == 0 and useBiSearch == 0) result = mFLSSScpp<double, int, 0, 0> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 0 and useBiSearch == 1) result = mFLSSScpp<double, signed char, 0, 1> (
+    else if(mk == 0 and useBiSearch == 1) result = mFLSSScpp<double, int, 0, 1> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 1 and useBiSearch == 0) result = mFLSSScpp<INT,            int, 1, 0> (
+    else if(mk == 1 and useBiSearch == 0) result = mFLSSScpp<INT,    int, 1, 0> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
-    else if(mk == 1 and useBiSearch == 1) result = mFLSSScpp<INT,            int, 1, 1> (
+    else if(mk == 1 and useBiSearch == 1) result = mFLSSScpp<INT,    int, 1, 1> (
       len, vr, d, dlst, dl, dust, du, vlen, targetMat, MEr, LBr, UBr, sizeNeed, endTime, maxCore, mask);
   }
   return result;

@@ -16,3 +16,58 @@ unlist(lapply(lis, function(x) sum(ds[x])))
 
 
 
+library(FLSSS)
+
+L = 5L # subset size
+
+d = 5L # number of dimensions
+
+N = 130 # superset size
+
+# generate a multidimensional vector/set
+v = as.data.frame(matrix(rnorm(d * N) * 1000,ncol = d))
+
+# make an underlying solution
+solution = sample(1L : N, L)
+
+# the subset sum target of the underlying solution
+target = as.numeric(colSums(v[solution, ]))
+
+# bound the error as 5% of each dimension's target magnitude
+ME = abs(target) * 0.05
+
+randomOrder = sample(1L:((nrow(v) - L) * L + 1L), (nrow(v) - L) * L + 1L)
+# randomizeTargetOrder should be TRUE or FALSE or
+# an index vector of size (N-L)*L+1
+
+tmp = FLSSS::mFLSSSpar(maxCore = 7, L, v, target, ME, tlimit = 1000, solutionNeed = 5)
+
+
+
+
+len = 3L
+N = 10L
+v = as.matrix(sort(rnorm(N)))
+target = sum(sample(v, len))
+me = 0.1 # error
+rst = FLSSS:::z_findBound(len, v, target, me, initialLB = c(1, 2, 3), initialUB = c(8, 9, 10))
+rst = rst[-1]
+print(rst)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

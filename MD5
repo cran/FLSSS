@@ -1,4 +1,4 @@
-81de37f7eae8515997be0a06d091af84 *DESCRIPTION
+cdf4bb2357b4bd85a6682460053c914b *DESCRIPTION
 692858a3dcae2fe6d5e670e7e9e03ed7 *NAMESPACE
 1ad083457c8649a774186b1ce24cd1f0 *R/RcppExports.R
 aa489ebd6264f5f3c4627d0f433f687c *R/auxGAP.r
@@ -8,7 +8,7 @@ e41e62937e143208ac1358e8969192d0 *R/knapsack.r
 def51eca2789da968ca182e4880e926b *R/rfuns.r
 ffba50c6e8e4c726553e1b586c23b1ce *R/rfunsLegacy.r
 ee3de7a562c524101bf24670c7e3f577 *R/rinterface.r
-3d2fed486866f92a1cb8acb4ae69b0d2 *inst/NEWS.Rd
+29d279c8b2786c2c94c44ab12bb51a48 *inst/NEWS.Rd
 eb942fe9c3c3da4cc3cda6eac617b293 *man/FLSSS.Rd
 a6677330ef6d2449685537552a32cf65 *man/FLSSSmultiset.Rd
 4d606374e5f72f730c44b17ed6ff224a *man/GAP.Rd
@@ -75,11 +75,11 @@ d4b605b13ce03e9fd9969a54dabe081e *src/legacy/singleDIO.hpp
 1e0ad6285363ed8094b1565a675039d1 *src/legacy/singleDstack.hpp
 ed9865729c9dcc2a6152329bcd5b5e74 *src/legacy/triMat.hpp
 bd247c73b1dd835f7949e5fc769b1150 *src/legacy/triMatOneD.hpp
-2163a7604092804ad67a0ae2ae7ec15c *src/mflsss.cpp
+0e9466295aeb9fb98d215a637b29ec0e *src/mflsss.cpp
 cca6a6d6343a329e22b6e7efe705114e *src/mflsssComoPar.cpp
 35468ae3abed5b4535c6ec3d53528e73 *src/mflsssVariableTree.cpp
 8b0397e18d5620008e039b3fb01b61d8 *src/testIntegerize.cpp
-2c23a84e3d4708b5d4938c9e3bf2a534 *tests/debugTests/FLSSSnumericIssue20190708.r
+417d475eb8a298f610a4dd9e60c1636d *tests/debugTests/FLSSSnumericIssue20190708.r
 bd8f5692eeffa3616cf38b579252f67c *tests/debugTests/HSknapsack.r
 4ccf1c5858ca50c7890ad77ac23aa01a *tests/debugTests/gapnew.r
 c5f03ee1ab813c18bf38954956014ff5 *tests/examples/FLSSS.r
