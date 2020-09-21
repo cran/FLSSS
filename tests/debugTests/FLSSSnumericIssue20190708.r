@@ -22,10 +22,10 @@ L = 5L # subset size
 
 d = 5L # number of dimensions
 
-N = 130 # superset size
+N = 1000 # superset size
 
 # generate a multidimensional vector/set
-v = as.data.frame(matrix(rnorm(d * N) * 1000,ncol = d))
+v = as.data.frame(matrix(abs(rnorm(d * N) * 1000), ncol = d))
 
 # make an underlying solution
 solution = sample(1L : N, L)
@@ -36,11 +36,11 @@ target = as.numeric(colSums(v[solution, ]))
 # bound the error as 5% of each dimension's target magnitude
 ME = abs(target) * 0.05
 
-randomOrder = sample(1L:((nrow(v) - L) * L + 1L), (nrow(v) - L) * L + 1L)
+# randomOrder = sample(1L:((nrow(v) - L) * L + 1L), (nrow(v) - L) * L + 1L)
 # randomizeTargetOrder should be TRUE or FALSE or
 # an index vector of size (N-L)*L+1
 
-tmp = FLSSS::mFLSSSpar(maxCore = 7, L, v, target, ME, tlimit = 1000, solutionNeed = 5)
+tmp = FLSSS::mFLSSSpar(maxCore = 7, L, v, target, ME, tlimit = 1000, solutionNeed = 50)
 
 
 

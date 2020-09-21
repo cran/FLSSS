@@ -44,7 +44,7 @@ struct paraBkpForCaps: public RcppParallel::Worker
     vec<vec<indtype> > current(maxCore, vec<indtype>(Xsize + 2));
     currentV = &current[0];
     bestV = &bestVec[0];
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -182,6 +182,8 @@ IntegerVector testCmp(NumericVector x)
   return a;
 }
 */
+
+
 
 
 

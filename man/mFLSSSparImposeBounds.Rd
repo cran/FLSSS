@@ -76,7 +76,7 @@ See \code{avgThreadLoad} in \code{mFLSSSpar()}.
 A list of index vectors.
 }
 \references{
-[1] Atomic template class in \href{https://software.intel.com/en-us/node/506277}{Intel TBB}. An atomic counter is used to coordinate heterogeneous subtasks to avoid idle threads. The atomic operation overhead is negligible compared to the time cost of the lightest subtask.
+[1] Atomic template class in \href{https://software.intel.com/content/www/us/en/develop/tools/threading-building-blocks.html}{Intel TBB}. An atomic counter is used to coordinate heterogeneous subtasks to avoid idle threads. The atomic operation overhead is negligible compared to the time cost of the lightest subtask.
 }
 %\author{
 %%  ~~who you are~~

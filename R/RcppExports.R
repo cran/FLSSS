@@ -69,6 +69,14 @@ z_mFLSSScomoPar <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targ
     .Call(`_FLSSS_z_mFLSSScomoPar`, maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetr, MEr, LBr, UBr, sizeNeededForAll, duration, useBiSearch, avgThreadLoad)
 }
 
+z_mFLSSSimage <- function(len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, useBiSearch = 0L, Ninstance = 100000L) {
+    .Call(`_FLSSS_z_mFLSSSimage`, len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, useBiSearch, Ninstance)
+}
+
+z_mFLSSSimport <- function(mflsssObj, sizeNeed, tlimit) {
+    .Call(`_FLSSS_z_mFLSSSimport`, mflsssObj, sizeNeed, tlimit)
+}
+
 z_mFLSSSvariableTree <- function(maxCore, len, vr, d, dlst, dl, dust, du, keyInd, originalTarget, keyTarget, scaleFactor, MEr, LBr, UBr, sizeNeed, duration, useFloat, useBisearchInFindBounds = 0L) {
     .Call(`_FLSSS_z_mFLSSSvariableTree`, maxCore, len, vr, d, dlst, dl, dust, du, keyInd, originalTarget, keyTarget, scaleFactor, MEr, LBr, UBr, sizeNeed, duration, useFloat, useBisearchInFindBounds)
 }

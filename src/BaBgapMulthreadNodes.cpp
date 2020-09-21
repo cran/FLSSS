@@ -1174,7 +1174,7 @@ struct runGapOBJ: public RcppParallel::Worker
     vec<indtype> NnodesKps(maxCore * 2, 0);
     nodes = &NnodesKps[0];
     kps = &NnodesKps[maxCore];
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
     totalNnodes = std::accumulate(nodes, nodes + maxCore, totalNnodes);
     totalNkps = std::accumulate(kps, kps + maxCore, totalNkps);
   }
@@ -1353,6 +1353,8 @@ List auxGAPbbMulthreadNodes(
                       Named("nodes") = totalNnodes,
                       Named("bkpSolved") = totalNkps);
 }
+
+
 
 
 

@@ -1,14 +1,22 @@
+// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppParallel)]]
 # include <Rcpp.h>
 # include <RcppParallel.h>
+# include <chrono>
 # include "header/dnyTasking.hpp"
-// # include "header/multiDIO.hpp"
-// # include "header/multiDstack.hpp"
 # include "header/mflsssOBJ.hpp"
 using namespace Rcpp;
 using namespace RcppParallel;
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
+// List mFLSSScomoParCpp(
+//     int len, NumericMatrix vr,
+//     int _d, int dlst, int dl, int dust, int du,
+//     int N, NumericVector targetr, NumericVector MEr,
+//     IntegerVector LBr, IntegerVector UBr, int sizeNeeded,
+//     std::chrono::time_point<std::chrono::steady_clock> endTime,
+//     int maxCore, int avgThreadLoad, INT *mask)
 
 
 // z_mFLSSS(maxCore, len, mV, d, 0, dl, d - du, du, targetMat, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB)
@@ -20,7 +28,9 @@ List mFLSSScpp(
     NumericMatrix targetMat,
     NumericVector MEr,
     IntegerVector LBr, IntegerVector UBr,
-    int sizeNeeded, double endTime, int maxCore, INT *mask)
+    int sizeNeeded,
+    std::chrono::time_point<std::chrono::steady_clock> endTime,
+    int maxCore, INT *mask)
 {
   // Language("print", vr).eval();
   triM<valtype, indtype> mat;
@@ -102,7 +112,9 @@ List z_mFLSSS(int maxCore, int len, NumericMatrix vr,
               bool useBiSearch = 0)
 {
   int vlen = vr.nrow();
-  double endTime = (double)std::clock() + duration * CLOCKS_PER_SEC;
+  // double endTime = (double)std::clock() + duration * CLOCKS_PER_SEC;
+  std::chrono::time_point<std::chrono::steady_clock> endTime =
+    std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(duration));
   List result;
   INT *mask = (INT*)&maskV[0];
   bool mk = maskV.size() > 0;
@@ -141,21 +153,6 @@ List z_mFLSSS(int maxCore, int len, NumericMatrix vr,
   }
   return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

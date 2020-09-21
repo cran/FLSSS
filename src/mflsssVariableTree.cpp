@@ -176,7 +176,7 @@ struct parMflsss: public Worker
     totalSize = &tsize;
     dynamicTasking dtask(maxThreads, keyTargetSize);
     dT = &dtask;
-    parallelFor(0, maxThreads, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 */
@@ -326,7 +326,7 @@ struct parMflsss: public Worker
     totalSize = &tsize;
     dynamicTasking dtask(maxThreads, keyTargetSize);
     dT = &dtask;
-    parallelFor(0, maxThreads, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -632,6 +632,7 @@ List mFLSSSimportCpp(
   return List::create(Named("solution") = lis, Named("memoryImage") = memImage);
 }
 */
+
 
 
 

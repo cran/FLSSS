@@ -1,11 +1,12 @@
+// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppParallel)]]
 # include <fstream>
 # include <Rcpp.h>
 # include <RcppParallel.h>
-// # include "header/multiDstack.hpp"
 # include "header/mflsssOBJ.hpp"
 using namespace Rcpp;
 using namespace RcppParallel;
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 
@@ -15,7 +16,8 @@ List mFLSSScomoParCpp(
     int len, NumericMatrix vr,
     int _d, int dlst, int dl, int dust, int du,
     int N, NumericVector targetr, NumericVector MEr,
-    IntegerVector LBr, IntegerVector UBr, int sizeNeeded, double endTime,
+    IntegerVector LBr, IntegerVector UBr, int sizeNeeded,
+    std::chrono::time_point<std::chrono::steady_clock> endTime,
     int maxCore, int avgThreadLoad, INT *mask)
 {
   triM <valtype, indtype> mat;
@@ -42,29 +44,54 @@ List mFLSSScomoParCpp(
 
 
   vec<vec<indtype> > rst;
-  rst.reserve(f.sizeNeed + 6);
+  rst.reserve(7);
 
 
+  // Rcout << "1.1\n";
   vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > descendants;
   mitosis<valtype, indtype, mk, useBiSearch> (
-      descendants, f, rst, LBtmp, UBtmp, (valtype*)&*targetr.begin(), (valtype*)&*MEr.begin(), maxCore, avgThreadLoad);
+      descendants, f, rst, LBtmp, UBtmp, (valtype*)&*targetr.begin(),
+      (valtype*)&*MEr.begin(), maxCore, avgThreadLoad);
 
 
-  if(f.totalSize < f.sizeNeed)
+  // for(int i = 0, iend = rst.size(); i < iend; ++i)
+  // {
+  //   for(int j = 0, jend = rst[i].size(); j < jend; ++j)
+  //   {
+  //     Rcout << (int)(rst[i][j]) << ", ";
+  //   }
+  //   Rcout << "\n";
+  // }
+  // if(true)
+  // {
+  //   for(int i = 0, iend = descendants.size(); i < iend; ++i)
+  //     descendants[i].print();
+  // }
+
+
+  // Rcout << "descendants.size() = " << descendants.size() << "\n";
+  if(f.totalSize < f.sizeNeed and descendants.size() > 0)
   {
-    Rcout << "parallel mflsss object computing\n";
-    Rcout << "N of tasks = " << descendants.size() << "\n";
+    // Rcout << "parallel mflsss object computing\n";
+    // Rcout << "N of tasks = " << descendants.size() << "\n";
     parMflsssOBJ<valtype, indtype, mk, useBiSearch> (descendants, maxCore);
   }
 
 
+  // Rcout << "-1\n";
   for(int i = 0, iend = descendants.size(); i < iend; ++i)
   {
     vec<vec<indtype> > &result = descendants[i].result;
-    for(int i = 0, iend = result.size(); i < iend; ++i)
+    for(int j = 0, jend = result.size(); j < jend; ++j)
     {
-      rst.push_back(result[i]);
+      // for(int k = 0, kend = result[j].size(); k < kend; ++k)
+      // {
+      //   Rcout << (int)result[j][k] << ", ";
+      // }
+      // Rcout << "\n";
+      rst.push_back(result[j]);
     }
+    // Rcout << "-1\n";
   }
 
 
@@ -89,7 +116,8 @@ List z_mFLSSScomoPar(int maxCore, int len, NumericMatrix vr, NumericVector maskV
                   double duration, bool useBiSearch = 0, int avgThreadLoad = 8)
 {
   int vlen = vr.nrow();
-  double endTime = duration * CLOCKS_PER_SEC + std::clock();
+  std::chrono::time_point<std::chrono::steady_clock> endTime =
+    std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(duration));
   List result;
   INT *mask = (INT*)&maskV[0];
   bool mk = maskV.size() > 0;

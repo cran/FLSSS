@@ -578,7 +578,7 @@ struct parMgap: public RcppParallel::Worker
     mx = &mxP;
     dynamicTasking dtask(maxCore, tasks);
     dT = &dtask;
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -1146,6 +1146,8 @@ IntegerVector z_GAP(int maxCore, int len, NumericMatrix V,
   }
   return result;
 }
+
+
 
 
 

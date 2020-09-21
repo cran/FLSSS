@@ -2,6 +2,7 @@
 // [[Rcpp::depends(RcppParallel)]]
 # include <Rcpp.h>
 # include <RcppParallel.h>
+# include <mutex>
 # include <fstream>
 // # include <iostream>
 // # include <ctime>
@@ -1043,7 +1044,7 @@ signed char TTTstack(
     double *optimalSolProfit,
     gapPAT<valtype, indtype> *SK,
     gapPAT<valtype, indtype> *&SKback,
-    double endTime, bool verbose, tbb::spin_mutex *mx,
+    double endTime, bool verbose, std::mutex *mx,
     vec<indtype> &acntr)
 {
   if(SKback <= SK) return 0;
@@ -1154,7 +1155,7 @@ struct parMgap: public RcppParallel::Worker
   indtype *optimalSolution;
   double *optimalSolProfit;
   vec<indtype> *cntr;
-  tbb::spin_mutex *mx;
+  std::mutex *mx;
   dynamicTasking *dT;
 
 
@@ -1191,10 +1192,10 @@ struct parMgap: public RcppParallel::Worker
     SKgroup(SKgroup), SKbackGroup(SKbackGroup),originalTV(originalTV),
     optimalSolution(optimalSolution), optimalSolProfit(optimalSolProfit)
   {
-    tbb::spin_mutex mxP; mx = &mxP;
+    std::mutex mxP; mx = &mxP;
     dynamicTasking dtask(maxCore, tasks); dT = &dtask;
     vec<vec<indtype> > cntrs(maxCore, vec<indtype>(len)); cntr = &cntrs[0];
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -1575,6 +1576,8 @@ IntegerVector z_GAP(int maxCore,
   }
   return result;
 }
+
+
 
 
 

@@ -1,5 +1,33 @@
 
 
+premine <- function(len, v, target, ME)
+{
+  if(len == 0)
+  {
+    cat("Looping over subset size from 1 to the superset size is strongly recommended. Given zero subset size, setting a larger number of solutions in demand might be necessary to obtain the expected number of solutions.")
+    return(NULL)
+  }
+  if(length(ME) == 1L) v = as.matrix(v)
+  if(len == 1)
+  {
+    rst = as.list(which(apply(v, 1, function(x) all(abs(x - target) <= ME))))
+    return(rst)
+  }
+  if(len == nrow(v) - 1L)
+  {
+    s = colSums(v)
+    rst = as.list(which(apply(v, 1, function(x) all(abs(s - x - target) <= ME))))
+    rst = lapply(rst, function(x) setdiff(1:nrow(v), x))
+    return(rst)
+  }
+  if(len == nrow(v))
+  {
+    s = colSums(v)
+    if(all(abs(s - target) <= ME)) return(list(1:nrow(v)))
+    else return(list())
+  }
+  return(NULL)
+}
 
 
 # =============================================================================
@@ -7,6 +35,10 @@
 # =============================================================================
 FLSSSvariableTree <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (length(v) - len + 1L) : length(v), viaConjugate = FALSE, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE)
 {
+  premineRst = premine(len, v, target, ME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(len == 0)
   {
     len = length(v)
@@ -52,6 +84,10 @@ FLSSSvariableTree <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : l
 # mV is the data matrix, each row is an observation
 mFLSSSparVariableTree <- function(maxCore = 7L, len, mV, mTarget, mME, viaConjugate = NULL, solutionNeed = 1L, tlimit = 60, dl = ncol(mV), du = ncol(mV), randomizeTargetOrder = FALSE, useBiSrchInFB = FALSE, useFloat = FALSE)
 {
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   # source("../src/legacy/rfuns.r")
   if(is.matrix(mV)) mV = as.data.frame(mV)
 
@@ -66,9 +102,9 @@ mFLSSSparVariableTree <- function(maxCore = 7L, len, mV, mTarget, mME, viaConjug
     fixedSize = F
     len = nrow(mV)
     mV = as.data.frame(lapply(mV, function(x)c(rep(0, len), x)))
-    backout = function(mV, len){unique(lapply(mV, function(x) sort(x[x > len] - len)))}
     randomizeTargetOrder = T
   }
+  backout = function(mV, len){unique(lapply(mV, function(x) sort(x[x > len] - len)))}
 
 
   shouldConjugate = F
@@ -130,7 +166,7 @@ mFLSSSparVariableTree <- function(maxCore = 7L, len, mV, mTarget, mME, viaConjug
   # if(verbose) cat("Final atom tasks = ", length(info$keyTarget), "\n")
 
 
-  tlimit = tlimit * maxCore
+  # tlimit = tlimit * maxCore
   d = ncol(info$v)
   dl = info$dldu[1]
   du = info$dldu[2]
@@ -157,6 +193,10 @@ mFLSSSparVariableTree <- function(maxCore = 7L, len, mV, mTarget, mME, viaConjug
 
 FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (length(v) - len + 1L) : length(v), viaConjugate = FALSE, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE)
 {
+  premineRst = premine(len, v, target, ME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(len == 0)
   {
     len = length(v)
@@ -218,6 +258,15 @@ FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (le
 # -------------------------------------------------------------------------------------------------
 FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE)
 {
+
+
+  # if(len == 1)
+  # {
+  #   cat("Subset size should not be 1.\n")
+  #   return(list())
+  # }
+
+
   if(length(buckets) == 1L) return("buckets size equals 1. Please call FLSSS().")
   if(min(len) <= 0L) return("len must be positive.")
 
@@ -288,6 +337,10 @@ FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 
 # mV is the data matrix, each row is an observation
 mFLSSSparImposeBounds <- function(maxCore = 7L, len, mV, mTarget, mME, LB = 1L : len, UB = (nrow(mV) - len + 1L) : nrow(mV), solutionNeed = 1L, tlimit = 60, dl = ncol(mV), du = ncol(mV), targetsOrder = NULL, useBiSrchInFB = FALSE, avgThreadLoad = 8L)
 {
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(is.data.frame(mV)) mV = as.matrix(mV)
 
 
@@ -309,8 +362,8 @@ mFLSSSparImposeBounds <- function(maxCore = 7L, len, mV, mTarget, mME, LB = 1L :
     fixedSize = F
     len = nrow(mV)
     mV = rbind(matrix(numeric(len * d), ncol = d), mV)
-    backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
   }
+  backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
 
 
   shouldConjugate = F
@@ -348,7 +401,7 @@ mFLSSSparImposeBounds <- function(maxCore = 7L, len, mV, mTarget, mME, LB = 1L :
   rm(tmp); gc()
 
 
-  tlimit = tlimit * maxCore
+  # tlimit = tlimit * maxCore
   # print(len); print(mV); print(d); print(dlst); print(dust); print(du); # print(targetMat);
   # print(mME)
   rst = z_mFLSSS(maxCore, len, mV, numeric(0), d, dlst, dl, dust, du, targetMat, mME, LB, UB, solutionNeed, tlimit, useBiSrchInFB)
@@ -373,6 +426,10 @@ mFLSSSparImposeBounds <- function(maxCore = 7L, len, mV, mTarget, mME, LB = 1L :
 # mV is the data matrix, each row is an observation
 mFLSSSpar <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, tlimit = 60, dl = ncol(mV), du = ncol(mV), useBiSrchInFB = FALSE, avgThreadLoad = 8L)
 {
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(is.data.frame(mV)) mV = as.matrix(mV)
 
 
@@ -388,7 +445,8 @@ mFLSSSpar <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, tl
   }
 
 
-  # make them all nonnegative
+  # Make them all nonnegative, but only for fixed size subset sum.
+  if(len != 0)
   {
     minV = apply(mV, 2L, function(x) min(x))
     mV = apply(mV, 2L, function(x) x - min(x))
@@ -401,9 +459,9 @@ mFLSSSpar <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, tl
   {
     fixedSize = F
     len = nrow(mV)
-    mV = rbind(matrix(numeric(len * d), ncol = d), mV)
-    backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
+    mV = rbind(matrix(0, nrow = len, ncol = d), mV)
   }
+  backout = function(rst, len) { unique(lapply(rst, function(x) sort(x[x > len] - len)) ) }
 
 
   shouldConjugate = F
@@ -461,14 +519,166 @@ mFLSSSpar <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, tl
   rm(tmp); gc()
 
 
-  tlimit = tlimit * maxCore
+  dimnames(mV) = NULL
+
+
+  # parameterList = list(maxCore = maxCore, len = len, mV = mV, d = d, targetMat = targetMat, mME = mME, LB = LB, UB = UB, solutionNeed = solutionNeed, tlimit = tlimit)
+  # save(parameterList, file = "parameterList.Rdata")
+
+
   rst = z_mFLSSS(maxCore, len, mV, numeric(0), d, dlst, dl, dust, du, targetMat, mME, LB, UB, solutionNeed, tlimit, useBiSrchInFB)
 
 
   rst = lapply(rst, function(x) leadingColOrder[x])
+  # print(str(rst))
   if(shouldConjugate)
   {
     tmp = 1L : nrow(mV)
+    rst = lapply(rst, function(x) tmp[-x])
+  }
+
+
+  if(!fixedSize) rst = backout(rst, len)
+  rst
+}
+
+
+
+
+# target
+# mV is the data matrix, each row is an observation
+decomposeMflsss <- function(len, mV, mTarget, mME, solutionNeed = 1L, dl = ncol(mV), du = ncol(mV), useBiSrchInFB = FALSE, approxNinstance = 50000L)
+{
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(list(mflsssObjects = list(), solutionsFound = premineRst))
+
+
+  if(is.data.frame(mV)) mV = as.matrix(mV)
+
+
+  d = ncol(mV)
+  dlst = 0L
+  dl = dl + 0L # materialize the values
+  dust = d - du
+  du = du + 0L
+  if(d == 1)
+  {
+    cat("Please call FLSSS for single dimensional set.\n")
+    return(list())
+  }
+
+
+  # Make them all nonnegative
+  if(len != 0)
+  {
+    minV = apply(mV, 2L, function(x) min(x))
+    mV = apply(mV, 2L, function(x) x - min(x))
+    mTarget = mTarget - len * minV
+  }
+
+
+  fixedSize = T
+  if(len == 0)
+  {
+    fixedSize = F
+    len = nrow(mV)
+    mV = rbind(matrix(numeric(len * d), ncol = d), mV)
+  }
+  backout = function(rst, len) { unique(lapply(rst, function(x) sort(x[x > len] - len))) }
+
+
+  shouldConjugate = F
+  if(2L * len > nrow(mV)) shouldConjugate = T
+
+
+  if(shouldConjugate)
+  {
+    len = nrow(mV) - len
+    mTarget = colSums(mV) - mTarget
+    tmp = dlst; dlst = dust; dust = tmp
+    tmp = dl; dl = du; du = tmp
+  }
+
+
+  LB = 1L : len
+  UB = (nrow(mV) - len + 1L) : nrow(mV)
+
+
+  # Find the leading column that most correlates the rest columns, order other columns by the leading column. Recent simulations show it substantially accelerates the speed.
+  corMat = cor(mV, method = "spearman")
+  corMat[is.na(corMat)] = 0
+  leadingCol = which.max(colSums(corMat))
+  leadingColOrder = order(mV[, leadingCol])
+  mV = mV[leadingColOrder, ]
+
+
+  maskV = numeric(0)
+  produceImage = function()
+  {
+    dimnames(mV) = NULL
+    rst = z_mFLSSSimage(len, mV, maskV, d, dlst, dl, dust, du, as.matrix(mTarget), mME, LB, UB, solutionNeed, useBiSrchInFB, approxNinstance)
+    rst$mflsssObjects = lapply(rst$mflsssObjects, function(x)
+    {
+      c(x, list(leadingColOrder = leadingColOrder), list(shouldConjugate = shouldConjugate), list(fixedSize = fixedSize), list(maskV = maskV), list(len = len), list(backout = backout))
+    })
+    if(length(rst$solutionsFound) != 0)
+    {
+      tmprst = rst$solutionsFound
+      tmprst = lapply(tmprst, function(x) leadingColOrder[x])
+      if(shouldConjugate)
+      {
+        tmp = 1L : nrow(mV)
+        tmprst = lapply(tmprst, function(x) tmp[-x])
+      }
+      if(!fixedSize) tmprst = backout(tmprst, len)
+      rst$solutionsFound = tmprst
+    }; rst
+  }
+
+
+  # _______________________________________________________________________________________________
+  # If mV are comonotonic
+  if(min(unlist(apply(mV, 2, function(x) min(diff(x))))) >= 0)
+  {
+    d = ncol(mV)
+    rst = produceImage()
+    return(rst)
+  }
+  # _______________________________________________________________________________________________
+
+
+  # Generate target matrix, each column is a d-dimensional target vector
+  tmp = z_mTargetMat(len, mV, mTarget, mME, leadingCol, dl, du)
+  mV = tmp$mV
+  mTarget = tmp$targetMat
+  mME = tmp$mME
+  d = tmp$d
+  dl = tmp$dl
+  du = tmp$du
+  leadingCol = tmp$keyColInd
+  rm(tmp); gc()
+
+
+  dimnames(mV) = NULL
+  rst = produceImage(); rst
+}
+
+
+
+
+mFLSSSobjRun <- function(mflsssObj, solutionNeed = 1, tlimit = 60)
+{
+  rst = z_mFLSSSimport(mflsssObj, solutionNeed, tlimit)
+  leadingColOrder = mflsssObj$leadingColOrder
+  shouldConjugate = mflsssObj$shouldConjugate
+  fixedSize = mflsssObj$fixedSize
+  rst = lapply(rst, function(x) leadingColOrder[x])
+  mV = mflsssObj$vr
+  len = mflsssObj$len
+  backout = mflsssObj$backout
+  if(shouldConjugate)
+  {
+    tmp = 1:nrow(mV)
     rst = lapply(rst, function(x) tmp[-x])
   }
   if(!fixedSize) rst = backout(rst, len)
@@ -478,14 +688,14 @@ mFLSSSpar <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, tl
 
 
 
-
-
-
-
 # -------------------------------------------------------------------------------------------------
 # mV is the data matrix, each row is an observation
 mFLSSSparImposeBoundsIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME, LB = 1L : len, UB = (nrow(mV) - len + 1L) : nrow(mV), solutionNeed = 1L, precisionLevel = integer(ncol(mV)), returnBeforeMining = FALSE, tlimit = 60, dl = ncol(mV), du = ncol(mV), targetsOrder = NULL, useBiSrchInFB = FALSE, avgThreadLoad = 8L, verbose = TRUE)
 {
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(.Machine$sizeof.pointer == 4L)
   {
     message("32-bit architecture unsupported")
@@ -509,7 +719,8 @@ mFLSSSparImposeBoundsIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME
   }
 
 
-  # make them all nonnegative
+  # Make them all nonnegative
+  if(len != 0)
   {
     minV = apply(mV, 2L, function(x) min(x))
     mV = apply(mV, 2L, function(x) x - min(x))
@@ -537,8 +748,8 @@ mFLSSSparImposeBoundsIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME
     fixedSize = F
     len = nrow(mV)
     mV = rbind(matrix(numeric(len * d), ncol = d), mV)
-    backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
   }
+  backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
 
 
   shouldConjugate = F
@@ -657,7 +868,7 @@ mFLSSSparImposeBoundsIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME
   if(verbose) cat("Dimensionality reduced from", ncol(INT$mV) + 1L, "to", ncol(mV), "\n")
 
 
-  tlimit = tlimit * maxCore
+  # tlimit = tlimit * maxCore
   rst = z_mFLSSS(maxCore, len, mV, maskV, d, dlst, dl, dust, du, targetMat, mME, LB, UB, solutionNeed, tlimit, useBiSrchInFB)
 
 
@@ -678,6 +889,10 @@ mFLSSSparImposeBoundsIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME
 # mV is the data matrix, each row is an observation
 mFLSSSparIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNeed = 1L, precisionLevel = integer(ncol(mV)), returnBeforeMining = FALSE, tlimit = 60, dl = ncol(mV), du = ncol(mV), useBiSrchInFB = FALSE, avgThreadLoad = 8L, verbose = TRUE)
 {
+  premineRst = premine(len, mV, mTarget, mME)
+  if(!is.null(premineRst)) return(premineRst)
+
+
   if(.Machine$sizeof.pointer == 4L)
   {
     message("32-bit architecture unsupported")
@@ -702,7 +917,8 @@ mFLSSSparIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNe
   }
 
 
-  # make them all nonnegative
+  # Make them all nonnegative
+  if(len != 0)
   {
     minV = apply(mV, 2L, function(x) min(x))
     mV = apply(mV, 2L, function(x) x - min(x))
@@ -730,8 +946,8 @@ mFLSSSparIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNe
     fixedSize = F
     len = nrow(mV)
     mV = rbind(matrix(numeric(len * d), ncol = d), mV)
-    backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
   }
+  backout = function(rst, len){unique(lapply(rst, function(x) sort(x[x > len] - len)))}
 
 
   shouldConjugate = F
@@ -857,7 +1073,7 @@ mFLSSSparIntegerized <- function(maxCore = 7L, len, mV, mTarget, mME, solutionNe
   if(verbose) cat("Dimensionality reduced from", ncol(INT$mV) + 1L, "to", ncol(mV), "\n")
 
 
-  tlimit = tlimit * maxCore
+  # tlimit = tlimit * maxCore
   rst = z_mFLSSS(maxCore, len, mV, maskV, d, dlst, dl, dust, du, targetMat, mME, LB, UB, solutionNeed, tlimit, useBiSrchInFB)
 
 

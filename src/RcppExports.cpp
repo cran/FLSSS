@@ -331,6 +331,44 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// z_mFLSSSimage
+List z_mFLSSSimage(int len, NumericMatrix vr, NumericVector maskV, int d, int dlst, int dl, int dust, int du, NumericMatrix targetMat, NumericVector MEr, IntegerVector LBr, IntegerVector UBr, int sizeNeed, bool useBiSearch, int Ninstance);
+RcppExport SEXP _FLSSS_z_mFLSSSimage(SEXP lenSEXP, SEXP vrSEXP, SEXP maskVSEXP, SEXP dSEXP, SEXP dlstSEXP, SEXP dlSEXP, SEXP dustSEXP, SEXP duSEXP, SEXP targetMatSEXP, SEXP MErSEXP, SEXP LBrSEXP, SEXP UBrSEXP, SEXP sizeNeedSEXP, SEXP useBiSearchSEXP, SEXP NinstanceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type vr(vrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type maskV(maskVSEXP);
+    Rcpp::traits::input_parameter< int >::type d(dSEXP);
+    Rcpp::traits::input_parameter< int >::type dlst(dlstSEXP);
+    Rcpp::traits::input_parameter< int >::type dl(dlSEXP);
+    Rcpp::traits::input_parameter< int >::type dust(dustSEXP);
+    Rcpp::traits::input_parameter< int >::type du(duSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type targetMat(targetMatSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type MEr(MErSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type LBr(LBrSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type UBr(UBrSEXP);
+    Rcpp::traits::input_parameter< int >::type sizeNeed(sizeNeedSEXP);
+    Rcpp::traits::input_parameter< bool >::type useBiSearch(useBiSearchSEXP);
+    Rcpp::traits::input_parameter< int >::type Ninstance(NinstanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(z_mFLSSSimage(len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, useBiSearch, Ninstance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// z_mFLSSSimport
+List z_mFLSSSimport(List mflsssObj, int sizeNeed, double tlimit);
+RcppExport SEXP _FLSSS_z_mFLSSSimport(SEXP mflsssObjSEXP, SEXP sizeNeedSEXP, SEXP tlimitSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type mflsssObj(mflsssObjSEXP);
+    Rcpp::traits::input_parameter< int >::type sizeNeed(sizeNeedSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    rcpp_result_gen = Rcpp::wrap(z_mFLSSSimport(mflsssObj, sizeNeed, tlimit));
+    return rcpp_result_gen;
+END_RCPP
+}
 // z_mFLSSSvariableTree
 List z_mFLSSSvariableTree(int maxCore, int len, List vr, int d, int dlst, int dl, int dust, int du, int keyInd, NumericVector originalTarget, NumericVector keyTarget, NumericVector scaleFactor, NumericVector MEr, IntegerVector LBr, IntegerVector UBr, int sizeNeed, double duration, bool useFloat, bool useBisearchInFindBounds);
 RcppExport SEXP _FLSSS_z_mFLSSSvariableTree(SEXP maxCoreSEXP, SEXP lenSEXP, SEXP vrSEXP, SEXP dSEXP, SEXP dlstSEXP, SEXP dlSEXP, SEXP dustSEXP, SEXP duSEXP, SEXP keyIndSEXP, SEXP originalTargetSEXP, SEXP keyTargetSEXP, SEXP scaleFactorSEXP, SEXP MErSEXP, SEXP LBrSEXP, SEXP UBrSEXP, SEXP sizeNeedSEXP, SEXP durationSEXP, SEXP useFloatSEXP, SEXP useBisearchInFindBoundsSEXP) {
@@ -430,6 +468,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FLSSS_z_FLSSSvariableTree", (DL_FUNC) &_FLSSS_z_FLSSSvariableTree, 10},
     {"_FLSSS_z_mFLSSS", (DL_FUNC) &_FLSSS_z_mFLSSS, 16},
     {"_FLSSS_z_mFLSSScomoPar", (DL_FUNC) &_FLSSS_z_mFLSSScomoPar, 17},
+    {"_FLSSS_z_mFLSSSimage", (DL_FUNC) &_FLSSS_z_mFLSSSimage, 15},
+    {"_FLSSS_z_mFLSSSimport", (DL_FUNC) &_FLSSS_z_mFLSSSimport, 3},
     {"_FLSSS_z_mFLSSSvariableTree", (DL_FUNC) &_FLSSS_z_mFLSSSvariableTree, 19},
     {"_FLSSS_z_integerize", (DL_FUNC) &_FLSSS_z_integerize, 5},
     {"_FLSSS_z_which64intAndSize", (DL_FUNC) &_FLSSS_z_which64intAndSize, 1},

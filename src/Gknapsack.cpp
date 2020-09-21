@@ -13,7 +13,8 @@ IntegerVector GknapsackCpp(
     int len, NumericMatrix vr, NumericVector profitVec,
     int _d, int dlst, int dl, int dust, int du,
     int N, NumericMatrix targetMat, NumericVector MEr,
-    IntegerVector LBr, IntegerVector UBr, double endTime, INT *mask,
+    IntegerVector LBr, IntegerVector UBr,
+    std::chrono::time_point<std::chrono::steady_clock> endTime, INT *mask,
     int maxCore, int avgThreadLoad, bool verbose, bool approx)
 {
   triM<valtype, indtype> mat;
@@ -78,7 +79,8 @@ IntegerVector z_Gknapsack(
 {
   int N = profitVec.size();
   int d = vr.ncol();
-  double endTime = (double)std::clock() + duration * CLOCKS_PER_SEC;
+  std::chrono::time_point<std::chrono::steady_clock> endTime =
+    std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(duration));
   IntegerVector result;
   INT *mask = (INT*)&maskV[0];
   bool mk = maskV.size() > 0;

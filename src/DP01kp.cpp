@@ -46,7 +46,7 @@ struct paraDp01kpForCaps: public RcppParallel::Worker
     selects.resize(capSize, vec<unsigned char> (Nitem, false));
     selections = &selects[0];
     dynamicTasking dt(maxCore, capSize); dT = &dt;
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -105,6 +105,8 @@ List auxKnapsack01dp(IntegerVector weight, NumericVector value,
                       Named("selection") = solutions,
                       Named("lookupTable") = V);
 }
+
+
 
 
 

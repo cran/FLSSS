@@ -3,6 +3,14 @@
 \title{FLSSS updates}
 
 
+\section{Changes in FLSSS version 8.6.0 (20200905)}{
+  \itemize{
+    \item Implemented the distributed computing infrastructure, \code{decomposeMflsss()} and \code{mFLSSSobjRun()}, for multidimensional subset sum.
+    \item Changed the timer from measuring total CPU time to measuring the elapsed wall time for multithreaded functions.
+  }
+}
+
+
 \section{Changes in FLSSS version 8.5.6 (20191027)}{
   \itemize{
     \item Bug fix. A typo in the code related to integer type selection resulted in crash of the multidimensional subset sum miner given superset size > 127.

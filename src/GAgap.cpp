@@ -387,7 +387,7 @@ struct gapGApara: public RcppParallel::Worker
     rstValue.resize(G.size());
     rstVal = &rstValue[0];
     dynamicTasking dt(maxCore, G.size()); dT = &dt;
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -503,6 +503,8 @@ List auxGAPgaGivenRandomSeeds(
                         Named("allBudgetExceedance") = allBudgetExceedance,
                         Named("allProfitOrLoss") = allProfitOrLoss));
 }
+
+
 
 
 

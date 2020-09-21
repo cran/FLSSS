@@ -5,7 +5,7 @@
 Multithreaded multidimensional Subset Sum given error thresholds
 }
 \description{
-The multidimensional version of \code{FLSSS()}.
+The multidimensional version of \code{FLSSS()}. See \code{decomposeMflsss()} for the multi-process version.
 }
 \usage{
 mFLSSSpar(

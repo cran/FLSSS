@@ -336,7 +336,7 @@ struct specialBiKpBaBpara: public RcppParallel::Worker
     vec<valtype> penaltyS(maxCore, 0);
     penaltyAfterKnapsacking = &penaltyS[0];
     dynamicTasking dt(maxCore, overloadedAgent.size()); dT = &dt;
-    parallelFor(0, maxCore, *this);
+      parallelFor(0, dT->NofCore, *this);
     totalPenalty = std::accumulate(penaltyS.begin(), penaltyS.end(), 0);
   }
 };
@@ -858,6 +858,8 @@ List auxGAPbbMulthreadKPs(NumericMatrix cost, NumericMatrix profitOrLoss, Numeri
                       Named("nodes") = Nnode,
                       Named("bkpSolved") = Nkp);
 }
+
+
 
 
 

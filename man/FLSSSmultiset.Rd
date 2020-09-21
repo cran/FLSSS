@@ -50,7 +50,7 @@ See \code{useFloat} in \code{FLSSS()}.
 A list of solutions. Each solution is a list of index vectors. Assume \code{X} is a solution. \code{X[[i]]} indexes the subset of superset \code{buckets[[i]]}.
 }
 \examples{
-rm(list = ls()); gc()
+# rm(list = ls()); gc()
 Nsupersets = 30L
 supersetSizes = sample(5L : 20L, Nsupersets, replace = TRUE)
 subsetSizes = sapply(supersetSizes, function(x) sample(1L : x, 1))
