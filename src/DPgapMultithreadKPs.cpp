@@ -470,7 +470,7 @@ struct specialBiKpDPpara: public RcppParallel::Worker
       valtype &totalPenalty, vec<indtype> &overloadedAgent,
       vec<vec<indtype> > &weight, vec<vec<valtype> > &penalty,
       vec<vec<indtype> > &stay, vec<vec<indtype> > &reassign,
-      vec<indtype> &budgetExceedance, int maxCore):
+      vec<indtype> &budgetExceedance, std::size_t maxCore):
     overloadedAgent(overloadedAgent),
     weight(weight), penalty(penalty), stay(stay), reassign(reassign),
     budgetExceedance(budgetExceedance)

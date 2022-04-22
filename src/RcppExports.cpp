@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // auxKnapsack01bb
 List auxKnapsack01bb(NumericVector weight, NumericVector value, NumericVector caps, IntegerVector itemNcaps, int maxCore, double tlimit, String ub, bool simplify);
 RcppExport SEXP _FLSSS_auxKnapsack01bb(SEXP weightSEXP, SEXP valueSEXP, SEXP capsSEXP, SEXP itemNcapsSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP ubSEXP, SEXP simplifySEXP) {
@@ -239,8 +244,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // z_FLSSS
-List z_FLSSS(int len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, int solutionNeed, double tlimit, bool useBiSrchInFB, bool useFloat);
-RcppExport SEXP _FLSSS_z_FLSSS(SEXP lenSEXP, SEXP vSEXP, SEXP targetSEXP, SEXP MESEXP, SEXP LBSEXP, SEXP UBSEXP, SEXP solutionNeedSEXP, SEXP tlimitSEXP, SEXP useBiSrchInFBSEXP, SEXP useFloatSEXP) {
+List z_FLSSS(int len, NumericVector v, double target, double ME, IntegerVector LB, IntegerVector UB, int solutionNeed, double tlimit, bool useBiSrchInFB, String valueType);
+RcppExport SEXP _FLSSS_z_FLSSS(SEXP lenSEXP, SEXP vSEXP, SEXP targetSEXP, SEXP MESEXP, SEXP LBSEXP, SEXP UBSEXP, SEXP solutionNeedSEXP, SEXP tlimitSEXP, SEXP useBiSrchInFBSEXP, SEXP valueTypeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -253,8 +258,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type solutionNeed(solutionNeedSEXP);
     Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
     Rcpp::traits::input_parameter< bool >::type useBiSrchInFB(useBiSrchInFBSEXP);
-    Rcpp::traits::input_parameter< bool >::type useFloat(useFloatSEXP);
-    rcpp_result_gen = Rcpp::wrap(z_FLSSS(len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat));
+    Rcpp::traits::input_parameter< String >::type valueType(valueTypeSEXP);
+    rcpp_result_gen = Rcpp::wrap(z_FLSSS(len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, valueType));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -301,6 +306,81 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type duration(durationSEXP);
     Rcpp::traits::input_parameter< bool >::type useBiSearch(useBiSearchSEXP);
     rcpp_result_gen = Rcpp::wrap(z_mFLSSS(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, duration, useBiSearch));
+    return rcpp_result_gen;
+END_RCPP
+}
+// arbFLSSS
+List arbFLSSS(int len, StringMatrix V, StringVector target, SEXP givenKsumTable, int solutionNeed, int maxCore, double tlimit, int approxNinstance, int ksumK, int ksumTableSizeScaler, bool verbose);
+RcppExport SEXP _FLSSS_arbFLSSS(SEXP lenSEXP, SEXP VSEXP, SEXP targetSEXP, SEXP givenKsumTableSEXP, SEXP solutionNeedSEXP, SEXP maxCoreSEXP, SEXP tlimitSEXP, SEXP approxNinstanceSEXP, SEXP ksumKSEXP, SEXP ksumTableSizeScalerSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< StringMatrix >::type V(VSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type givenKsumTable(givenKsumTableSEXP);
+    Rcpp::traits::input_parameter< int >::type solutionNeed(solutionNeedSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< int >::type approxNinstance(approxNinstanceSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumK(ksumKSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumTableSizeScaler(ksumTableSizeScalerSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(arbFLSSS(len, V, target, givenKsumTable, solutionNeed, maxCore, tlimit, approxNinstance, ksumK, ksumTableSizeScaler, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// decomposeArbFLSSS
+List decomposeArbFLSSS(int len, StringMatrix V, StringVector target, int approxNinstance, int maxCore, SEXP ksumTable, int ksumK, int ksumTableSizeScaler, bool verbose);
+RcppExport SEXP _FLSSS_decomposeArbFLSSS(SEXP lenSEXP, SEXP VSEXP, SEXP targetSEXP, SEXP approxNinstanceSEXP, SEXP maxCoreSEXP, SEXP ksumTableSEXP, SEXP ksumKSEXP, SEXP ksumTableSizeScalerSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< StringMatrix >::type V(VSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< int >::type approxNinstance(approxNinstanceSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ksumTable(ksumTableSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumK(ksumKSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumTableSizeScaler(ksumTableSizeScalerSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(decomposeArbFLSSS(len, V, target, approxNinstance, maxCore, ksumTable, ksumK, ksumTableSizeScaler, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// arbFLSSSobjRun
+List arbFLSSSobjRun(List X, int solutionNeed, double tlimit, int maxCore, int ksumK, int ksumTableSizeScaler, bool verbose);
+RcppExport SEXP _FLSSS_arbFLSSSobjRun(SEXP XSEXP, SEXP solutionNeedSEXP, SEXP tlimitSEXP, SEXP maxCoreSEXP, SEXP ksumKSEXP, SEXP ksumTableSizeScalerSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type solutionNeed(solutionNeedSEXP);
+    Rcpp::traits::input_parameter< double >::type tlimit(tlimitSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumK(ksumKSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumTableSizeScaler(ksumTableSizeScalerSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(arbFLSSSobjRun(X, solutionNeed, tlimit, maxCore, ksumK, ksumTableSizeScaler, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ksumHash
+List ksumHash(int ksumK, StringMatrix V, int ksumTableSizeScaler, SEXP target, int len, int approxNinstance, bool verbose, int maxCore);
+RcppExport SEXP _FLSSS_ksumHash(SEXP ksumKSEXP, SEXP VSEXP, SEXP ksumTableSizeScalerSEXP, SEXP targetSEXP, SEXP lenSEXP, SEXP approxNinstanceSEXP, SEXP verboseSEXP, SEXP maxCoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ksumK(ksumKSEXP);
+    Rcpp::traits::input_parameter< StringMatrix >::type V(VSEXP);
+    Rcpp::traits::input_parameter< int >::type ksumTableSizeScaler(ksumTableSizeScalerSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< int >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< int >::type approxNinstance(approxNinstanceSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< int >::type maxCore(maxCoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(ksumHash(ksumK, V, ksumTableSizeScaler, target, len, approxNinstance, verbose, maxCore));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -467,6 +547,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FLSSS_z_FLSSS", (DL_FUNC) &_FLSSS_z_FLSSS, 10},
     {"_FLSSS_z_FLSSSvariableTree", (DL_FUNC) &_FLSSS_z_FLSSSvariableTree, 10},
     {"_FLSSS_z_mFLSSS", (DL_FUNC) &_FLSSS_z_mFLSSS, 16},
+    {"_FLSSS_arbFLSSS", (DL_FUNC) &_FLSSS_arbFLSSS, 11},
+    {"_FLSSS_decomposeArbFLSSS", (DL_FUNC) &_FLSSS_decomposeArbFLSSS, 9},
+    {"_FLSSS_arbFLSSSobjRun", (DL_FUNC) &_FLSSS_arbFLSSSobjRun, 7},
+    {"_FLSSS_ksumHash", (DL_FUNC) &_FLSSS_ksumHash, 8},
     {"_FLSSS_z_mFLSSScomoPar", (DL_FUNC) &_FLSSS_z_mFLSSScomoPar, 17},
     {"_FLSSS_z_mFLSSSimage", (DL_FUNC) &_FLSSS_z_mFLSSSimage, 15},
     {"_FLSSS_z_mFLSSSimport", (DL_FUNC) &_FLSSS_z_mFLSSSimport, 3},

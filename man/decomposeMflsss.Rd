@@ -51,19 +51,19 @@ Approximately how many instances should the problem be decomposed into.
 }
 }
 \details{
-This function and \code{mFLSSSobjRun()} constitute a multi-process counterpart of \code{mFLSSSpar()}. It decomposes a multidimensional subset sum problem into numerous independent instances that can be submitted to any computing resource of CPU threads, where \code{mFLSSSobjRun()} receives and solves the instance.
+This function and \code{mFLSSSobjRun()} constitute a multi-process counterpart of \code{mFLSSSpar()}. It decomposes a multidimensional subset sum problem into numerous independent instances that can be submitted to any computing resource of CPU threads, on each of which \code{mFLSSSobjRun()} receives and solves the instance.
 
-For example, if 1000 threads are available, either on a computing cluster integrated by LAN or on 1000 PCs connected by the Internet, one could (i) decompose the problem of interest into 100000 instances using \code{decomposeMflsss()}, (ii) transmit each instance and an R script that calls \code{mFLSSSobjRun()} on the instance to any available thread, (iii) collect the results from all threads. A good practice is to decompose the problem of interest into much more instances than the threads, provided that an automatic queueing system exists, so there would be less chance of having idling threads during computation --- if the number of instances equals the number of threads, some threads may finish much earlier than others due to the heterogeneous nature of the instances, thus the waste.
+For example, if 1000 threads are available, either on a computing cluster or on a few hundred laptops, one could (i) decompose the problem of interest into 100000 instances using \code{decomposeMflsss()}, (ii) transmit each instance to any available thread and calls \code{mFLSSSobjRun()} on the instance, (iii) collect the results from all threads. It is strongly recommended to decompose the initial problem into much more instances than the threads, provided that an automatic queueing system exists, so there would be less chance of having idling threads during computation --- if the number of instances equals the number of threads, some threads may finish earlier than others due to the heterogeneous nature of the instances, thus the computing waste.
 
 
-The pair \code{decomposeMflsss()} and \code{mFLSSSobjRun()} is designed for exploiting distrbuted resource to solve large and hard multidimensional subset sum instances.
+The pair \code{decomposeMflsss()} and \code{mFLSSSobjRun()} is designed for exploiting distributed resource to solve large and hard multidimensional subset sum instances.
 }
 \value{
 A list of two:
 
 \code{$mflsssObjects}: a list. Each element is an \code{mFLSSS} object that would be supplied to \code{mFLSSSobjRun()}.
 
-\code{$solutionsFound}: solutions found during decomposition.
+\code{$solutionsFound}: a list. Solutions found during decomposition.
 }
 
 \examples{

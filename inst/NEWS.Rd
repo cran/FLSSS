@@ -3,6 +3,13 @@
 \title{FLSSS updates}
 
 
+\section{Changes in FLSSS version 9.0.0 (20220415)}{
+  \itemize{
+    \item Implemented multidimensional exact subset sum in arbitrary precision and magnitude, \code{arbFLSSS()}, and its distributed computing counterpart, \code{decomposeArbflsss()} and \code{arbFLSSSobjRun()}. A simple Bloom filter is added as an option to accelerate the algorithms.
+  }
+}
+
+
 \section{Changes in FLSSS version 8.6.0 (20200905)}{
   \itemize{
     \item Implemented the distributed computing infrastructure, \code{decomposeMflsss()} and \code{mFLSSSobjRun()}, for multidimensional subset sum.

@@ -152,7 +152,7 @@ List z_FLSSS(
     int len, NumericVector v, double target, double ME,
     IntegerVector LB, IntegerVector UB,
     int solutionNeed = 1, double tlimit = 60,
-    bool useBiSrchInFB = false, bool useFloat = false)
+    bool useBiSrchInFB = false, String valueType = "double")
 {
   int N = v.size();
   double durationClock = tlimit * CLOCKS_PER_SEC;
@@ -161,18 +161,24 @@ List z_FLSSS(
 
   if(N < 127)
   {
-    if(useFloat) result = FLSSScpp<float, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp<double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(valueType == "double")
+      result = FLSSScpp<double, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else
+      result = FLSSScpp<int64_t, signed char> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else if(N < 32767)
   {
-    if(useFloat) result = FLSSScpp<float, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp<double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(valueType == "double")
+      result = FLSSScpp<double, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else
+      result = FLSSScpp<int64_t, short> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   else
   {
-    if(useFloat) result = FLSSScpp<float, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
-    else result = FLSSScpp<double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    if(valueType == "double")
+      result = FLSSScpp<double, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
+    else
+      result = FLSSScpp<int64_t, int> (len, v, target, ME, LB, UB, solutionNeed, durationClock, useBiSrchInFB);
   }
   return result;
 }

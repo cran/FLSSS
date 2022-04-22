@@ -26,8 +26,10 @@ inline void supressSeqBy1(indtype *begin, indtype *end)
 
 
 template<typename indtype>
-inline indtype riseUpdateRightConsecutiveSeqEnd(indtype *base, indtype *cnsctvSeqEnd, indtype *seqRightEnd)
-// find the consecutive sequence's end on the right side of LB, specifically for position = 0 in the update procedure
+inline indtype riseUpdateRightConsecutiveSeqEnd(
+    indtype *base, indtype *cnsctvSeqEnd, indtype *seqRightEnd)
+// find the consecutive sequence's end on the right side of LB,
+// specifically for position = 0 in the update procedure
 // and the right part of LB when position is in middle
 {
   while(cnsctvSeqEnd < seqRightEnd)
@@ -43,8 +45,10 @@ inline indtype riseUpdateRightConsecutiveSeqEnd(indtype *base, indtype *cnsctvSe
 
 
 template<typename indtype>
-inline indtype descendUpdateLeftConsecutiveSeqEnd(indtype *base, indtype *cnsctvSeqEnd, indtype *seqLeftEnd)
-// find the consecutive sequence's end on the left side of UB, specifically for position=len in the update procedure
+inline indtype descendUpdateLeftConsecutiveSeqEnd(
+    indtype *base, indtype *cnsctvSeqEnd, indtype *seqLeftEnd)
+// find the consecutive sequence's end on the left side of UB, specifically for
+// position=len in the update procedure.
 {
   while(cnsctvSeqEnd > seqLeftEnd)
   {
@@ -59,9 +63,11 @@ inline indtype descendUpdateLeftConsecutiveSeqEnd(indtype *base, indtype *cnsctv
 
 
 template<typename indtype>
-inline indtype riseUpdateLeftConsecutiveSeqBegin(indtype *base, indtype *cnsctvSeqBegin,
-                                                 indtype *seqRightEnd, indtype *UBleftResvBegin)
-  // find the consecutive sequence's begin on the left side of UB, specifically for position is in middle in the update()
+inline indtype riseUpdateLeftConsecutiveSeqBegin(
+    indtype *base, indtype *cnsctvSeqBegin,
+    indtype *seqRightEnd, indtype *UBleftResvBegin)
+  // find the consecutive sequence's begin on the left side of UB, specifically
+  // for position is in middle in the update()
 {
   indtype *tmp = UBleftResvBegin + (cnsctvSeqBegin - base);
   while(cnsctvSeqBegin < seqRightEnd)
@@ -78,7 +84,8 @@ inline indtype riseUpdateLeftConsecutiveSeqBegin(indtype *base, indtype *cnsctvS
 
 
 template<typename indtype>
-inline indtype consecutiveBoundSeqFromRightToLeft(indtype *base, indtype *seqRightBegin, indtype boundRightBegin)
+inline indtype consecutiveBoundSeqFromRightToLeft(
+    indtype *base, indtype *seqRightBegin, indtype boundRightBegin)
 {
   if(*seqRightBegin <= boundRightBegin)
   {
@@ -100,6 +107,13 @@ inline indtype consecutiveBoundSeqFromRightToLeft(indtype *base, indtype *seqRig
   }
   return seqRightBegin - base;
 }
+
+
+
+
+
+
+
 
 
 

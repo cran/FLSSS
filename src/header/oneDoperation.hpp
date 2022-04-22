@@ -14,13 +14,13 @@ inline void iterSum(valtype &rst, valtype *V, indtype *ele, indtype eleSize)
 }
 
 
-template<typename valtype>
-inline valtype absDiff(valtype x, valtype y)
+// template<typename valtype>
+inline double absDiff(double x, double y)
 {
   if(y == 0)
   {
     if(x == 0) return 0;
-    return std::numeric_limits<valtype>::max();
+    return std::numeric_limits<double>::max();
   }
   return std::abs(x / y - 1);
 }

@@ -46,15 +46,16 @@ struct triMoneD
   }
 
 
-  inline void make(void *containerBegin, indtype len, Rcpp::NumericVector v) // mv is the data frame of d (dimensions) columns
+  inline void make(void *containerBegin, indtype len, Rcpp::NumericVector v)
+    // mv is the data frame of d (dimensions) columns
   {
     indtype vlen = v.size();
     alloc(containerBegin, len, vlen);
 
 
     // get the first col
-    // std::copy(v.begin(), v.end(), mat[0]);
-    std::memcpy(mat[0], &*v.begin(), sizeof(valtype) * v.size());
+    std::copy(v.begin(), v.end(), mat[0]);
+    // std::memcpy(mat[0], &*v.begin(), sizeof(valtype) * v.size());
 
 
     valtype *V = mat[0];

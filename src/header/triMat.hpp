@@ -15,7 +15,8 @@ struct triM
   {
     std::size_t NofVal = (2 * N - L + 1) * L / 2;
     std::size_t byteSizeAtLeast =
-      NofVal * d * sizeof(valtype) + (NofVal + 1) * sizeof(valtype*) + (L + 1) * sizeof(valtype**);
+      NofVal * d * sizeof(valtype) + (NofVal + 1) *
+      sizeof(valtype*) + (L + 1) * sizeof(valtype**);
     return byteSizeAtLeast / sizeof(word) + 1;
   }
 
@@ -57,10 +58,11 @@ struct triM
   }
 
 
-  inline valtype ** & operator [] (indtype i) {return mat[i];}
+  inline valtype ** & operator [] (indtype i) { return mat[i]; }
 
 
-  inline void make(void *containerBegin, indtype len, Rcpp::NumericMatrix mv) // mv is the matrix of d (dimensions) columns
+  inline void make(void *containerBegin, indtype len, Rcpp::NumericMatrix mv)
+    // mv is the matrix of d (dimensions) columns
   {
     indtype d = mv.ncol();
     indtype vlen = mv.nrow();

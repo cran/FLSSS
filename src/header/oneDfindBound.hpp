@@ -131,7 +131,11 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
 {
   valtype Min = x - ME, Max = x + ME;
   if(sumUB < Min or sumLB > Max) return 0;
-  if(absDiff(sumLB, sumUB) < relaEps) return 2;
+  if(absDiff(sumLB, sumUB) < relaEps)
+  {
+    // for(indtype i = 0; i < len; ++i) { if(LB[i] != UB[i]) return 1; }
+    return 2;
+  }
 
 
   bool boo = 0;
@@ -190,7 +194,11 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
         if(!boundChanged)
         {
           // if(std::abs(sumLB - sumUB) < eps) return 2;
-          if(absDiff(sumLB, sumUB) < relaEps) return 2;
+          if(absDiff(sumLB, sumUB) < relaEps)
+          {
+            // for(indtype i = 0; i < len; ++i) { if(LB[i] != UB[i]) return 1; }
+            return 2;
+          }
           break;
         }
       }
@@ -241,8 +249,11 @@ inline indtype findBoundCpp(indtype len, valtype x, valtype ME,
     {
       if(!boundChanged)
       {
-        // if(std::abs(sumLB - sumUB) < eps) return 2;
-        if(absDiff(sumLB, sumUB) < relaEps) return 2;
+        if(absDiff(sumLB, sumUB) < relaEps)
+        {
+          // for(indtype i = 0; i < len; ++i) { if(LB[i] != UB[i]) return 1; }
+          return 2;
+        }
         break;
       }
     }

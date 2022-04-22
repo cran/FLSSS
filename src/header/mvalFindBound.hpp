@@ -8,6 +8,7 @@
 # include <fstream>
 # include <bitset>
 // using namespace Rcpp;
+
 // jmp_buf env;
 
 
@@ -219,6 +220,13 @@ inline indtype findBoundCpp(
     mvalPlusMinus(SR + dlst, Min + dlst, v[UB[I]] + dlst, sumUB + dlst, dl);
 
 
+    // Rcpp::Rcout << "LB = ";
+    // for(int u = 0; u < len; ++u) Rcpp::Rcout << LB[u] << ", ";
+    // Rcpp::Rcout << "\nUB = ";
+    // for(int u = 0; u < len; ++u) Rcpp::Rcout << UB[u] << ", ";
+    // Rcpp::Rcout << "\n\n";
+
+
     // update first lower bound, 0;
     LBsum = 0;
     {
@@ -269,6 +277,14 @@ inline indtype findBoundCpp(
         }
       }
     }
+
+
+    // Rcpp::Rcout << "LB = ";
+    // for(int u = 0; u < len; ++u) Rcpp::Rcout << LB[u] << ", ";
+    // Rcpp::Rcout << "\nUB = ";
+    // for(int u = 0; u < len; ++u) Rcpp::Rcout << UB[u] << ", ";
+    // Rcpp::Rcout << "\n\n\n\n";
+
 
 
     boundChanged = 0;

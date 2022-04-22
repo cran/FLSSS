@@ -9,16 +9,18 @@ using namespace Rcpp;
 
 // Do not delete this!
 // [[Rcpp::export]]
-List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector me, IntegerVector initialLB = -1,
-               IntegerVector initialUB = -1, int findBoundTimes = 1,
-               bool useBinarySearch = 0, bool UBfirst = 0)
+List z_findBound(int len, NumericMatrix V, NumericVector target,
+                 NumericVector me, IntegerVector initialLB = -1,
+                 IntegerVector initialUB = -1, int findBoundTimes = 1,
+                 bool useBinarySearch = 0, bool UBfirst = 0)
 {
   int d = V.ncol();
   int vlen = V.nrow();
 
 
-  vec<unsigned char> computeSpace((std::size_t)len * (2 * vlen - len + 1) / 2 * d * sizeof(double) +
-    len * sizeof(double**) + (std::size_t)len * (2 * vlen - len + 1) / 2 * sizeof(double*));
+  vec<unsigned char> computeSpace((std::size_t)len * (2 * vlen - len + 1) / 2 *
+    d * sizeof(double) + len * sizeof(double**) + (std::size_t)len *
+    (2 * vlen - len + 1) / 2 * sizeof(double*));
 
 
   triM <double, int> M;
@@ -85,9 +87,11 @@ List z_findBound(int len, NumericMatrix V, NumericVector target, NumericVector m
 
 
     if(UBfirst) findOrNot = findBoundUpFirstCpp<double, int, 0, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr, SRVcntr);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat,
+      nullptr, SRVcntr);
     else findOrNot = findBoundCpp<double, int, 0, 0> (
-      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat, nullptr, SRVcntr);
+      len, d, 0, d, 0, d, Min, Max, &LB[0], &sumLB[0], &UB[0], &sumUB[0], M.mat,
+      nullptr, SRVcntr);
 
 
     ++I;
@@ -127,8 +131,9 @@ List z_findBoundIntegerized(
   int vlen = V.nrow();
 
 
-  vec<unsigned char> computeSpace((std::size_t)len * (2 * vlen - len + 1) / 2 * d * sizeof(INT) +
-    len * sizeof(INT**) + (std::size_t)len * (2 * vlen - len + 1) / 2 * sizeof(INT*));
+  vec<unsigned char> computeSpace((std::size_t)len * (2 * vlen - len + 1) /
+    2 * d * sizeof(INT) + len * sizeof(INT**) + (std::size_t)len * (
+        2 * vlen - len + 1) / 2 * sizeof(INT*));
 
 
   triM<INT, int> M;

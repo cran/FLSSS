@@ -53,8 +53,8 @@ z_findBoundIntegerized <- function(len, V, mask, target, me, initialLB = -1L, in
     .Call(`_FLSSS_z_findBoundIntegerized`, len, V, mask, target, me, initialLB, initialUB, findBoundTimes, useBinarySearch, UBfirst)
 }
 
-z_FLSSS <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE) {
-    .Call(`_FLSSS_z_FLSSS`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
+z_FLSSS <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, valueType = "double") {
+    .Call(`_FLSSS_z_FLSSS`, len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, valueType)
 }
 
 z_FLSSSvariableTree <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE) {
@@ -63,6 +63,22 @@ z_FLSSSvariableTree <- function(len, v, target, ME, LB, UB, solutionNeed = 1L, t
 
 z_mFLSSS <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, duration, useBiSearch = 0L) {
     .Call(`_FLSSS_z_mFLSSS`, maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetMat, MEr, LBr, UBr, sizeNeed, duration, useBiSearch)
+}
+
+arbFLSSS <- function(len, V, target, givenKsumTable = NULL, solutionNeed = 1L, maxCore = 7L, tlimit = 60, approxNinstance = 1000L, ksumK = 4L, ksumTableSizeScaler = 30L, verbose = TRUE) {
+    .Call(`_FLSSS_arbFLSSS`, len, V, target, givenKsumTable, solutionNeed, maxCore, tlimit, approxNinstance, ksumK, ksumTableSizeScaler, verbose)
+}
+
+decomposeArbFLSSS <- function(len, V, target, approxNinstance = 1000L, maxCore = 7L, ksumTable = NULL, ksumK = 4L, ksumTableSizeScaler = 30L, verbose = TRUE) {
+    .Call(`_FLSSS_decomposeArbFLSSS`, len, V, target, approxNinstance, maxCore, ksumTable, ksumK, ksumTableSizeScaler, verbose)
+}
+
+arbFLSSSobjRun <- function(X, solutionNeed = 1L, tlimit = 60, maxCore = 7L, ksumK = 0L, ksumTableSizeScaler = 30L, verbose = TRUE) {
+    .Call(`_FLSSS_arbFLSSSobjRun`, X, solutionNeed, tlimit, maxCore, ksumK, ksumTableSizeScaler, verbose)
+}
+
+ksumHash <- function(ksumK, V, ksumTableSizeScaler = 30L, target = NULL, len = 0L, approxNinstance = 1000L, verbose = TRUE, maxCore = 7L) {
+    .Call(`_FLSSS_ksumHash`, ksumK, V, ksumTableSizeScaler, target, len, approxNinstance, verbose, maxCore)
 }
 
 z_mFLSSScomoPar <- function(maxCore, len, vr, maskV, d, dlst, dl, dust, du, targetr, MEr, LBr, UBr, sizeNeededForAll, duration, useBiSearch = 0L, avgThreadLoad = 8L) {

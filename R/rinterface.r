@@ -4,7 +4,7 @@ premine <- function(len, v, target, ME)
 {
   if(len == 0)
   {
-    cat("Looping over subset size from 1 to the superset size is strongly recommended. Given zero subset size, setting a larger number of solutions in demand might be necessary to obtain the expected number of solutions.")
+    cat("Looping over subset size from 1 to the superset size is strongly recommended. Given zero subset size, setting a larger number of solutions in demand might be necessary to obtain the expected number of solutions.\n")
     return(NULL)
   }
   if(length(ME) == 1L) v = as.matrix(v)
@@ -191,8 +191,19 @@ mFLSSSparVariableTree <- function(maxCore = 7L, len, mV, mTarget, mME, viaConjug
 
 
 
-FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (length(v) - len + 1L) : length(v), viaConjugate = FALSE, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE)
+FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1:len, UB = (length(v) - len + 1L):length(v), viaConjugate = FALSE, tlimit = 60, useBiSrchInFB = FALSE, NfractionDigits = Inf)
 {
+  valtype = "int"
+  if(is.infinite(NfractionDigits)) valtype = "double"
+  else
+  {
+    scaler = 10 ^ NfractionDigits
+    v = as.integer(round(v * scaler))
+    target = as.integer(round(target * scaler))
+    ME = as.integer(round(ME * scaler))
+  }
+
+
   premineRst = premine(len, v, target, ME)
   if(!is.null(premineRst)) return(premineRst)
 
@@ -205,20 +216,24 @@ FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (le
     sortOrder = order(v)
     v = v[sortOrder]
     vindex = vindex[sortOrder]
-    target = (target - v[1] * len) / ME
-    v = (v - v[1]) / ME
-    ME = 1
-    # v = v / ME
-    # target = target / ME
-    rst = z_FLSSS(len, v, target, ME, LB = 1L : len, UB = (length(v) - len + 1L) : length(v), solutionNeed, tlimit, useBiSrchInFB, useFloat)
+    if(valtype == "double")
+    {
+      target = target / ME
+      v = v / ME
+      ME = 1
+    }
+    rst = z_FLSSS(len, v, target, ME, LB = 1:len, UB = (length(v) - len + 1L):length(v), solutionNeed, tlimit, useBiSrchInFB, valtype)
     rst = unique(lapply(rst, function(x) sort(vindex[x][vindex[x] > 0L])))
     return(rst)
   }
 
 
-  target = (target - v[1] * len) / ME
-  v = (v - v[1]) / ME
-  ME = 1
+  if(valtype == "double")
+  {
+    target = target / ME
+    v = v / ME
+    ME = 1
+  }
 
 
   if(is.null(viaConjugate))
@@ -231,18 +246,18 @@ FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (le
   {
     target = sum(v) - target
     LBresv = LB
-    LB = (1L : length(v))[-UB]
-    UB = (1L : length(v))[-LBresv]
+    LB = (1:length(v))[-UB]
+    UB = (1:length(v))[-LBresv]
     len = length(v) - len
   }
 
 
-  rst = z_FLSSS(len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, useFloat)
+  rst = z_FLSSS(len, v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, valtype)
 
 
   if(viaConjugate)
   {
-    tmp = 1L : length(v)
+    tmp = 1:length(v)
     rst = lapply(rst, function(x) tmp[-x])
   }
   rst
@@ -256,15 +271,8 @@ FLSSS <- function(len, v, target, ME, solutionNeed = 1L, LB = 1L : len, UB = (le
 
 
 # -------------------------------------------------------------------------------------------------
-FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, useFloat = FALSE)
+FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 60, useBiSrchInFB = FALSE, NfractionDigits = Inf)
 {
-
-
-  # if(len == 1)
-  # {
-  #   cat("Subset size should not be 1.\n")
-  #   return(list())
-  # }
 
 
   if(length(buckets) == 1L) return("buckets size equals 1. Please call FLSSS().")
@@ -300,13 +308,26 @@ FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 
   }
 
 
-  for(i in 2L : length(buckets))
+  for(i in 2:length(buckets))
   {
     target = target + (buckets[[i - 1L]][length(buckets[[i - 1L]])] - buckets[[i]][1]) * len[i]
     buckets[[i]] = (buckets[[i - 1L]][length(buckets[[i - 1L]])] - buckets[[i]][1]) + buckets[[i]]
   }
   v = unlist(buckets)
-  result = z_FLSSS(length(LB), v, target, ME, LB, UB, solutionNeed, tlimit, useFloat, useBiSrchInFB)
+
+
+  valtype = "int"
+  if(is.infinite(NfractionDigits)) valtype = "double"
+  else
+  {
+    scaler = 10 ^ NfractionDigits
+    v = as.integer(round(v * scaler))
+    target = as.integer(round(target * scaler))
+    ME = as.integer(round(ME * scaler))
+  }
+
+
+  result = z_FLSSS(length(LB), v, target, ME, LB, UB, solutionNeed, tlimit, useBiSrchInFB, valtype)
 
 
   result = lapply(result, function(x)
@@ -317,10 +338,6 @@ FLSSSmultiset <- function(len, buckets, target, ME, solutionNeed = 1L, tlimit = 
     rst[bucketsOrder] = tmp
     rst
   })
-
-
-  # additionalMem = list(lb = lb, whichBucket = whichBucket, bucketsOrder = bucketsOrder, orderInBucket = orderInBucket)
-  # result[[2]] = list(flsssMemImage = result[[2]], additionalMem = additionalMem)
 
 
   result

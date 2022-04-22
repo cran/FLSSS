@@ -311,7 +311,7 @@ struct parMflsss: public Worker
             vec<vec<indtype> > &intCtnrGroup,
             vec<vec<valtype> > &valCtnrGroup,
             vec<vec<mPAT<valtype, indtype> > > &SKgroup,
-            int maxThreads, int keyTargetSize):
+            std::size_t maxThreads, int keyTargetSize):
     useBisearchInFindBounds(useBisearchInFindBounds),
     len(len), N(N),
     d(d), dlst(dlst), dl(dl), dust(dust), du(du), keyInd(keyInd),

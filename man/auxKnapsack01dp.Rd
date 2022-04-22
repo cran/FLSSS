@@ -60,18 +60,25 @@ Be cautioned that dynamic programming is not suitable for problems with weights 
 
 
 \examples{
-set.seed(42)
-weight = sample(10L : 100L, 600L, replace = TRUE) # Dynamic programming
-                                                  # solution requires integer
-                                                  # weights.
-value = weight ^ 0.5 * 100 # Higher correlation between item weights and values
-                           # typically implies a harder knapsack problem.
-caps = as.integer(runif(10, min(weight), 600L))
-system.time({rstDp = FLSSS::auxKnapsack01dp(
-  weight, value, caps, maxCore = 2, tlimit = 4)})
-system.time({rstBb = FLSSS::auxKnapsack01bb(
-  weight, value, caps, maxCore = 2, tlimit = 4)})
-# Dynamic programming can be faster than branch-and-bound for integer weights
-# and capacity of small magnitudes.
+# Examples with CPU (user + system) or elapsed time > 5s
+#                 user system elapsed
+# auxKnapsack01dp 6.53      0    3.33
+# CRAN complains about computing time. Wrap it.
+if (FALSE)
+{
+  set.seed(42)
+  weight = sample(10L : 100L, 600L, replace = TRUE) # Dynamic programming
+  # solution requires integer
+  # weights.
+  value = weight ^ 0.5 * 100 # Higher correlation between item weights and values
+  # typically implies a harder knapsack problem.
+  caps = as.integer(runif(10, min(weight), 600L))
+  system.time({rstDp = FLSSS::auxKnapsack01dp(
+    weight, value, caps, maxCore = 2, tlimit = 4)})
+  system.time({rstBb = FLSSS::auxKnapsack01bb(
+    weight, value, caps, maxCore = 2, tlimit = 4)})
+  # Dynamic programming can be faster than branch-and-bound for integer weights
+  # and capacity of small magnitudes.  
+}
 }
 

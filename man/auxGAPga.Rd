@@ -102,18 +102,19 @@ rst = FLSSS::auxGAPga(
 # =============================================================================
 # Download gapInstances.Rdata from
 # https://github.com/WhateverLiu/gapInstances. Load it in R.
-\donttest{
-cost = gapC[[3]]$cost
-loss = gapC[[3]]$loss
-budget = gapC[[3]]$budget
-# Intel CPU i7-4770 3.4GHz, g++ '-Ofast', 64-bit Windows 7.
-system.time({rst = FLSSS::auxGAPga(cost, loss, budget, trials = 7,
-             randomSeed = 42, populationSize = 100, generations = 500000,
-             optim = "min", maxCore = 7)})
-rst$totalProfitOrLoss # 1416
-#  user  system elapsed
-# 69.24    0.17   11.61
-# The known optimum equals 1402 as the total loss.
+if (FALSE)
+{
+  cost = gapC[[3]]$cost
+  loss = gapC[[3]]$loss
+  budget = gapC[[3]]$budget
+  # Intel CPU i7-4770 3.4GHz, g++ '-Ofast', 64-bit Windows 7.
+  system.time({rst = FLSSS::auxGAPga(
+    cost, loss, budget, trials = 7, randomSeed = 42, populationSize = 100, 
+    generations = 500000, optim = "min", maxCore = 7)})
+  rst$totalProfitOrLoss # 1416
+  #  user  system elapsed
+  # 69.24    0.17   11.61
+  # The known optimum equals 1402 as the total loss.
 }
 }
 

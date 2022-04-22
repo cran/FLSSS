@@ -39,7 +39,7 @@ struct paraDp01kpForCaps: public RcppParallel::Worker
   paraDp01kpForCaps(indtype minCost_1, indtype Nitem, indtype *caps,
                     indtype capSize, valtype **value, indtype *w, valtype *v,
                     valtype *bestVal, vec<vec<unsigned char> > &selects,
-                    double endTime, int maxCore):
+                    double endTime, std::size_t maxCore):
     minCost_1(minCost_1), Nitem(Nitem), caps(caps), value(value),
     w(w), v(v), bestVal(bestVal), endTime(endTime)
   {

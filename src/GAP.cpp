@@ -1187,7 +1187,7 @@ struct parMgap: public RcppParallel::Worker
           double endTime, vec<vec<gapPAT<valtype, indtype> > > &SKgroup,
           vec<gapPAT<valtype, indtype>*> &SKbackGroup,
           task<valtype, indtype> *originalTV, indtype *optimalSolution,
-          double *optimalSolProfit, int maxCore, int tasks):
+          double *optimalSolProfit, std::size_t maxCore, int tasks):
     verbose(verbose), len(len), nagent(nagent), endTime(endTime),
     SKgroup(SKgroup), SKbackGroup(SKbackGroup),originalTV(originalTV),
     optimalSolution(optimalSolution), optimalSolProfit(optimalSolProfit)

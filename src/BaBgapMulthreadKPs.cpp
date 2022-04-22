@@ -328,7 +328,7 @@ struct specialBiKpBaBpara: public RcppParallel::Worker
       vec<vec<kpEle<valtype, indtype> > > &Xcontain, // aux
       vec<vec<indtype> > &unitValOrder, // aux
       vec<vec<indtype> > &current, // aux
-      int maxCore): overloadedAgent(overloadedAgent),
+      std::size_t maxCore): overloadedAgent(overloadedAgent),
     weight(weight), penalty(penalty), stay(stay), reassign(reassign),
     budgetExceedance(budgetExceedance), valuePerWeight(valuePerWeight),
     Xcontain(Xcontain), unitValOrder(unitValOrder), current(current)

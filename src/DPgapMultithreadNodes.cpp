@@ -1120,7 +1120,7 @@ struct runGapOBJ: public RcppParallel::Worker
             std::time_t timer, double tlimit, vec<signed char> *currentSolution,
             valtype *currentSolutionRevenue,
             indtype *budget, indtype &totalNnodes, indtype &totalNkps,
-            int maxCore): info(info), timer(timer), tlimit(tlimit),
+            std::size_t maxCore): info(info), timer(timer), tlimit(tlimit),
             currentSolution(currentSolution), currentSolutionRevenue(currentSolutionRevenue),
             budget(budget) //, G(&Gvec)
   {
@@ -1128,7 +1128,7 @@ struct runGapOBJ: public RcppParallel::Worker
     tbb::spin_mutex m; mtx = &m;
     Bcontainers = &BcontainersV[0];
     vec<gapOBJ<valtype, indtype, greedyBranch> > Gvec(maxCore);
-    for(int i = 0; i < maxCore; ++i)
+    for(int i = 0, iend = maxCore; i < iend; ++i)
     {
       Gvec[i].initialize(Nagent, Ntask);
     }

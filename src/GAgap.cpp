@@ -379,7 +379,7 @@ struct gapGApara: public RcppParallel::Worker
     }
   }
   gapGApara(INT generationN, vec<gapGA<valtype, indtype> > &G,
-            vec<vec<indtype> > &rst, vec<valtype> &rstValue, int maxCore):
+            vec<vec<indtype> > &rst, vec<valtype> &rstValue, std::size_t maxCore):
     generationN(generationN), rst(rst)
   {
     Gvec = &G[0];

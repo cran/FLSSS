@@ -36,7 +36,7 @@ struct paraBkpForCaps: public RcppParallel::Worker
   paraBkpForCaps(indtype Xsize, valtype *capV, indtype *lenCapV,
                  indtype capVsize, double endtime, kpEle<valtype, indtype> *X,
                  vec<vec<indtype> > &bestVec, // of size capVsize
-                 valtype *bestVal, int maxCore): Xsize(Xsize),
+                 valtype *bestVal, std::size_t maxCore): Xsize(Xsize),
                  capV(capV), lenCapV(lenCapV), endtime(endtime),
                  X(X), bestVal(bestVal)
   {

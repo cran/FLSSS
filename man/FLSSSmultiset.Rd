@@ -16,7 +16,7 @@ FLSSSmultiset(
   solutionNeed = 1L,
   tlimit = 60,
   useBiSrchInFB = FALSE,
-  useFloat = FALSE
+  NfractionDigits = Inf
   )
 }
 %- maybe also 'usage' for other objects documented here.
@@ -42,8 +42,8 @@ See \code{tlimit} in \code{FLSSS()}.
   \item{useBiSrchInFB}{
 See \code{useBiSrchInFB} in \code{FLSSS()}.
 }
-  \item{useFloat}{
-See \code{useFloat} in \code{FLSSS()}.
+  \item{NfractionDigits}{
+An integer, the maximum number of fractional digits of all elements in \code{v}. Internally, \code{v}, \code{target} and \code{ME} are multiplied by \code{10 ^ NfractionDigits}, and then converted as integer values before mining. The default \code{Inf} prevents such conversion.
 }
 }
 \value{

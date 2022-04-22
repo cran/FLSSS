@@ -19,7 +19,7 @@ FLSSS(
   viaConjugate = FALSE,
   tlimit = 60,
   useBiSrchInFB = FALSE,
-  useFloat = FALSE
+  NfractionDigits = Inf
   )
 }
 %- maybe also 'usage' for other objects documented here.
@@ -54,8 +54,8 @@ A numeric value. Enforce function to return in \code{tlimit} seconds.
   \item{useBiSrchInFB}{
 A boolean value. If \code{TRUE}, the function performs binary search for index bounds in the auxiliary triangle matrix of continuous sequence sums. This argument is mainly for research. Simulations show binary search has no major advantage over linear search due to caching mechanisms. The advantage may be pronounced if \code{length(v)} is substantial ( > 10000) while \code{len} is small ( < 5).
 }
-  \item{useFloat}{
-A boolean value. If \code{TRUE}, convert data to single-precision floats. This argument is mainly for research. \code{useFloat = TRUE} is highly unrecommended.
+  \item{NfractionDigits}{
+An integer, the maximum number of fractional digits of all elements in \code{v}. Internally, \code{v}, \code{target} and \code{ME} are multiplied by \code{10 ^ NfractionDigits}, and then converted as integer values before mining. The default \code{Inf} prevents such conversion. The goal is eliminate
 }
 }
 \details{

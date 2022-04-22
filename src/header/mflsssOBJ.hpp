@@ -303,7 +303,7 @@ struct mflsssOBJ
   {
     f = fixedInfo;
     std::size_t stackLen = (unsigned)f->subsetSize + 2;
-    unsigned biscaleFactor = (unsigned)std::log2(f->N + 0.0 - f->subsetSize) + 3;
+    unsigned biscaleFactor = (unsigned)std::log2(f->N + 1.0 - f->subsetSize) + 3;
     // about '+3': once, there was a failed test case given '+0'
     if(dummies != nullptr)
     {
@@ -1101,7 +1101,7 @@ struct parMflsssOBJ: public RcppParallel::Worker // works for mflsssComoPar() or
 
 
   parMflsssOBJ(vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> >
-                 &mflsssOBJvec, int maxCore): mflsssOBJvec(mflsssOBJvec)
+                 &mflsssOBJvec, std::size_t maxCore): mflsssOBJvec(mflsssOBJvec)
   {
     dynamicTasking dt(maxCore, mflsssOBJvec.size());
     dT = &dt;
@@ -1157,7 +1157,7 @@ struct parMflsssOBJbyCore: public RcppParallel::Worker // works for mflsssPar()
                      dummyContainers<valtype, indtype, mk, useBiSearch> *dummyCs,
                      valtype *ME, indtype *commonLB, indtype *commonUB,
                      vec<vec<vec<indtype> > > &rst,
-                     unsigned keyTargetSize, int maxCore):
+                     unsigned keyTargetSize, std::size_t maxCore):
     mflsssOBJvec(mflsssOBJvec), f(f), target(target),
     dummyCs(dummyCs), ME(ME), commonLB(commonLB), commonUB(commonUB), rst(rst)
   {
@@ -1641,7 +1641,7 @@ struct parMflsssOBJforKnapsack: public RcppParallel::Worker // works for mflsssC
 
 
   parMflsssOBJforKnapsack(
-    vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > &mflsssOBJvec, int maxCore):
+    vec<mflsssOBJ<valtype, indtype, mk, useBiSearch> > &mflsssOBJvec, std::size_t maxCore):
     mflsssOBJvec(mflsssOBJvec)
   {
     dynamicTasking dt(maxCore, mflsssOBJvec.size());
