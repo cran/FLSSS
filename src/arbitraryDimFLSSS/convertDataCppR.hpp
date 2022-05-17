@@ -29,13 +29,13 @@ inline Rcpp::RawVector copy2rRaw(T &x)
 }
 
 
-template<typename T>
-inline Rcpp::RawVector copy2rRaw(T &&x)
-{
-  Rcpp::RawVector rst(sizeof(T));
-  std::memcpy(&rst[0], &x, sizeof(T));
-  return rst;
-}
+// template<typename T>
+// inline Rcpp::RawVector copy2rRaw(T &&x)
+// {
+//   Rcpp::RawVector rst(sizeof(T));
+//   std::memcpy(&rst[0], &x, sizeof(T));
+//   return rst;
+// }
 
 
 template<typename T>

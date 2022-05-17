@@ -130,9 +130,10 @@ No k-sum lookup tables to build.\n\n";
   }
 
 
-  void read(Rcpp::List tables)
+  void read(Rcpp::List tables, ing fullSubsetSize)
   {
-    Q.assign(tables.size() + 3, PtrPrime());
+    ing qsize = std::max<ing> (tables.size() + 3, fullSubsetSize);
+    Q.assign(qsize, PtrPrime());
     for (int k = 0, kend = tables.size(); k < kend; ++k)
     {
       Rcpp::List tmp = tables[k];
@@ -159,8 +160,8 @@ No k-sum lookup tables to build.\n\n";
 
 
 
-    // Rcpp::Rcout << "Q.size()" << Q.size() << "\n";
-    // Rcpp::Rcout << "len" << len << "\n";
+    // Rcpp::Rcout << "Q.size() = " << Q.size() << ", ";
+    // Rcpp::Rcout << "len = " << int(len) << "\n";
     auto &q = Q[len];
     if (q.p == nullptr) return 1;
     uint64_t whichBit = XXH64(sum, sizeof(uint64_t) * d, 42) % q.prime;

@@ -64,7 +64,7 @@ List z_findBound(int len, NumericMatrix V, NumericVector target,
 
 
   int findOrNot = 0;
-  unsigned totaltime = 0;
+  // unsigned totaltime = 0;
 
 
   vec<int> LBres(LB.begin(), LB.end()), UBres(UB.begin(), UB.end());
@@ -83,7 +83,7 @@ List z_findBound(int len, NumericMatrix V, NumericVector target,
   for(int I = 0; ;)
   {
     std::clock_t t = std::clock();
-    totaltime += std::clock() - t;
+    // totaltime += std::clock() - t;
 
 
     if(UBfirst) findOrNot = findBoundUpFirstCpp<double, int, 0, 0> (
@@ -177,7 +177,7 @@ List z_findBoundIntegerized(
 
 
   int findOrNot = 0;
-  unsigned totaltime = 0;
+  // unsigned totaltime = 0;
 
 
   vec<int> LBres(LB.begin(), LB.end()), UBres(UB.begin(), UB.end());
@@ -196,7 +196,7 @@ List z_findBoundIntegerized(
   for(int I = 0; ;)
   {
     std::clock_t t = std::clock();
-    totaltime += std::clock() - t;
+    // totaltime += std::clock() - t;
 
 
     if(UBfirst) findOrNot = findBoundUpFirstCpp<INT, int, 1, 0> (

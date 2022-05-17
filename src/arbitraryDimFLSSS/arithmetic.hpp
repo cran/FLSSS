@@ -200,8 +200,8 @@ inline bool equal(uint64_t *x, uint64_t *y, ing d)
 template<typename ing>
 inline bool lessEqual(uint64_t *x, uint64_t *y, ing d)
 {
-  for(--d; d >= 0 and x[d] == y[d]; --d);
-  return x[d] < y[d] or d < 0;
+  for (--d; d >= 0 and x[d] == y[d]; --d);
+  return d < 0 or x[d] < y[d];
 }
 
 

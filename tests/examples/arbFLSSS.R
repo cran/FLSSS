@@ -1,78 +1,6 @@
-\name{arbFLSSS}
-\alias{arbFLSSS}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-Multidimensional exact subset sum in arbitrary precision and magnitude
-}
-\description{
-Given a multidimensional set and a subset size, find one or more subsets whose elements sum up to a given target.
-}
-\usage{
-arbFLSSS(
-  len,
-  V,
-  target,
-  givenKsumTable,
-  solutionNeed = 1L,
-  maxCore = 7L,
-  tlimit = 60,
-  approxNinstance = 1000L,
-  ksumK = 4L,
-  ksumTableSizeScaler = 30L,
-  verbose = TRUE
-  )
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{len}{
-An integer as the subset size. \code{1 <= len <= nrow(V)}.
-}
-  \item{V}{
-A string matrix as the superset. Rows are elements.
-}
-  \item{target}{
-A string vector as the target subset sum. \code{length(target) == ncol(V)}.
-}
-  \item{givenKsumTable}{
-Either \code{NULL} or the return value from \code{ksumHash()}. See argument \code{ksumK} for the preliminaries. If \code{NULL}, the function will compute and hash k-sums depending on \code{ksumK} before mining the subsets. Otherwise it will use \code{givenKsumTable} as the lookup table and ignore arguments \code{ksumK} and \code{ksumTableSizeScaler}.
-}
-  \item{solutionNeed}{
-An integer. How many solutions are wanted. Default \code{solutionNeed = 1}.
-}
-  \item{maxCore}{
-An integer as the maximum threads to invoke. Better not exceed the number of logical processors on the platform. Default \code{maxCore = 7}.
-}
-  \item{tlimit}{
-A numeric value as the time limit (seconds). Default \code{tlimit = 60}.
-}
-  \item{approxNinstance}{
-An integer. The problem will be decomposed into about \code{approxNinstance} subproblems solved independently by the threads. Default \code{approxNinstance = 1000}. \code{approxNinstance} is better to be much higher than argument \code{maxCore} since time costs of the subproblems are unknown and probably vary greatly.
-}
-  \item{ksumK}{
-An integer. If \code{ksumK < 3}, no k-sum accelerator will be built. For example, if \code{ksumK = 5}, then the sums of all combinations of 3 elements (3-sums), the sums of all combinations of 4 elements (4-sums), and the sums of all combinations of 5 elements (5-sums) in \code{V}, are pre-computed and hashed into a Bloom filter variant. This filter thus contains 3 lookup tables responding to the 3-sums, 4-sums and 5-sums. During the main course of mining, if any set is reduced to one of size 3, 4, or 5, the set's associated target sum will be hashed and looked up in the filter. Not existing would imply the target sum is unreachable and the set can be discredited immediately. This typically generates massive speedup. For \code{ksumK < 3}, such filtering is not meaningful and thus not performed. A high \code{ksumK} coupled with a large superset \code{V} however is prone to memory overflow or extremely time consuming. \code{ksumK} will be upper-bounded by subset size \code{len} internally. Default \code{ksumK = 4}.
-}
-  \item{ksumTableSizeScaler}{
-An integer for determining size of the k-sum lookup table in the filter described above. For example, a set of size 21 has 1330 3-element subsets. If \code{ksumTableSizeScaler = 10}, then around 13300 bits will be allocated for the 3-sum lookup table. The exact number of bits is 14033 + 7, where 14033 is the lowest element greater than 13300 in a prime array defined in GCC's STL of hashing policy, and 7 is to make up the last byte. Default  \code{ksumTableSizeScaler = 30}. Higher \code{ksumTableSizeScaler} means lower chance of hash collision, thus higher efficiency.
-}
-  \item{verbose}{
-A boolean value. \code{TRUE} prints the computing progress. Default \code{TRUE}.
-}
-}
-\details{
-New users might want to check out \code{FLSSS()} or \code{mFLSSSpar()} first.
-
-String matrix \code{V} is maximally compressed into an integer set of size \code{nrow(V)}. Dimensionality of the set will be printed given \code{verbose = TRUE}. Each set element is a huge integer comprising many 64-bit buffers. Addition and subtraction of the huge integers call \code{mpn_add_n()} and \code{mpn_sub_n()} from the GNU Multiple Precision Arithmetic Library (GMP) if the system has it, otherwise they are performed by customized algorithms.
-
-After the initial problem is decomposed, the smaller problems can collectively offer a pair of index lower and upper bounds. The k-subsets outside the bounds are not necessarily considered for building the k-sum accelerator.
-
-See comparisons between this function and \code{FLSSS()}, \code{mFLSSSpar()} in Examples.
-}
-\value{
-A list of index vectors as solutions.
-}
-
-
-\examples{
+# ==============================================================================
+# Mine subsets with arbitrary precision and magnitude.
+# ==============================================================================
 set.seed(1)
 N = 200L # Superset size.
 len = 20L # Subset size.
@@ -117,7 +45,6 @@ roundN = 4L # For rounding the numeric values before conversion to strings.
 
 
 V = matrix(round(runif(N * d, -1, 1), roundN), nrow = N) # Make superset.
-optionSave = options()
 options(scipen = 999) # Ensure numeric-to-string conversion does not
 # produce strings like "2e-3".
 Vstr = matrix(as.character(V), nrow = N)
@@ -263,8 +190,6 @@ all(unlist(lapply(rst, function(x)
 # })
 
 
-options(optionSave)
-}
 
 
 
@@ -280,4 +205,22 @@ options(optionSave)
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

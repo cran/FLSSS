@@ -86,7 +86,7 @@ struct ComputeComboRecur
 
   // Don't worry baby. You have done checking the unique hash values and they
   // ARE pretty unique in numeric experiments.
-  void setbit(uint64_t *s)
+  void setBitFun(uint64_t *s)
   {
     uint64_t hashval = XXH64(s, sizeof(uint64_t) * d, 42); // Rcpp::Rcout << hashval << ", ";
     uint64_t whichBit = hashval % prime;
@@ -120,7 +120,7 @@ struct ComputeComboRecur
         // if (csum[k - 1][0] == 6300766154302661ull) Rcpp::Rcout << "Hey that is it!\n";
 
 
-        setbit(csum[k - 1]); // Register the sum
+        setBitFun(csum[k - 1]); // Register the sum
         ++n;
         int i = k - 1;
         for (; i >= 0 and lb[i] >= ub[i]; --i);
@@ -143,7 +143,7 @@ struct ComputeComboRecur
         // if (csum[k - 1][0] == 6300766154302661ull) Rcpp::Rcout << "Hey that is it!\n";
 
 
-        setbit(csum[k - 1]); // Register the sum
+        setBitFun(csum[k - 1]); // Register the sum
         ++n;
         lb[k - 1] += 1;
       }
@@ -332,7 +332,7 @@ struct Ksum
     if (i >= iend) // The number of sums is so small that it can be easily done
       // using just 1 core.
     {
-      std::atomic<uint64_t> ic(0);
+      // std::atomic<uint64_t> ic(0);
       if (verbose) Rcpp::Rcout << NS.x.back().back() << " sums with 1 thread: ";
       uint64_t Nsums = ComputeComboRecur(d, N, k, lb, ub, H, modPrime, &v[0])();
       if (verbose) Rcpp::Rcout << Nsums << "\n\n";
@@ -345,7 +345,7 @@ struct Ksum
 
 
       vec<ComputeComboRecur> computeComboObjs(tp->maxCore);
-      for ( int j = 0; j < tp->maxCore; ++j )
+      for ( unsigned j = 0; j < tp->maxCore; ++j )
         computeComboObjs[j].reset(d, N, k, H, modPrime, &v[0]);
       vec<vec<int> > upperBounds(tp->maxCore, vec<int> (ub, ub + k));
 

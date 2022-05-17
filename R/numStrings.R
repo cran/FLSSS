@@ -109,7 +109,7 @@ addIntStrings = function(s)
 }
 
 
-addNumStrings = function(s, expandTo64bitSeg = FALSE)
+addNumStrings = function(s)
 {
   tmp = asIntegerString(s)
   s = tmp$s

@@ -120,7 +120,7 @@ inline void processGivenKsumtableORrecompute(
   if (givenKsumTable.size() != 0)
   {
     if (verbose) Rcpp::Rcout << "A k-sum accelerator is given. Read in..\n\n";
-    ksumtable.read(givenKsumTable);
+    ksumtable.read(givenKsumTable, f.subsetSize);
   }
   else if (ksum >= 3)
   {
@@ -162,7 +162,8 @@ inline List saveMflsssObjs(vec<mflsssOBJ<ing> > &X, Shared<ing> &f,
   {
     rst[i] = List::create(
       Named("indtype") = int(sizeof(ing)),
-      Named("shared") = fsave, Named("trimat") = ftrimat,
+      Named("shared") = fsave,
+      Named("trimat") = ftrimat,
       Named("order") = odr,  Named("obj") = X[i].save(),
       Named("ksumtable") = ksumtable);
   }

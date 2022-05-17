@@ -7,7 +7,7 @@ subsetSize = 6
 supersetSize = 60
 NcostsAttr = 4
 
-\donttest{
+# \donttest{
   # Make up costs for each item.
   costs = abs(6 * (rnorm(supersetSize * NcostsAttr) ^ 3 +
                      2 * runif(supersetSize * NcostsAttr) ^ 2 +
@@ -47,7 +47,7 @@ NcostsAttr = 4
   cat(length(rst1$solution)); cat(length(rst2$solution)) # See if solution exists.
   if(length(rst1$solution) > 0 & length(rst2$solution) > 0)
     sum(gains[rst2$solution]) / sum(gains[rst1$solution])
-}
+# }
 
 
 

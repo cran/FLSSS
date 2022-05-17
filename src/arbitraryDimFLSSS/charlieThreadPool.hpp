@@ -3,7 +3,7 @@
 #include <atomic>
 
 
-struct dynamicTasking
+struct DTask
 {
   std::size_t jobEnd, grainSize;
   std::atomic<std::size_t> counter;
@@ -27,8 +27,8 @@ struct dynamicTasking
   }
 
 
-  dynamicTasking(){}
-  dynamicTasking(std::size_t jobBegin, std::size_t jobEnd, std::size_t grainSize)
+  DTask(){}
+  DTask(std::size_t jobBegin, std::size_t jobEnd, std::size_t grainSize)
   {
     reset(jobBegin, jobEnd, grainSize);
   }
@@ -37,13 +37,13 @@ struct dynamicTasking
 
 struct CharlieThreadPool
 {
-  int maxCore;
+  unsigned maxCore;
   volatile bool *haveFood; // haveFood[maxCore] will be appEnd indicator.
   std::thread *tp;
   std::function<bool(std::size_t, std::size_t)> run;
   std::function<bool(std::size_t)> beforeRun;
   std::function<bool(std::size_t)> afterRun;
-  dynamicTasking dT; // Will be set by ParaFor object.
+  DTask dT; // Will be set by ParaFor object.
 
 
   void runJobs(std::size_t threadID) // threadID = 0 is the main thread.
@@ -75,16 +75,15 @@ struct CharlieThreadPool
   }
 
 
-  void initialize(int maxCore)
+  void initialize(unsigned maxCore)
   {
-    maxCore = std::min<int> (
+    maxCore = std::min<unsigned> (
       std::thread::hardware_concurrency(), maxCore);
     this->maxCore = maxCore;
     tp = new std::thread [maxCore];
     haveFood = new volatile bool [maxCore + 1];
     std::fill(haveFood, haveFood + maxCore + 1, false); // appEnd = false;
-    tp = new std::thread [maxCore];
-    for (int i = 1; i < maxCore; ++i) // Fire up all the worker threads.
+    for (unsigned i = 1; i < maxCore; ++i) // Fire up all the worker threads.
       tp[i] = std::thread(&CharlieThreadPool::live, this, i);
   }
 
@@ -92,7 +91,7 @@ struct CharlieThreadPool
   void destroy()
   {
     haveFood[maxCore] = true; // appEnd = true;
-    for (int i = 1; i < maxCore; ++i) tp[i].join();
+    for (unsigned i = 1; i < maxCore; ++i) tp[i].join();
     delete [] tp;
     tp = nullptr;
     delete [] haveFood;
@@ -100,9 +99,9 @@ struct CharlieThreadPool
   }
 
 
-  void reset(int maxCore)
+  void reset(unsigned maxCore)
   {
-    maxCore = std::min<int> (
+    maxCore = std::min<unsigned> (
       std::thread::hardware_concurrency(), maxCore);
     if (maxCore != this->maxCore)
     {
@@ -112,17 +111,17 @@ struct CharlieThreadPool
   }
 
 
-  CharlieThreadPool(int maxCore) { initialize(maxCore); }
+  CharlieThreadPool(unsigned maxCore) { initialize(maxCore); }
 
 
   ~CharlieThreadPool() { if (haveFood != nullptr) destroy(); }
 
 
   void parFor(std::size_t begin, std::size_t end,
-               std::function<bool(std::size_t, std::size_t)> run,
-               std::size_t grainSize,
-               std::function<bool(std::size_t)> beforeRun,
-               std::function<bool(std::size_t)> afterRun)
+              std::function<bool(std::size_t, std::size_t)> run,
+              std::size_t grainSize,
+              std::function<bool(std::size_t)> beforeRun,
+              std::function<bool(std::size_t)> afterRun)
   {
     this->run = run;
     this->beforeRun = beforeRun;
@@ -134,7 +133,8 @@ struct CharlieThreadPool
     while (!allfinished)
     {
       allfinished = true;
-      for (int i = 1; i < this->maxCore; ++i) allfinished &= !this->haveFood[i];
+      for (unsigned i = 1; i < this->maxCore; ++i)
+        allfinished &= !this->haveFood[i];
     }
   }
 };

@@ -22,7 +22,13 @@ struct Shared
   KsumLookUpTable<ing> *ksumtable;
 
 
-  Shared() { totalSize = 0; }
+  Shared()
+  {
+    totalSize = 0;
+    // std::memset(this, 0, sizeof(*this));
+    subsetSize = 0; N = 0; d = 0; sizeNeed = 0;
+    totalSize = 0; M = nullptr; ksumtable = nullptr;
+  }
 
 
   void reset(ing subsetSize, ing N, ing d, int sizeNeed,
@@ -262,9 +268,12 @@ struct mflsssOBJ
   Rcpp::List save()
   {
     auto hopeV_ = copyVec2rRaw(hopeV);
-    auto hopeOffset = copy2rRaw(ptrInt(hope) - ptrInt(&hopeV[0]));
-    auto SKvec0addr = copy2rRaw(ptrInt(&SKvec[0]));
-    auto SKbackOffset = copy2rRaw(ptrInt(SKback) - ptrInt(&SKvec[0]));
+    auto tmp2 = ptrInt(hope) - ptrInt(&hopeV[0]);
+    auto hopeOffset = copy2rRaw(tmp2);
+    auto tmp0 = ptrInt(&SKvec[0]);
+    auto SKvec0addr = copy2rRaw(tmp0);
+    auto tmp1 = ptrInt(SKback) - ptrInt(&SKvec[0]);
+    auto SKbackOffset = copy2rRaw(tmp1);
     auto SKvec_ = copyVec2rRaw(SKvec);
     int SRVcntrCapacity = SRVcntr.capacity();
 

@@ -68,7 +68,7 @@ A list of index vectors.
 # =====================================================================================
 # Example I: play random numbers.
 # =====================================================================================
-rm(list = ls()); gc()
+# rm(list = ls()); gc()
 subsetSize = 200L
 supersetSize = 1000L
 superset = 10000 * sort(rnorm(supersetSize) ^ 3 + 2 * runif(supersetSize) ^ 2 +
@@ -157,7 +157,7 @@ if(length(rst3) > 0)
 # =====================================================================================
 # Example II: mine a real-world dataset.
 # =====================================================================================
-rm(list = ls()); gc()
+# rm(list = ls()); gc()
 superset = c(
   -1119924501, -793412295, -496234747,  -213654767,   16818148,   26267601,   26557292,
      27340260,   28343800,   32036573,    32847411,   34570996,   34574989,   43633028,
@@ -222,7 +222,7 @@ all(unlist(lapply(rst, function(x)
 # catagory, select the least number of items to fulfill at least 95% of the knapsack's
 # capacity.
 # =====================================================================================
-rm(list = ls()); gc()
+# rm(list = ls()); gc()
 capacity = 361
 catagories = LETTERS[1L : 10L] # A, B, ..., J, 10 catagories
 catagoryMasses = round(runif(length(catagories)) * 20 + 1)
@@ -259,9 +259,10 @@ if(length(rst) == 0L)
 }
 
 
-rm(list = ls()); gc()
+# rm(list = ls()); gc()
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 % \keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
 % \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+ 
