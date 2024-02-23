@@ -2,6 +2,7 @@
 # include <Rcpp.h>
 # include <RcppParallel.h>
 # include "header/multiDstack.hpp"
+#include <atomic>
 using namespace Rcpp;
 using namespace RcppParallel;
 
@@ -96,7 +97,7 @@ List mFLSSScomoCpp(
   rst.reserve(sizeNeeded + 6);
 
 
-  tbb::atomic<int> totalSize = 0;
+  std::atomic<int> totalSize(0);
 
 
   // std::size_t SKbackOffset = TTTstack <valtype, indtype> (

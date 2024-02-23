@@ -82,7 +82,7 @@ List z_findBound(int len, NumericMatrix V, NumericVector target,
   vec<double> SRVcntr(d);
   for(int I = 0; ;)
   {
-    std::clock_t t = std::clock();
+    // std::clock_t t = std::clock();
     // totaltime += std::clock() - t;
 
 
@@ -195,7 +195,7 @@ List z_findBoundIntegerized(
   vec<INT> SRVcntr(d);
   for(int I = 0; ;)
   {
-    std::clock_t t = std::clock();
+    // std::clock_t t = std::clock();
     // totaltime += std::clock() - t;
 
 

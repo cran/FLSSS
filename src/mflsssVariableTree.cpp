@@ -25,7 +25,7 @@ struct parMflsss: public Worker
   valtype *scaleFactor;
   valtype ***M, *ME;
   indtype *commonLB, *commonUB;
-  tbb::atomic<int> *totalSize; // initialized as 0
+  std::atomic<int> *totalSize; // initialized as 0
   vec<vec<vec<indtype> > > &result; // result.size() equals the number of threads
   double endTime;
   vec<vec<indtype> > &intCtnrGroup; // each thread takes up a container
@@ -172,7 +172,7 @@ struct parMflsss: public Worker
     intCtnrGroup(intCtnrGroup), valCtnrGroup(valCtnrGroup),
     SKgroup(SKgroup)
   {
-    tbb::atomic<int> tsize = 0;
+    std::atomic<int> tsize = 0;
     totalSize = &tsize;
     dynamicTasking dtask(maxThreads, keyTargetSize);
     dT = &dtask;
@@ -199,7 +199,7 @@ struct parMflsss: public Worker
   valtype *scaleFactor;
   valtype ***M, *ME;
   indtype *commonLB, *commonUB;
-  tbb::atomic<int> *totalSize; // initialized as 0
+  std::atomic<int> *totalSize; // initialized as 0
   vec<vec<vec<indtype> > > &result; // result.size() equals the number of threads
   double endTime;
   vec<vec<indtype> > &intCtnrGroup; // each thread takes up a container
@@ -322,7 +322,8 @@ struct parMflsss: public Worker
     intCtnrGroup(intCtnrGroup), valCtnrGroup(valCtnrGroup),
     SKgroup(SKgroup)
   {
-    tbb::atomic<int> tsize = 0;
+    // std::atomic<int> tsize = 0;
+    std::atomic<int> tsize(0);
     totalSize = &tsize;
     dynamicTasking dtask(maxThreads, keyTargetSize);
     dT = &dtask;

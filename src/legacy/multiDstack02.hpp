@@ -11,7 +11,7 @@ inline std::size_t TTTstack(
     valtype ***M, vec<vec<indtype> > &result, int sizeNeeded,
     mPAT<valtype, indtype> *SK, mPAT<valtype, indtype> *SKback,
     bool useBisearchInFindBounds,
-    tbb::atomic<int> &totalSize, double endTime)
+    std::atomic<int> &totalSize, double endTime)
 {
   if(SKback <= SK) return SKback - SK;
   int rstCurrentSize = result.size();
@@ -149,8 +149,8 @@ inline std::size_t TTTstack(
 
 /*
 // ------------------------------------------------------------------------------------------------
-inline int findIdle(tbb::atomic<unsigned> &totalFreeThreads,
-                    tbb::atomic<unsigned char> *idle0prepare1ready2, unsigned maxCore)
+inline int findIdle(std::atomic<unsigned> &totalFreeThreads,
+                    std::atomic<unsigned char> *idle0prepare1ready2, unsigned maxCore)
 {
   if(totalFreeThreads == 0) return -1;
   for(unsigned i = 0; i < maxCore; ++i)
@@ -175,13 +175,13 @@ inline std::size_t TTTstackPar(
     valtype ***M, vec<vec<indtype> > &result, int sizeNeeded,
     mPAT<valtype, indtype> *SK, mPAT<valtype, indtype> *SKback,
     bool useBisearchInFindBounds,
-    tbb::atomic<int> &totalSize, double endTime,
+    std::atomic<int> &totalSize, double endTime,
     vec<indtype> &hopeV, // this is one element in hopeGroup
 
 
-    // tbb::atomic<unsigned char> &currentThread, // this is an element in idle0prepare1ready2
-    tbb::atomic<unsigned> &totalFreeThreads,
-    tbb::atomic<unsigned char> *idle0prepare1ready2, unsigned maxCore,
+    // std::atomic<unsigned char> &currentThread, // this is an element in idle0prepare1ready2
+    std::atomic<unsigned> &totalFreeThreads,
+    std::atomic<unsigned char> *idle0prepare1ready2, unsigned maxCore,
     vec<vec<mPAT<valtype, indtype> > > &SKgroup,
     vec<vec<indtype> > &indGroup,
     vec<vec<valtype> > &valGroup,
@@ -258,7 +258,7 @@ inline std::size_t TTTstackPar(
       vec<indtype> &idleHope = hopeGroup[idle];
       idleHope.resize(hope - &*hopeV.begin());
       std::copy(&*hopeV.begin(), hope, &*idleHope.begin()); // project existing hope to new thread
-      tbb::atomic<unsigned char> &ready = idle0prepare1ready2[idle];
+      std::atomic<unsigned char> &ready = idle0prepare1ready2[idle];
       boo = SKback->growHalfProjectHalf(
         M, d, dlst, dl, dust, du, hope, useBisearchInFindBounds,
         idleSK, idleVal, idleInd, ready);

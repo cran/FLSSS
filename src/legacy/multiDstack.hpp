@@ -12,7 +12,7 @@ inline std::size_t TTTstack(
     valtype ***M, vec<vec<indtype> > &result, int sizeNeeded,
     mPAT<valtype, indtype> *SK, mPAT<valtype, indtype> *SKback,
     bool useBisearchInFindBounds,
-    tbb::atomic<int> &totalSize, double endTime)
+    std::atomic<int> &totalSize, double endTime)
 {
   if(SKback <= SK) return SKback - SK;
 
@@ -44,7 +44,7 @@ inline std::size_t TTTstack(
     // update totalSize
     {
       int addSize = result.size() - rstCurrentSize;
-      if(addSize > 0) totalSize.fetch_and_add(addSize);
+      if(addSize > 0) totalSize.fetch_add(addSize);
     }
     return SKback - SK;
   }
@@ -112,7 +112,7 @@ inline std::size_t TTTstack(
       if(SKback - SK <= 1)
       {
         int addSize = result.size() - rstCurrentSize;
-        if(addSize > 0) totalSize.fetch_and_add(addSize);
+        if(addSize > 0) totalSize.fetch_add(addSize);
       }
       return 0; // all the combinations have been tried
     }
@@ -121,7 +121,7 @@ inline std::size_t TTTstack(
     // update totalSize
     {
       int addSize = result.size() - rstCurrentSize;
-      if(addSize > 0) totalSize.fetch_and_add(addSize);
+      if(addSize > 0) totalSize.fetch_add(addSize);
       rstCurrentSize += addSize;
     }
 
@@ -146,7 +146,7 @@ inline std::size_t TTTstack(
     valtype ***M, vec<vec<indtype> > &result, int sizeNeeded,
     mPAT<valtype, indtype> *SK, mPAT<valtype, indtype> *SKback,
     bool useBisearchInFindBounds,
-    tbb::atomic<int> &totalSize, double endTime)
+    std::atomic<int> &totalSize, double endTime)
 {
   if(SKback <= SK) return SKback - SK;
   int rstCurrentSize = result.size();
@@ -176,7 +176,7 @@ inline std::size_t TTTstack(
     // update totalSize
     {
       int addSize = result.size() - rstCurrentSize;
-      if(addSize > 0) totalSize.fetch_and_add(addSize);
+      if(addSize > 0) totalSize.fetch_add(addSize);
     }
     return SKback - SK;
   }
@@ -261,7 +261,7 @@ inline std::size_t TTTstack(
         // update totalSize
         {
           int addSize = result.size() - rstCurrentSize;
-          if(addSize > 0) totalSize.fetch_and_add(addSize);
+          if(addSize > 0) totalSize.fetch_add(addSize);
         }
         return 0; // all the combinations have been tried
       }
@@ -271,7 +271,7 @@ inline std::size_t TTTstack(
     // update totalSize
     {
       int addSize = result.size() - rstCurrentSize;
-      if(addSize > 0) totalSize.fetch_and_add(addSize);
+      if(addSize > 0) totalSize.fetch_add(addSize);
       rstCurrentSize += addSize;
     }
 
