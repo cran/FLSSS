@@ -23,8 +23,8 @@ struct sol
   vec<indtype> gene; // size = Ntask.
   vec<valtype> residualBudget;
   vec<indtype> auxContainer; // capacity = Ntask
-
-
+  
+  
   void initialize(indtype Nagent, indtype Ntask)
   {
     fitness = 0;
@@ -33,8 +33,8 @@ struct sol
     residualBudget.resize(Nagent);
     auxContainer.reserve(Ntask);
   }
-
-
+  
+  
   void swap(sol &x)
   {
     fitness = x.fitness;
@@ -42,8 +42,8 @@ struct sol
     gene.swap(x.gene);
     residualBudget.swap(x.residualBudget);
   }
-
-
+  
+  
   void grow(WV<valtype> **info, valtype *budget)
   {
     residualBudget.assign(budget, budget + residualBudget.size());
@@ -60,8 +60,8 @@ struct sol
       unfitness += std::max<valtype> (-residualBudget[i], 0);
     }
   }
-
-
+  
+  
   // update residualBudget, unfitness, fitness
   // pa, pt: previous agent and task.
   // a, t: new agent and task
@@ -84,8 +84,8 @@ struct sol
     }
     residualBudget[a] = tmp;
   }
-
-
+  
+  
   void educateA(WV<valtype> **info, RNG &rng)
   {
     for(indtype i = 0, iend = residualBudget.size(); i < iend; ++i)
@@ -121,8 +121,8 @@ struct sol
       gene[selectedTask] = agentSwitchTo;
     }
   }
-
-
+  
+  
   void educateB(WV<valtype> **info)
   {
     indtype Ntask = gene.size(), Nagent = residualBudget.size();
@@ -165,30 +165,30 @@ struct gapGA
   // vec<WV<valtype>*> info;
   WV<valtype> **info;
   valtype *budget; // can share.
-
-
+  
+  
   // return C
   void initialize(int rsd, NumericMatrix cost, NumericMatrix profit,
-                     NumericVector Budget, int Npopu, String optim, WV<valtype> **INFO)
+                  NumericVector Budget, int Npopu, String optim, WV<valtype> **INFO)
   {
     rng.seed(rsd);
-
-
+    
+    
     Nagent = cost.nrow();
     Ntask = cost.ncol();
     // infoContent.resize(INT(Nagent) * Ntask);
     // info.resize(Ntask);
     info = INFO;
-
-
+    
+    
     kid.initialize(Nagent, Ntask);
     geniusGene.resize(Ntask);
     geniusFitness = -std::numeric_limits<valtype>::max();
-
-
+    
+    
     budget = &Budget[0]; // implies valtype should always be double.
-
-
+    
+    
     population.resize(Npopu);
     unifInt U(0, Nagent - 1);
     for(indtype i = 0; i < Npopu; ++i)
@@ -200,8 +200,8 @@ struct gapGA
       }
       population[i].grow(info, budget); // set parameters.
     }
-
-
+    
+    
     whichMostFitnessAndFeasible = -1;
     highestFeasibleFitness = -std::numeric_limits<valtype>::max();
     for(indtype i = 0, iend = population.size(); i < iend; ++i)
@@ -212,8 +212,8 @@ struct gapGA
       whichMostFitnessAndFeasible = i;
     }
   }
-
-
+  
+  
   indtype biTournament()
   {
     indtype psize = population.size();
@@ -231,16 +231,16 @@ struct gapGA
     if(population[i].fitness < population[j].fitness) return j;
     else return i;
   }
-
-
+  
+  
   void selectParent(indtype &dadInd, indtype &mumInd)
   {
     dadInd = biTournament();
     mumInd = biTournament();
     while(dadInd == mumInd) mumInd = biTournament();
   }
-
-
+  
+  
   // Ntask >= 2
   void giveBirth(indtype dadInd, indtype mumInd)
   {
@@ -249,25 +249,25 @@ struct gapGA
     // crossover:
     sol<valtype, indtype>
       &dad = population[dadInd], &mum = population[mumInd];
-    std::copy(dad.gene.begin(), dad.gene.begin() + COpoint, kid.gene.begin());
-    std::copy(mum.gene.begin() + COpoint, mum.gene.end(),
-              kid.gene.begin() + COpoint);
-    // mutation:
-    indtype geneA = U(rng);
-    indtype geneB = U(rng);
-    if(geneA == geneB)
-    {
-      if(geneA < Ntask - 1) ++geneB;
-      else
+      std::copy(dad.gene.begin(), dad.gene.begin() + COpoint, kid.gene.begin());
+      std::copy(mum.gene.begin() + COpoint, mum.gene.end(),
+                kid.gene.begin() + COpoint);
+      // mutation:
+      indtype geneA = U(rng);
+      indtype geneB = U(rng);
+      if(geneA == geneB)
       {
-        U = unifInt(0, Ntask - 2);
-        geneB = U(rng);
+        if(geneA < Ntask - 1) ++geneB;
+        else
+        {
+          U = unifInt(0, Ntask - 2);
+          geneB = U(rng);
+        }
       }
-    }
-    std::swap(kid.gene[geneA], kid.gene[geneB]);
+      std::swap(kid.gene[geneA], kid.gene[geneB]);
   }
-
-
+  
+  
   // Generate a kid. If it is accepted and its fitness is greater than
   // than the current best, return true, else false.
   bool generate()
@@ -304,8 +304,8 @@ struct gapGA
       }
       if(j == Ntask) return false;
     }
-
-
+    
+    
     indtype swapPosition = 0;
     if(std::abs(mostUnfitness) >= 1e-10) // There are infeasible solutions in population.
     {
@@ -334,8 +334,8 @@ struct gapGA
     }
     return false;
   }
-
-
+  
+  
   valtype runNgenerations(INT generN, vec<indtype> &rst) // M is population size
   {
     INT Nstay = 0;
@@ -387,7 +387,7 @@ struct gapGApara: public RcppParallel::Worker
     rstValue.resize(G.size());
     rstVal = &rstValue[0];
     dynamicTasking dt(maxCore, G.size()); dT = &dt;
-      parallelFor(0, dT->NofCore, *this);
+    parallelFor(0, dT->NofCore, *this);
   }
 };
 
@@ -405,8 +405,8 @@ List auxGAPgaGivenRandomSeeds(
   maxCore = std::min<int> (trials, maxCore);
   vec<gapGA<double, int> > Gvec(trials);
   int Nagent = cost.nrow(), Ntask = cost.ncol();
-
-
+  
+  
   vec<WV<double> > infoContent(Ntask * Nagent);
   vec<WV<double>*> infoV(Ntask);
   for(int j = 0; j < Ntask; ++j)
@@ -426,18 +426,18 @@ List auxGAPgaGivenRandomSeeds(
       else I[j][i].value = C - profitOrLoss[j * Nagent + i];
     }
   }
-
-
+  
+  
   for(int i = 0, iend = Gvec.size(); i < iend; ++i)
   {
     Gvec[i].initialize(
-      randomSeeds[i], cost, profitOrLoss, budget, populationSize, optim, I);
+        randomSeeds[i], cost, profitOrLoss, budget, populationSize, optim, I);
   }
   vec<vec<int> > rst;
   vec<double> rstVal;
   gapGApara<double, int> (generations, Gvec, rst, rstVal, maxCore);
-
-
+  
+  
   IntegerMatrix allGenes(Ntask, Gvec.size() * populationSize);
   NumericVector allProfitOrLoss(Gvec.size() * populationSize);
   NumericVector allBudgetExceedance(Gvec.size() * populationSize);
@@ -458,8 +458,8 @@ List auxGAPgaGivenRandomSeeds(
       v += Ntask;
     }
   }
-
-
+  
+  
   int whichMax = std::max_element(rstVal.begin(), rstVal.end()) - rstVal.begin();
   vec<int> &solution = rst[whichMax];
   double solutionRevenue = rstVal[whichMax];
@@ -473,28 +473,28 @@ List auxGAPgaGivenRandomSeeds(
                           Named("allBudgetExceedance") = allBudgetExceedance,
                           Named("allProfitOrLoss") = allProfitOrLoss));
   }
-
-
+  
+  
   if(!maxOpt)
   {
     solutionRevenue = C * Ntask - solutionRevenue;
   }
-
-
+  
+  
   NumericVector agentCost(Nagent);
   for(int j = 0; j < Ntask; ++j)
   {
     agentCost[solution[j]] += cost[j * Nagent + solution[j]];
   }
-
-
+  
+  
   IntegerVector assignment(Ntask);
   for(int i = 0; i < Ntask; ++i)
   {
     assignment[i] = solution[i] + 1;
   }
-
-
+  
+  
   return List::create(Named("totalProfitOrLoss") = solutionRevenue,
                       Named("agentCost") = agentCost,
                       Named("assignment") = assignment,

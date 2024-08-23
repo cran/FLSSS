@@ -319,7 +319,8 @@ struct specialBiKpBaBpara: public RcppParallel::Worker
         valuePerWeight[st], stay[objI], reassign[objI], current[st]);
     }
   }
-  specialBiKpBaBpara<valtype, indtype, fmove> (
+  specialBiKpBaBpara // <valtype, indtype, fmove> 
+    (
       valtype &totalPenalty, vec<indtype> &overloadedAgent,
       vec<vec<valtype> > &weight, vec<vec<valtype> > &penalty,
       vec<vec<indtype> > &stay, vec<vec<indtype> > &reassign,

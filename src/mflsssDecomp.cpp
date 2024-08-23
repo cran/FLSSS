@@ -154,7 +154,7 @@ List mFLSSScppImage(
   }
 
 
-  if(false)
+  if constexpr (false)
   {
 
 
@@ -262,8 +262,11 @@ List z_mFLSSSimage(int len, NumericMatrix vr,
 {
   int vlen = vr.nrow();
   List result;
-  INT *mask = (INT*)&maskV[0];
+  INT *mask = nullptr;
   bool mk = maskV.size() > 0;
+  if (mk) mask = (INT*)&maskV[0];
+  
+  
   if(std::max(vlen, d) < 127)
   {
     if(mk == 0 and useBiSearch == 0) result = mFLSSScppImage<double, signed char, 0, 0> (

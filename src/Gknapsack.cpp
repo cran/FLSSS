@@ -82,8 +82,9 @@ IntegerVector z_Gknapsack(
   std::chrono::time_point<std::chrono::steady_clock> endTime =
     std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(duration));
   IntegerVector result;
-  INT *mask = (INT*)&maskV[0];
   bool mk = maskV.size() > 0;
+  INT* mask = nullptr;
+  if (mk) mask = (INT*)&maskV[0];
   if(std::max(N, d) < 127)
   {
          if(mk == 0 and useBiSearch == 0) result = GknapsackCpp<double, signed char, 0, 0> (

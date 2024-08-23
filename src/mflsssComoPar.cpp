@@ -119,8 +119,11 @@ List z_mFLSSScomoPar(int maxCore, int len, NumericMatrix vr, NumericVector maskV
   std::chrono::time_point<std::chrono::steady_clock> endTime =
     std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(duration));
   List result;
-  INT *mask = (INT*)&maskV[0];
   bool mk = maskV.size() > 0;
+  INT *mask = nullptr;
+  if (mk) mask = (INT*)&maskV[0];
+  
+  
   if(std::max(vlen, d) < 127)
   {
          if(mk == 0 and useBiSearch == 0) result = mFLSSScomoParCpp <double, signed char, 0, 0> (len, vr, d, dlst, dl, dust, du, vlen, targetr, MEr, LBr, UBr, sizeNeededForAll, endTime, maxCore, avgThreadLoad, mask);

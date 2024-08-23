@@ -466,7 +466,8 @@ struct specialBiKpDPpara: public RcppParallel::Worker
       penaltyAfterKnapsacking[st] += KPinGapV[st].run(stay[objI], reassign[objI]);
     }
   }
-  specialBiKpDPpara<valtype, indtype> (
+  specialBiKpDPpara // <valtype, indtype> 
+    (
       valtype &totalPenalty, vec<indtype> &overloadedAgent,
       vec<vec<indtype> > &weight, vec<vec<valtype> > &penalty,
       vec<vec<indtype> > &stay, vec<vec<indtype> > &reassign,
