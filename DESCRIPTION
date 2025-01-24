@@ -1,7 +1,7 @@
 Package: FLSSS
 Type: Package
 Title: Mining Rigs for Problems in the Subset Sum Family
-Version: 9.1.8
+Version: 9.2.0
 Authors@R: person(given = c("Charlie", "Wusuo"),
                     family = "Liu",
                     role = c("aut", "cre"),
@@ -15,7 +15,7 @@ LinkingTo: Rcpp, RcppParallel
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Repository: CRAN
-Packaged: 2024-08-22 14:41:39 UTC; i56087
+Packaged: 2025-01-22 16:05:28 UTC; i56087
 Author: Charlie Wusuo Liu [aut, cre]
 Maintainer: Charlie Wusuo Liu <liuwusuo@gmail.com>
-Date/Publication: 2024-08-23 07:50:02 UTC
+Date/Publication: 2025-01-24 10:20:13 UTC

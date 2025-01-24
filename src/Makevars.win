@@ -6,5 +6,5 @@ PKG_LIBS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "RcppParallel::R
 
 PKG_LIBS += -lgmp
 
-
+# PKG_CXXFLAGS += -ffast-math -ftree-vectorize -march=native
 

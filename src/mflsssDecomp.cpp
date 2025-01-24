@@ -330,7 +330,9 @@ List mFLSSSimport(List mflsssObj, int sizeNeed, double tlimit)
   mat.make(&matContainer[0], f.subsetSize, vr);
   valtype ***M = mat.mat;
   NumericVector maskV = mflsssObj["maskV"];
-  f.read(M, (INT*)(&maskV[0]), nullptr, nullptr);
+  INT* maskVptr = nullptr;
+  if (maskV.size() != 0) maskVptr = (INT*)(&maskV[0]);
+  f.read(M, maskVptr, nullptr, nullptr);
   f.endTime = std::chrono::steady_clock::now() + std::chrono::seconds(std::size_t(tlimit));
   f.sizeNeed = sizeNeed;
   f.totalSize = 0;

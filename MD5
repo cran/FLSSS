@@ -1,4 +1,4 @@
-ba59d3156fadcca450c5e04bfdcc1314 *DESCRIPTION
+52e7c2b03af10658c2dda32d467fe2b2 *DESCRIPTION
 99de3a33eb1f865da10a0a1cc4d56bdc *NAMESPACE
 97a40393169fea63ae76df2864e88960 *R/RcppExports.R
 aa489ebd6264f5f3c4627d0f433f687c *R/auxGAP.r
@@ -42,8 +42,8 @@ feeca5169564ae4d13c53617cef508d6 *src/DP01kp.cpp
 17cb4c0d96ec8db34453966c8bd6a08a *src/GAP.cpp
 10be795d313740edea85bc2fefdecf7c *src/GAgap.cpp
 242aa5fe02ae58df0f1bc2ea8345f454 *src/Gknapsack.cpp
-5f99bfc41490b669c8da51d9c49aa348 *src/Makevars.in
-3b18c6aee6cf2131453b293130b6c9c3 *src/Makevars.win
+276fc37a4b4f5c4e8b7a1b717620a2b9 *src/Makevars.in
+40fa32181662a36cb186254919681e08 *src/Makevars.win
 36d1c21b66a2749ff8994c0d5aa3106d *src/RcppExports.cpp
 08e710d05348cdfa96ab0546d2272f03 *src/arbitraryDimFLSSS/archive/dnyTasking2.hpp
 5d4fee0ac1c0743e91c9445b89c4e5a6 *src/arbitraryDimFLSSS/arithmetic.hpp
@@ -125,7 +125,7 @@ bd247c73b1dd835f7949e5fc769b1150 *src/legacy/triMatOneD.hpp
 4fe8aa81230737dcb455e256b76ef44f *src/mflsss.cpp
 3578eefae6e3434eccf457aae303019d *src/mflsssArb.cpp
 518c34920363d6cdfff880a479d9bac8 *src/mflsssComoPar.cpp
-5928950e14ccc5a4eeb156f4d541b9b8 *src/mflsssDecomp.cpp
+ed71b5ddb5064855bc04c20e3c3c88a5 *src/mflsssDecomp.cpp
 13d34ed88764c3a7524cb58236ed7975 *src/mflsssVariableTree.cpp
 8b0397e18d5620008e039b3fb01b61d8 *src/testIntegerize.cpp
 9b22e8eebf8abd25396b4dd3821d7f23 *tests/asmTest/asmtest.cpp
