@@ -93,16 +93,20 @@ sol = sample(N, len) # Make a solution.
 target = FLSSS::addNumStrings(V[sol]) # An unexposed helper function.
 
 
-system.time({
-  rst = FLSSS::arbFLSSS(
-    len, V = as.matrix(V), target, solutionNeed = 1, maxCore = 2,
-    tlimit = 10, ksumK = 0, verbose = TRUE)
-})
-
-
-# Validation.
-all(unlist(lapply(rst, function(x) FLSSS:::addNumStrings(V[x]))) == target)
-
+# Uncomment the following block for testing the code since CRAN check uses 
+# Valgrind, which takes over 5s to run.
+# system.time({
+#   rst = FLSSS::arbFLSSS(
+#     len = len, V = Vstr, target, givenKsumTable = NULL, tlimit = 60,
+#     solutionNeed = 1e9, maxCore = 2, ksumK = 4, verbose = TRUE)
+# })
+# 
+# 
+# # Validation.
+# all(unlist(lapply(rst, function(x)
+# {
+#   apply(Vstr, 2, function(u) FLSSS:::addNumStrings(u[x]))
+# })) == targetStr)
 
 
 
@@ -128,18 +132,20 @@ target = round(colSums(V[sol, ]), roundN) # Target subset sum.
 targetStr = as.character(target)
 
 
-system.time({
-  rst = FLSSS::arbFLSSS(
-    len = len, V = Vstr, target, givenKsumTable = NULL, tlimit = 60,
-    solutionNeed = 1e9, maxCore = 2, ksumK = 4, verbose = TRUE)
-})
-
-
-# Validation.
-all(unlist(lapply(rst, function(x)
-{
-  apply(Vstr, 2, function(u) FLSSS:::addNumStrings(u[x]))
-})) == targetStr)
+# Uncomment the following block for testing the code since CRAN check uses 
+# Valgrind, which takes over 5s to run.
+# system.time({
+#   rst = FLSSS::arbFLSSS(
+#     len = len, V = Vstr, target, givenKsumTable = NULL, tlimit = 60,
+#     solutionNeed = 1e9, maxCore = 2, ksumK = 4, verbose = TRUE)
+# })
+# 
+# 
+# # Validation.
+# all(unlist(lapply(rst, function(x)
+# {
+#   apply(Vstr, 2, function(u) FLSSS:::addNumStrings(u[x]))
+# })) == targetStr)
 
 
 
@@ -280,4 +286,3 @@ options(optionSave)
 
 
 
- 

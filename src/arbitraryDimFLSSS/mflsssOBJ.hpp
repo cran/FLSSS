@@ -24,10 +24,12 @@ struct Shared
 
   Shared()
   {
-    totalSize = 0;
-    // std::memset(this, 0, sizeof(*this));
-    subsetSize = 0; N = 0; d = 0; sizeNeed = 0;
-    totalSize = 0; M = nullptr; ksumtable = nullptr;
+    subsetSize = 0; 
+    N = 0; d = 0; 
+    sizeNeed = 0;
+    totalSize = 0; 
+    endTime = std::chrono::time_point<std::chrono::steady_clock>{};
+    M = nullptr; ksumtable = nullptr;
   }
 
 

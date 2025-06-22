@@ -1,4 +1,4 @@
-52e7c2b03af10658c2dda32d467fe2b2 *DESCRIPTION
+49610c955daf35c8a40093df9559ab62 *DESCRIPTION
 99de3a33eb1f865da10a0a1cc4d56bdc *NAMESPACE
 97a40393169fea63ae76df2864e88960 *R/RcppExports.R
 aa489ebd6264f5f3c4627d0f433f687c *R/auxGAP.r
@@ -16,14 +16,14 @@ d74cdb9be55e27758b4b5379bc548dd9 *R/rinterface.r
 a89ae2c8db796bd23f15b718682149a6 *man/FLSSSmultiset.Rd
 9b8c562076d1a17e4a731812384ff98d *man/GAP.Rd
 d8735455adaec76187dcb185177c7eb7 *man/addNumStrings.Rd
-11fed4792cac8e5766ee84c510cf2685 *man/arbFLSSS.Rd
-e8f46722f76cde9ab41660439c1e53c8 *man/arbFLSSSobjRun.Rd
+cad4ff741a7b0a3ab522b8aad03ce873 *man/arbFLSSS.Rd
+cac80476f18f53f515bf37b0b0daa673 *man/arbFLSSSobjRun.Rd
 d5ba3548e0f6a33cdbac562529d79606 *man/auxGAPbb.Rd
 627280a8c039b11623f0e99806b04bd4 *man/auxGAPbbDp.Rd
 ccecf81168e954a7ada20a2f2e51934f *man/auxGAPga.Rd
 fd12b5177a720e277b1d0ab5ca7ded0e *man/auxKnapsack01bb.Rd
 e5ff6ba23e69ee2a870683b6091d2e9d *man/auxKnapsack01dp.Rd
-f61ff887ffe9bfb75e18266e07da9f67 *man/decomposeArbFLSSS.Rd
+c19e30cc902bae665dcd9083907d4400 *man/decomposeArbFLSSS.Rd
 3b6e3e4f262fa974e20985d130568981 *man/decomposeMflsss.Rd
 d419a5c15f8c07da4e5ac57dfcd411fe *man/ksumHash.Rd
 8b09af0a751a69c4237148e2c869a775 *man/mFLSSSobjRun.Rd
@@ -56,7 +56,7 @@ feeca5169564ae4d13c53617cef508d6 *src/DP01kp.cpp
 c48fe06bcaecd5c70971fa03e6757b42 *src/arbitraryDimFLSSS/mPATclass.hpp
 be9f17fbd6a88de734dc5d37d4e4dd9e *src/arbitraryDimFLSSS/makeKsumIndicatorTables.hpp
 ddc8836107d90e1f8a539ca7a0f9bc7c *src/arbitraryDimFLSSS/mflsssDecomp.hpp
-85e24b79020625da53c1310a2e654127 *src/arbitraryDimFLSSS/mflsssOBJ.hpp
+084f6c97984b0b0ed6df022db4dfe462 *src/arbitraryDimFLSSS/mflsssOBJ.hpp
 1799e98a6f98a36fc3f5a6b76931078e *src/arbitraryDimFLSSS/mvalFindBound.hpp
 6a493317873b22eb9663a8d63d9ab14d *src/arbitraryDimFLSSS/raiseSupressBound.hpp
 dbfc842b47cfd46b95ff5aeed8251e34 *src/arbitraryDimFLSSS/tiktok.hpp
@@ -155,6 +155,3 @@ f246099d2b480ae0b79af7b89c653511 *tests/gapInstances/gapSmallInstances.r
 427956a3df42e69bd2252c2baabf5488 *tests/hashtest/testFlattenedSet.r
 2d0c273f238725cb9418d43bd6824f61 *tests/stringTest/outdated.R
 278ce8db8c1f4263a9241daab90fb8f1 *tests/stringTest/testInsertBits.R
-800082be27ae0f8f703e30bcd5f41f37 *tests/valgrindTest/valgrindTest.cpp
-1c6f20563f8a2abb8ef3070d96f2d9b1 *tests/valgrindTest/valgrindTestAgainstRcheckFLSSS-Ex.txt
-e2a9de25f1c0f9c21e0bd9a19dd536f8 *tests/valgrindTest/valgrindTestR.r
