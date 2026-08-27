@@ -1,4 +1,4 @@
-49610c955daf35c8a40093df9559ab62 *DESCRIPTION
+4eb34281026a55ef7936d93282b1b94c *DESCRIPTION
 99de3a33eb1f865da10a0a1cc4d56bdc *NAMESPACE
 97a40393169fea63ae76df2864e88960 *R/RcppExports.R
 aa489ebd6264f5f3c4627d0f433f687c *R/auxGAP.r
@@ -97,7 +97,7 @@ d73efb356e1a8ab845dae724fbe45ad0 *src/header/macros.hpp
 b7d855036b18eac8086204de32c69e77 *src/header/oneDfindBound.hpp
 da0628e998e92a14e4da82bf91ba1578 *src/header/oneDoperation.hpp
 16a12bc45feebe46359eb5f4de9bc57a *src/header/raiseSupressBound.hpp
-96f81c4692d7e6fbca3f414ecff8217c *src/header/singleDstack.hpp
+c40cce815f53fa78f3619af18f5250de *src/header/singleDstack.hpp
 4c761dfc601cdf3b68cd6ac78608fc7e *src/header/triMat.hpp
 26e384e1c06d30dc14ab8b1d316300d3 *src/header/triMatOneD.hpp
 33e02aef7351b27f939e738bdf006ed2 *src/legacy/BaB01kpOld.cpp
@@ -119,7 +119,7 @@ c6cb738e4049085b0e548393bed5994d *src/legacy/mflsssComo.cpp
 6e3819ee4367608b423c2b0baef1e173 *src/legacy/oneDoperation.hpp
 689ab33ee830f789194dc0aa95c86356 *src/legacy/raiseSupressBound.hpp
 d4b605b13ce03e9fd9969a54dabe081e *src/legacy/singleDIO.hpp
-1e0ad6285363ed8094b1565a675039d1 *src/legacy/singleDstack.hpp
+8858817945de71651a0d745bf483f74d *src/legacy/singleDstack.hpp
 ed9865729c9dcc2a6152329bcd5b5e74 *src/legacy/triMat.hpp
 bd247c73b1dd835f7949e5fc769b1150 *src/legacy/triMatOneD.hpp
 4fe8aa81230737dcb455e256b76ef44f *src/mflsss.cpp
