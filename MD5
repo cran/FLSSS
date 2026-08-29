@@ -1,4 +1,4 @@
-4eb34281026a55ef7936d93282b1b94c *DESCRIPTION
+b8ff75d596d68ab98532bcfb99815aef *DESCRIPTION
 99de3a33eb1f865da10a0a1cc4d56bdc *NAMESPACE
 97a40393169fea63ae76df2864e88960 *R/RcppExports.R
 aa489ebd6264f5f3c4627d0f433f687c *R/auxGAP.r
@@ -9,8 +9,8 @@ c63694d504d7e74ff6af47540faa4d11 *R/numStrings.R
 def51eca2789da968ca182e4880e926b *R/rfuns.r
 ffba50c6e8e4c726553e1b586c23b1ce *R/rfunsLegacy.r
 d74cdb9be55e27758b4b5379bc548dd9 *R/rinterface.r
-72aadc5ac34b8f0d6d8a08d77b8f66d5 *configure
-10f38c2e466005fcf6f4eb63204f2328 *configure.ac
+588fff1bf4cbee300c8333fbef9d6608 *configure
+4c35a9cea9d9c786868fa034238e5f33 *configure.ac
 850166693c92e1607ee249250ab91e18 *inst/NEWS.Rd
 1d0e7a2f352e2a60807f23b0459588cd *man/FLSSS.Rd
 a89ae2c8db796bd23f15b718682149a6 *man/FLSSSmultiset.Rd
@@ -40,13 +40,13 @@ feeca5169564ae4d13c53617cef508d6 *src/DP01kp.cpp
 629b506e51bb63bd0aa1c9962ef1e8df *src/DPgapMultithreadKPs.cpp
 0d6af3f38022378480c608f2f64c74f3 *src/DPgapMultithreadNodes.cpp
 17cb4c0d96ec8db34453966c8bd6a08a *src/GAP.cpp
-10be795d313740edea85bc2fefdecf7c *src/GAgap.cpp
+7cebcc1f7a0722ad1107e3bdd3c9a3a5 *src/GAgap.cpp
 242aa5fe02ae58df0f1bc2ea8345f454 *src/Gknapsack.cpp
 276fc37a4b4f5c4e8b7a1b717620a2b9 *src/Makevars.in
 40fa32181662a36cb186254919681e08 *src/Makevars.win
 36d1c21b66a2749ff8994c0d5aa3106d *src/RcppExports.cpp
 08e710d05348cdfa96ab0546d2272f03 *src/arbitraryDimFLSSS/archive/dnyTasking2.hpp
-5d4fee0ac1c0743e91c9445b89c4e5a6 *src/arbitraryDimFLSSS/arithmetic.hpp
+3df4063ef868412abc701bdf00726da1 *src/arbitraryDimFLSSS/arithmetic.hpp
 42b2a8a0bc93e21818c1d6f669c98276 *src/arbitraryDimFLSSS/charlieThreadPool.hpp
 6c557315626cfcc4ec9051a115c2c35a *src/arbitraryDimFLSSS/convertDataCppR.hpp
 3a4fbb050d338c24df33a19ff77228f8 *src/arbitraryDimFLSSS/flattenUnorderedSet.hpp
@@ -103,7 +103,6 @@ c40cce815f53fa78f3619af18f5250de *src/header/singleDstack.hpp
 33e02aef7351b27f939e738bdf006ed2 *src/legacy/BaB01kpOld.cpp
 cb06b3562b66bb10d165e4f5250ed5c7 *src/legacy/GAP.cpp
 176c17af8da9d293a6a9c947dce6c515 *src/legacy/GAPintegerized.Rd
-6d414cfa23b50355699a8ab59e9c7aa2 *src/legacy/Makevars
 9b9bef0c29fa593006672627ea698175 *src/legacy/PATclass.hpp
 9774c61959c0ec104b7e98df5a8658f1 *src/legacy/gap.r
 8f57c8497e53a42232a1f49ba0a72d4a *src/legacy/gapBaBold.cpp

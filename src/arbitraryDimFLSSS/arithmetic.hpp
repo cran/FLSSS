@@ -36,7 +36,7 @@ inline void mulHint32(uint32_t *z, int zsize,
   ++xsize;
   for(--ysize; ysize >= 0 and y[ysize] == 0; --ysize);
   ++ysize;
-  std::fill(z, z + zsize, 0);
+  if(zsize > 0) std::fill(z, z + zsize, 0);
   for(int i = 0; i < xsize; ++i)
   {
     for(int j = 0; j < ysize; ++j)

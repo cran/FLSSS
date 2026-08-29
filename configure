@@ -3848,7 +3848,7 @@ fi
 
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-GMP_CFLAGS="${GMPFLAG} ${CFLAGS}"
+GMP_CFLAGS="${GMPFLAG}"
 
 GMP_LIBS=${LIBS}
 

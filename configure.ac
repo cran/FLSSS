@@ -32,7 +32,7 @@ AC_CHECK_LIB(gmp, __gmpz_init, ,
    [AC_MSG_WARN([gmp library not found, so skipping GMP.])])
 
 # Now substitute these variables in src/Makevars.in to create src/Makevars
-AC_SUBST(GMP_CFLAGS, ["${GMPFLAG} ${CFLAGS}"])
+AC_SUBST(GMP_CFLAGS, ["${GMPFLAG}"])
 AC_SUBST(GMP_LIBS, ${LIBS})
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT

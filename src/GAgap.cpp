@@ -126,13 +126,6 @@ struct sol
   void educateB(WV<valtype> **info)
   {
     indtype Ntask = gene.size(), Nagent = residualBudget.size();
-    {
-      valtype S = 0;
-      for(int i = 0, iend = residualBudget.size(); i < iend; ++i)
-      {
-        if(residualBudget[i] < 0) S += -residualBudget[i];
-      }
-    }
     for(indtype j = 0; j < Ntask; ++j)
     {
       indtype &genej = gene[j];
